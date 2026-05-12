@@ -1,0 +1,754 @@
+/* ============================================================
+   BARCAPRINTSHOP — DESIGN STUDIO
+   designer.css
+   ============================================================ */
+
+/* ── Font (reuse from main site) ── */
+@font-face {
+  font-family: 'GelatoSans';
+  src: url('fonts/fonnts.com-gelatosans-regular.otf') format('opentype');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'GelatoSans';
+  src: url('fonts/fonnts.com-gelatosans-medium.otf') format('opentype');
+  font-weight: 500; font-style: normal;
+}
+@font-face {
+  font-family: 'GelatoSans';
+  src: url('fonts/fonnts.com-gelatosans-semibold.otf') format('opentype');
+  font-weight: 600; font-style: normal;
+}
+@font-face {
+  font-family: 'GelatoSans';
+  src: url('fonts/fonnts.com-gelatosans-bold.otf') format('opentype');
+  font-weight: 700; font-style: normal;
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'GelatoSans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: #111;
+  background: #ebebeb;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* ============================================================
+   ROOT LAYOUT — flex row: sidebar | main | panel
+   ============================================================ */
+.dr-root {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================================================
+   LEFT SIDEBAR
+   ============================================================ */
+.dr-sidebar {
+  width: 80px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 6px;
+  z-index: 20;
+}
+
+/* ── Tabs ── */
+.dr-tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.dr-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 15px 0;
+  width: 100%;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  color: #888;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: color 0.18s, background 0.18s;
+}
+
+.dr-tab:hover {
+  color: #222;
+  background: #f6f6f6;
+}
+
+.dr-tab.active {
+  color: #111;
+  border-left-color: #111;
+  background: #f6f6f6;
+}
+
+/* ── Separator ── */
+.dr-sidebar-sep {
+  width: 36px;
+  height: 1px;
+  background: #e8e8e8;
+  margin: 8px 0;
+}
+
+/* ── Undo / Redo ── */
+.dr-undoredo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.dr-undoredo-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 11px 0;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 0.64rem;
+  font-weight: 500;
+  transition: color 0.18s;
+}
+
+.dr-undoredo-btn:not(:disabled):hover { color: #222; }
+.dr-undoredo-btn:disabled { opacity: 0.35; cursor: default; }
+
+/* ============================================================
+   MAIN CANVAS AREA
+   ============================================================ */
+.dr-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #ebebeb;
+  overflow: hidden;
+}
+
+/* ── Top action bar ── */
+.dr-topbar {
+  height: 44px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 12px;
+}
+
+.dr-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dr-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 10px;
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 0.67rem;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.dr-action-btn:hover {
+  background: #f5f5f5;
+  color: #111;
+}
+
+/* ── Canvas wrap — centres the canvas vertically & horizontally ── */
+.dr-canvas-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px 16px;
+  overflow: hidden;
+}
+
+/* ── The actual canvas (sizes to shirt image) ── */
+.dr-canvas {
+  position: relative;
+  display: inline-block;
+  line-height: 0;     /* collapse inline gap */
+  border-radius: 4px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+
+.dr-shirt-img {
+  display: block;
+  height: 440px;
+  width: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  border-radius: 4px;
+  background: #f8f8f8;
+}
+
+/* ── Print zone dashed overlay ──
+   Positioned over chest area; percentages tuned to this shirt image.
+   top/left/width/height are relative to .dr-canvas (= the img size). ── */
+.dr-print-zone {
+  position: absolute;
+  top:    22%;
+  left:   27%;
+  width:  46%;
+  height: 44%;
+  border: 2px dashed #3d8ed8;
+  background: transparent;
+  overflow: visible;
+  cursor: default;
+}
+
+/* ── Text elements inside print zone ── */
+.dr-text-el {
+  position: absolute;
+  cursor: grab;
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1.15;
+  padding: 2px 3px;
+  border: 2px solid transparent;   /* reserve space so selected outline doesn't shift layout */
+  border-radius: 2px;
+  transform-origin: center center;
+  transition: border-color 0.1s;
+}
+
+.dr-text-el:hover {
+  border-color: rgba(61, 142, 216, 0.4);
+}
+
+.dr-text-el.selected {
+  border-color: #3d8ed8;
+  cursor: grab;
+  z-index: 50;
+}
+
+.dr-text-el.is-dragging {
+  cursor: grabbing;
+}
+
+/* ── Floating mini-toolbar (shown above selected text) ── */
+.dr-float-bar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  border-radius: 7px;
+  padding: 3px 5px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.14);
+  z-index: 200;
+  pointer-events: auto;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.dr-float-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 5px;
+  color: #444;
+  transition: background 0.15s, color 0.15s;
+}
+
+.dr-float-btn:hover { background: #f0f0f0; }
+.dr-float-btn.dr-float-delete:hover { background: #fee2e2; color: #dc2626; }
+
+/* ── View thumbnails ── */
+.dr-views {
+  height: 84px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 16px;
+}
+
+.dr-view-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 0.67rem;
+  font-weight: 500;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.dr-view-btn.active { color: #111; }
+
+.dr-view-thumb {
+  width: 48px;
+  height: 52px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f7f7;
+  transition: border-color 0.15s;
+}
+
+.dr-view-btn.active .dr-view-thumb { border-color: #3d8ed8; }
+
+.dr-view-thumb img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.dr-view-empty {
+  background: #f0f0f0;
+}
+
+/* ============================================================
+   RIGHT PANEL
+   ============================================================ */
+.dr-panel {
+  width: 290px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-left: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Scrollable body area */
+.dr-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
+}
+
+.dr-panel-body::-webkit-scrollbar { width: 4px; }
+.dr-panel-body::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+.dr-panel-body.hidden { display: none; }
+
+/* ── Product info ── */
+.dr-product-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.dr-eco-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.dr-delivery {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.dr-link { color: #1a73e8; font-weight: 500; }
+.dr-link:hover { text-decoration: underline; }
+
+.dr-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.dr-stars {
+  color: #f9ab00;
+  font-size: 0.88rem;
+  letter-spacing: -1px;
+}
+
+.dr-half-star {
+  display: inline-block;
+  width: 0.5em;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.dr-rating-count { font-size: 0.78rem; color: #666; }
+
+.dr-product-link {
+  display: block;
+  font-size: 0.8rem;
+  color: #1a7a4a;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.dr-product-link:hover { text-decoration: underline; }
+
+.dr-print-method-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.dr-label-muted { color: #666; }
+
+.dr-method-badge {
+  background: #3d8ed8;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+}
+
+.dr-color-label {
+  font-size: 0.8rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+/* ── Colour swatches ── */
+.dr-color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.dr-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--sw);
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: transform 0.15s, outline-color 0.15s;
+}
+
+.dr-swatch:hover { transform: scale(1.12); }
+.dr-swatch.selected { outline-color: #3d8ed8; }
+.dr-swatch[data-color="white"] { border-color: #ccc; }
+
+.dr-swatch-check { display: none; }
+.dr-swatch.selected .dr-swatch-check { display: block; }
+
+/* ── Arrange button ── */
+.dr-arrange-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 0;
+  background: none;
+  border: none;
+  border-top: 1px solid #eee;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #333;
+  transition: color 0.15s;
+}
+.dr-arrange-btn:hover { color: #111; }
+
+/* ============================================================
+   TEXT EDITING PANEL
+   ============================================================ */
+
+/* Text content input */
+.dr-text-input {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: #111;
+  margin-bottom: 10px;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.dr-text-input:focus { border-color: #3d8ed8; }
+
+/* Formatting toolbar */
+.dr-text-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  padding: 4px 5px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.dr-tb-sep {
+  width: 1px;
+  height: 20px;
+  background: #e0e0e0;
+  margin: 0 3px;
+}
+
+/* Color button */
+.dr-tb-color {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.dr-color-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #bbb;
+  pointer-events: none;
+}
+
+.dr-tb-color input[type="color"] {
+  position: absolute;
+  opacity: 0;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+/* Icon buttons */
+.dr-tb-btn {
+  width: 27px;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  color: #444;
+  font-size: 0.82rem;
+  transition: background 0.14s;
+  cursor: pointer;
+}
+.dr-tb-btn:hover { background: #f0f0f0; }
+.dr-tb-btn.active { background: #e8e8e8; color: #111; }
+
+/* Font selector row */
+.dr-font-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+}
+
+.dr-font-select {
+  flex: 1;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Text size row */
+.dr-size-row,
+.dr-bend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  color: #444;
+}
+
+.dr-row-label { flex: 1; font-weight: 500; }
+
+.dr-size-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.dr-size-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #d8d8d8;
+  background: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  line-height: 1;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.14s;
+}
+.dr-size-btn:hover { background: #f5f5f5; }
+
+.dr-size-val {
+  width: 46px;
+  text-align: center;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  padding: 3px 4px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  color: #111;
+  -moz-appearance: textfield;
+}
+.dr-size-val::-webkit-outer-spin-button,
+.dr-size-val::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+/* Bend */
+.dr-bend-num {
+  width: 40px;
+  text-align: center;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  padding: 3px 4px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  color: #111;
+  -moz-appearance: textfield;
+}
+.dr-bend-num::-webkit-outer-spin-button,
+.dr-bend-num::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.dr-bend-slider {
+  flex: 1;
+  height: 4px;
+  accent-color: #3d8ed8;
+  cursor: pointer;
+}
+
+/* Bottom action grid */
+.dr-text-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 12px 0 16px;
+  border-top: 1px solid #eee;
+  margin-top: 4px;
+}
+
+.dr-ta-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 6px;
+  background: none;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  font-size: 0.66rem;
+  color: #555;
+  font-family: inherit;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.dr-ta-btn:hover { background: #f7f7f7; color: #111; border-color: #ddd; }
+.dr-ta-delete:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+
+/* ============================================================
+   CTA BUTTON — fixed at panel bottom
+   ============================================================ */
+.dr-cta-wrap {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+
+.dr-cta-btn {
+  width: 100%;
+  padding: 14px;
+  background: #009688;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.2s, transform 0.1s;
+}
+.dr-cta-btn:hover { background: #00796b; }
+.dr-cta-btn:active { transform: scale(0.99); }

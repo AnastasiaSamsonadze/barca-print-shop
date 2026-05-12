@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Studio — Barcaprintshop</title>
+  <link rel="stylesheet" href="designer.css">
+</head>
+<body>
+
+<div class="dr-root">
+
+  <!-- ===================================================
+       LEFT SIDEBAR
+  =================================================== -->
+  <aside class="dr-sidebar">
+    <nav class="dr-tabs">
+
+      <button class="dr-tab" data-tab="products" title="Products">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/>
+        </svg>
+        <span>Products</span>
+      </button>
+
+      <button class="dr-tab" data-tab="designs" title="Designs">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+        <span>Designs</span>
+      </button>
+
+      <button class="dr-tab active" data-tab="text" title="Text">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
+        </svg>
+        <span>Text</span>
+      </button>
+
+      <button class="dr-tab" data-tab="upload" title="Upload">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+        </svg>
+        <span>Upload</span>
+      </button>
+
+    </nav>
+
+    <div class="dr-sidebar-sep"></div>
+
+    <div class="dr-undoredo">
+      <button class="dr-undoredo-btn" id="btn-undo" disabled title="Undo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 7v6h6"/><path d="M3 13C5 7.5 10 4 16 5.5c4 1 7 4.5 7 9"/>
+        </svg>
+        <span>Undo</span>
+      </button>
+      <button class="dr-undoredo-btn" id="btn-redo" disabled title="Redo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 7v6h-6"/><path d="M21 13C19 7.5 14 4 8 5.5c-4 1-7 4.5-7 9"/>
+        </svg>
+        <span>Redo</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ===================================================
+       MAIN CANVAS AREA
+  =================================================== -->
+  <main class="dr-main">
+
+    <!-- Top action bar -->
+    <div class="dr-topbar">
+      <div class="dr-topbar-actions">
+        <button class="dr-action-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+          </svg>
+          <span>Support</span>
+        </button>
+        <button class="dr-action-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span>Save</span>
+        </button>
+        <button class="dr-action-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span>Share</span>
+        </button>
+        <button class="dr-action-btn" id="btn-fullscreen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
+          </svg>
+          <span>Full screen</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Shirt canvas -->
+    <div class="dr-canvas-wrap">
+      <div class="dr-canvas" id="design-canvas">
+        <img
+          class="dr-shirt-img"
+          id="shirt-img"
+          src="images/whiteshirt.webp"
+          alt="T-Shirt"
+          draggable="false"
+        >
+        <!-- Print zone — dashed overlay, text elements live inside here -->
+        <div class="dr-print-zone" id="print-zone"></div>
+      </div>
+    </div>
+
+    <!-- View selector -->
+    <div class="dr-views">
+      <button class="dr-view-btn active" data-view="front">
+        <div class="dr-view-thumb">
+          <img id="view-front-thumb" src="images/whiteshirt.webp" alt="Front">
+        </div>
+        <span>Front</span>
+      </button>
+      <button class="dr-view-btn" data-view="back">
+        <div class="dr-view-thumb dr-view-empty"></div>
+        <span>Back</span>
+      </button>
+      <button class="dr-view-btn" data-view="right">
+        <div class="dr-view-thumb dr-view-empty"></div>
+        <span>Right</span>
+      </button>
+      <button class="dr-view-btn" data-view="left">
+        <div class="dr-view-thumb dr-view-empty"></div>
+        <span>Left</span>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ===================================================
+       RIGHT PANEL
+  =================================================== -->
+  <aside class="dr-panel" id="dr-panel">
+
+    <!-- ── Product info (default) ── -->
+    <div id="panel-product" class="dr-panel-body">
+
+      <h2 class="dr-product-title">Men's T-Shirt</h2>
+
+      <span class="dr-eco-badge" title="Eco-friendly production">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1a7a4a">
+          <path d="M17 8C8 10 5.9 16.17 3.82 19.82A2 2 0 005.5 22a2 2 0 001.8-1.1C9 18 11 16 17 16c3.87 0 6-2 6-6 0-2.5-1.5-4.5-3.5-5.5A10 10 0 0017 8z"/>
+        </svg>
+      </span>
+
+      <div class="dr-delivery">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+        <span>Delivery time: <a href="#" class="dr-link">May 26 – Jun 4</a></span>
+      </div>
+
+      <div class="dr-rating">
+        <span class="dr-stars" aria-label="4.5 stars">
+          ★★★★<span class="dr-half-star">★</span>
+        </span>
+        <span class="dr-rating-count">(7219)</span>
+      </div>
+
+      <a href="#" class="dr-product-link">See product details ›</a>
+
+      <div class="dr-print-method-row">
+        <span class="dr-label-muted">Print method:</span>
+        <span class="dr-method-badge">Digital Direct</span>
+      </div>
+
+      <div class="dr-color-label">
+        Product color: <strong id="active-color-name">white</strong>
+      </div>
+
+      <div class="dr-color-grid" id="color-grid">
+        <button class="dr-swatch selected" data-color="white" data-img="images/whiteshirt.webp" style="--sw:#FFFFFF;" title="white">
+          <svg class="dr-swatch-check" width="12" height="12" viewBox="0 0 12 12">
+            <path d="M2 6l3 3 5-5" stroke="#333" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="dr-swatch" data-color="black" data-img="images/blackshirt.webp" style="--sw:#111111;" title="black"></button>
+        <button class="dr-swatch" data-color="gray" data-img="images/grayshirt.webp" style="--sw:#888888;" title="heather gray"></button>
+      </div>
+
+      <button class="dr-arrange-btn">
+        Arrange designs
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+
+    </div><!-- /#panel-product -->
+
+    <!-- ── Text editing panel (hidden until text selected) ── -->
+    <div id="panel-text" class="dr-panel-body hidden">
+
+      <input
+        type="text"
+        id="text-content"
+        class="dr-text-input"
+        placeholder="Your text here"
+        value="Your text here"
+        spellcheck="false"
+      >
+
+      <!-- Formatting toolbar row -->
+      <div class="dr-text-toolbar">
+        <!-- Color picker -->
+        <label class="dr-tb-color" title="Text color">
+          <div class="dr-color-dot" id="text-color-dot" style="background:#000000;"></div>
+          <input type="color" id="text-color" value="#000000">
+        </label>
+
+        <div class="dr-tb-sep"></div>
+
+        <!-- Bold / Italic -->
+        <button class="dr-tb-btn" id="btn-bold" title="Bold"><strong style="font-size:0.95rem;">T</strong></button>
+        <button class="dr-tb-btn" id="btn-italic" title="Italic"><em style="font-size:0.95rem;">T</em></button>
+
+        <div class="dr-tb-sep"></div>
+
+        <!-- Align -->
+        <button class="dr-tb-btn dr-align-btn active" data-align="left" title="Align left">
+          <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 3.5h12M2 6.5h8M2 9.5h12M2 12.5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <button class="dr-tb-btn dr-align-btn" data-align="center" title="Align center">
+          <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 3.5h12M4 6.5h8M2 9.5h12M4 12.5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <button class="dr-tb-btn dr-align-btn" data-align="right" title="Align right">
+          <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 3.5h12M6 6.5h8M2 9.5h12M6 12.5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <button class="dr-tb-btn dr-align-btn" data-align="justify" title="Justify">
+          <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 3.5h12M2 6.5h12M2 9.5h12M2 12.5h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Font selector -->
+      <div class="dr-font-row">
+        <select id="font-select" class="dr-font-select">
+          <option value="'GelatoSans', sans-serif">GelatoSans</option>
+          <option value="'Alfa Slab One', Georgia, serif">Alfa Slab One</option>
+          <option value="'Impact', sans-serif">Impact</option>
+          <option value="'Georgia', serif">Georgia</option>
+          <option value="'Courier New', monospace">Courier New</option>
+          <option value="'Arial', sans-serif">Arial</option>
+        </select>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </div>
+
+      <!-- Text size -->
+      <div class="dr-size-row">
+        <span class="dr-row-label">Text size</span>
+        <div class="dr-size-ctrl">
+          <button class="dr-size-btn" id="btn-size-minus" aria-label="Decrease size">−</button>
+          <input type="number" id="text-size" class="dr-size-val" value="48" min="8" max="200" aria-label="Font size">
+          <button class="dr-size-btn" id="btn-size-plus" aria-label="Increase size">+</button>
+        </div>
+      </div>
+
+      <!-- Bend -->
+      <div class="dr-bend-row">
+        <span class="dr-row-label">Bend text</span>
+        <input type="number" id="bend-val" class="dr-bend-num" value="0" min="-100" max="100">
+        <input type="range" id="bend-slider" class="dr-bend-slider" value="0" min="-100" max="100" step="1">
+      </div>
+
+      <!-- Bottom action grid -->
+      <div class="dr-text-actions">
+
+        <button class="dr-ta-btn" id="btn-bring-front" title="Bring to front">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="8" width="13" height="13" rx="1"/><path d="M8 3h13v13" stroke-dasharray="3 2"/>
+          </svg>
+          <span>Bring to front</span>
+        </button>
+
+        <button class="dr-ta-btn" id="btn-send-back" title="Send to back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="8" y="3" width="13" height="13" rx="1" stroke-dasharray="3 2"/><rect x="3" y="8" width="13" height="13" rx="1"/>
+          </svg>
+          <span>Send to back</span>
+        </button>
+
+        <button class="dr-ta-btn" title="Print areas">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 2"/>
+          </svg>
+          <span>Print areas</span>
+        </button>
+
+        <button class="dr-ta-btn" id="btn-duplicate" title="Duplicate">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="1"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          <span>Duplicate</span>
+        </button>
+
+        <button class="dr-ta-btn dr-ta-delete" id="btn-delete" title="Delete">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+          </svg>
+          <span>Delete</span>
+        </button>
+
+      </div>
+
+    </div><!-- /#panel-text -->
+
+    <!-- CTA — always visible at bottom -->
+    <div class="dr-cta-wrap">
+      <button class="dr-cta-btn">Choose size &amp; quantity</button>
+    </div>
+
+  </aside><!-- /.dr-panel -->
+
+</div><!-- /.dr-root -->
+
+<script src="designer.js"></script>
+</body>
+</html>
