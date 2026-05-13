@@ -454,7 +454,7 @@ button {
 .trust-section {
     background: var(--black);
     color: var(--white);
-    padding: 2.5rem 2rem;
+    padding: 4.5rem 2rem 4.5rem 2rem;
 }
 .trust-container {
     max-width: 1440px;
@@ -473,21 +473,39 @@ button {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
+    width: 56px;
+    height: 56px;
     margin-top: 2px;
+    transition: width 0.2s, height 0.2s;
 }
 .trust-item strong {
     display: block;
-    font-size: 0.9375rem;
-    font-weight: 600;
+    font-size: 1.18rem;
+    font-weight: 700;
     color: var(--white);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
 }
 .trust-item p {
-    font-size: 0.8125rem;
+    font-size: 1.01rem;
     color: #AAAAAA;
-    line-height: 1.5;
+    line-height: 1.6;
+}
+@media (min-width: 769px) {
+    .trust-section {
+        padding-top: 6.5rem;
+        padding-bottom: 6.5rem;
+    }
+    .trust-icon {
+        width: 72px;
+        height: 72px;
+    }
+    .trust-item strong {
+        font-size: 1.35rem;
+    }
+    .trust-item p {
+        font-size: 1.13rem;
+    }
 }
 
 /* ============================================================
