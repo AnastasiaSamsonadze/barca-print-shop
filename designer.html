@@ -3,28 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Design your custom t-shirt online with the Barcaprintshop studio. Add text, choose colors, and order.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Design Studio — Barcaprintshop">
+  <meta property="og:description" content="Design your custom t-shirt online with the Barcaprintshop studio.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://barcaprintshop.com/designer.html">
+  <meta property="og:image" content="images/barclalogo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Design Studio — Barcaprintshop">
+  <meta name="twitter:description" content="Design your custom t-shirt online with the Barcaprintshop studio.">
+  <meta name="theme-color" content="#000000">
+
   <title>Design Studio — Barcaprintshop</title>
+  <link rel="icon" type="image/png" href="images/barclalogo.png">
+  <link rel="canonical" href="https://barcaprintshop.com/designer.html">
+
+  <!-- Google Fonts — 15 designer-quality typefaces -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Black+Han+Sans&family=Dancing+Script:wght@400;700&family=Lobster&family=Montserrat:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;600;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@400;700&family=Righteous&family=Russo+One&family=Satisfy&family=Alfa+Slab+One&display=swap" rel="stylesheet">
+
+  <!-- Shared brand styles (navbar + footer live here) -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Studio-specific styles -->
   <link rel="stylesheet" href="designer.css">
 </head>
 <body>
 
-<div class="dr-root">
+<!-- ===== ANNOUNCEMENT BAR ===== -->
+<div class="announce-bar" role="banner" aria-label="Announcements">
+  <div class="announce-track">
+    <!-- Message 1 -->
+    <div class="announce-msg">
+      <span data-en="Shop Open 24/7 — Order anytime, we ship worldwide" data-ge="მაღაზია ღია 24/7 — შეუკვეთეთ ნებისმიერ დროს, ვაგზავნით მთელ მსოფლიოში">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:6px;">
+          <circle cx="10" cy="10" r="9" stroke="#111" stroke-width="2" fill="none"/>
+          <rect x="9.2" y="4" width="1.6" height="6.5" rx="0.8" fill="#111"/>
+          <rect x="10.1" y="10.1" width="5.2" height="1.6" rx="0.8" transform="rotate(45 10.1 10.1)" fill="#111"/>
+        </svg>
+        Shop Open 24/7 — Order anytime, we ship worldwide
+      </span>
+    </div>
+    <!-- Message 2 -->
+    <div class="announce-msg">
+      <span data-en="Subscribe to our newsletter" data-ge="გამოიწერეთ ჩვენი ბიულეტენი">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:6px;">
+          <rect x="2" y="4" width="16" height="12" rx="2.5" stroke="#111" stroke-width="2" fill="none"/>
+          <polyline points="3,5 10,12 17,5" fill="none" stroke="#111" stroke-width="2"/>
+        </svg>
+        Subscribe to our newsletter
+      </span>
+      <a href="index.html#contact" class="ann-link" data-en="Subscribe now" data-ge="გამოიწერეთ">Subscribe now</a>
+    </div>
+    <!-- Message 1 copy (seamless loop) -->
+    <div class="announce-msg" aria-hidden="true">
+      <span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:6px;">
+          <circle cx="10" cy="10" r="9" stroke="#111" stroke-width="2" fill="none"/>
+          <rect x="9.2" y="4" width="1.6" height="6.5" rx="0.8" fill="#111"/>
+          <rect x="10.1" y="10.1" width="5.2" height="1.6" rx="0.8" transform="rotate(45 10.1 10.1)" fill="#111"/>
+        </svg>
+        Shop Open 24/7 — Order anytime, we ship worldwide
+      </span>
+    </div>
+  </div>
+</div>
 
-  <!-- ===================================================
-       LEFT SIDEBAR
-  =================================================== -->
+<!-- ===== NAVBAR (shared with index.html) ===== -->
+<header class="navbar" id="navbar">
+  <div class="navbar-container">
+    <a href="index.html" class="navbar-logo">
+      <img src="images/barclalogo.png" alt="Barcaprintshop Logo" class="logo-img">
+    </a>
+    <nav class="nav-menu" aria-label="Main navigation">
+      <a href="index.html#shop"    class="nav-link" data-en="Shop"      data-ge="მაღაზია">Shop</a>
+      <a href="index.html#story"   class="nav-link" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a>
+      <a href="index.html#faq"     class="nav-link" data-en="FAQ"       data-ge="კითხვები">FAQ</a>
+      <a href="index.html#contact" class="nav-link" data-en="Contact"   data-ge="კონტაქტი">Contact</a>
+    </nav>
+    <div class="navbar-actions">
+      <div class="lang-switcher" role="group" aria-label="Language">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" data-lang="ge">GE</button>
+      </div>
+      <button class="cart-btn" aria-label="Shopping cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+        </svg>
+        <span class="cart-count">0</span>
+      </button>
+      <button class="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" aria-hidden="true">
+  <nav class="mobile-nav">
+    <a href="index.html#shop"    class="mobile-nav-link" data-en="Shop"      data-ge="მაღაზია">Shop</a>
+    <a href="index.html#story"   class="mobile-nav-link" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a>
+    <a href="index.html#faq"     class="mobile-nav-link" data-en="FAQ"       data-ge="კითხვები">FAQ</a>
+    <a href="index.html#contact" class="mobile-nav-link" data-en="Contact"   data-ge="კონტაქტი">Contact</a>
+  </nav>
+</div>
+
+<!-- ===== DESIGN STUDIO ===== -->
+<div class="dr-studio">
+
+  <!-- ── LEFT SIDEBAR ── -->
   <aside class="dr-sidebar">
-    <nav class="dr-tabs">
+    <nav class="dr-tabs" role="tablist">
 
-      <button class="dr-tab" data-tab="products" title="Products">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="dr-tab" data-tab="products" role="tab" title="Products">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/>
         </svg>
         <span>Products</span>
       </button>
 
-      <button class="dr-tab" data-tab="designs" title="Designs">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="dr-tab" data-tab="designs" role="tab" title="Designs">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="3" width="18" height="18" rx="2"/>
           <circle cx="8.5" cy="8.5" r="1.5"/>
           <path d="M21 15l-5-5L5 21"/>
@@ -32,15 +135,15 @@
         <span>Designs</span>
       </button>
 
-      <button class="dr-tab active" data-tab="text" title="Text">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="dr-tab active" data-tab="text" role="tab" title="Text">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
         </svg>
         <span>Text</span>
       </button>
 
-      <button class="dr-tab" data-tab="upload" title="Upload">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <button class="dr-tab" data-tab="upload" role="tab" title="Upload">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
         </svg>
         <span>Upload</span>
@@ -52,13 +155,13 @@
 
     <div class="dr-undoredo">
       <button class="dr-undoredo-btn" id="btn-undo" disabled title="Undo">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 7v6h6"/><path d="M3 13C5 7.5 10 4 16 5.5c4 1 7 4.5 7 9"/>
         </svg>
         <span>Undo</span>
       </button>
       <button class="dr-undoredo-btn" id="btn-redo" disabled title="Redo">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 7v6h-6"/><path d="M21 13C19 7.5 14 4 8 5.5c-4 1-7 4.5-7 9"/>
         </svg>
         <span>Redo</span>
@@ -66,53 +169,39 @@
     </div>
   </aside>
 
-  <!-- ===================================================
-       MAIN CANVAS AREA
-  =================================================== -->
+  <!-- ── CENTER CANVAS ── -->
   <main class="dr-main">
 
     <!-- Top action bar -->
     <div class="dr-topbar">
-      <div class="dr-topbar-actions">
-        <button class="dr-action-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-          </svg>
-          <span>Support</span>
-        </button>
-        <button class="dr-action-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
-          </svg>
-          <span>Save</span>
-        </button>
-        <button class="dr-action-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-          </svg>
-          <span>Share</span>
-        </button>
-        <button class="dr-action-btn" id="btn-fullscreen">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
-          </svg>
-          <span>Full screen</span>
-        </button>
-      </div>
+      <button class="dr-action-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+        </svg>
+        <span>Support</span>
+      </button>
+      <button class="dr-action-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+        </svg>
+        <span>Save</span>
+      </button>
+      <button class="dr-action-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        <span>Share</span>
+      </button>
+
     </div>
 
-    <!-- Shirt canvas -->
-    <div class="dr-canvas-wrap">
+    <!-- Canvas (shirt + print zone) -->
+    <div class="dr-canvas-wrap" id="canvas-wrap">
       <div class="dr-canvas" id="design-canvas">
-        <img
-          class="dr-shirt-img"
-          id="shirt-img"
-          src="images/whiteshirt.webp"
-          alt="T-Shirt"
-          draggable="false"
-        >
-        <!-- Print zone — dashed overlay, text elements live inside here -->
+        <img class="dr-shirt-img" id="shirt-img"
+             src="images/whiteshirt.webp" alt="T-Shirt"
+             draggable="false" role="presentation">
         <div class="dr-print-zone" id="print-zone"></div>
       </div>
     </div>
@@ -126,39 +215,29 @@
         <span>Front</span>
       </button>
       <button class="dr-view-btn" data-view="back">
-        <div class="dr-view-thumb dr-view-empty"></div>
+        <div class="dr-view-thumb">
+          <img id="view-back-thumb" src="images/whiteback.webp" alt="Back">
+        </div>
         <span>Back</span>
-      </button>
-      <button class="dr-view-btn" data-view="right">
-        <div class="dr-view-thumb dr-view-empty"></div>
-        <span>Right</span>
-      </button>
-      <button class="dr-view-btn" data-view="left">
-        <div class="dr-view-thumb dr-view-empty"></div>
-        <span>Left</span>
       </button>
     </div>
 
-  </main>
+    <!-- ── FLOATING PANEL (bottom-right of canvas) ── -->
+    <aside class="dr-panel">
 
-  <!-- ===================================================
-       RIGHT PANEL
-  =================================================== -->
-  <aside class="dr-panel" id="dr-panel">
-
-    <!-- ── Product info (default) ── -->
+    <!-- ── Product info panel ── -->
     <div id="panel-product" class="dr-panel-body">
 
       <h2 class="dr-product-title">Men's T-Shirt</h2>
 
-      <span class="dr-eco-badge" title="Eco-friendly production">
+      <span class="dr-eco-badge" title="Eco-friendly">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="#1a7a4a">
           <path d="M17 8C8 10 5.9 16.17 3.82 19.82A2 2 0 005.5 22a2 2 0 001.8-1.1C9 18 11 16 17 16c3.87 0 6-2 6-6 0-2.5-1.5-4.5-3.5-5.5A10 10 0 0017 8z"/>
         </svg>
       </span>
 
       <div class="dr-delivery">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/>
           <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
         </svg>
@@ -166,9 +245,7 @@
       </div>
 
       <div class="dr-rating">
-        <span class="dr-stars" aria-label="4.5 stars">
-          ★★★★<span class="dr-half-star">★</span>
-        </span>
+        <span class="dr-stars">★★★★<span class="dr-half-star">★</span></span>
         <span class="dr-rating-count">(7219)</span>
       </div>
 
@@ -184,60 +261,55 @@
       </div>
 
       <div class="dr-color-grid" id="color-grid">
-        <button class="dr-swatch selected" data-color="white" data-img="images/whiteshirt.webp" style="--sw:#FFFFFF;" title="white">
+        <button class="dr-swatch selected" data-color="white" data-img="images/whiteshirt.webp" data-back="images/whiteback.webp" style="--sw:#FFFFFF;" title="white">
           <svg class="dr-swatch-check" width="12" height="12" viewBox="0 0 12 12">
             <path d="M2 6l3 3 5-5" stroke="#333" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <button class="dr-swatch" data-color="black" data-img="images/blackshirt.webp" style="--sw:#111111;" title="black"></button>
-        <button class="dr-swatch" data-color="gray" data-img="images/grayshirt.webp" style="--sw:#888888;" title="heather gray"></button>
+        <button class="dr-swatch" data-color="black" data-img="images/blackshirt.webp" data-back="images/blackshirt-back.webp" style="--sw:#111111;" title="black"></button>
+        <button class="dr-swatch" data-color="gray"  data-img="images/grayshirt.webp"  data-back="images/grayback.webp" style="--sw:#888888;" title="heather gray"></button>
       </div>
 
       <button class="dr-arrange-btn">
         Arrange designs
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 18l6-6-6-6"/>
-        </svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
 
     </div><!-- /#panel-product -->
 
-    <!-- ── Text editing panel (hidden until text selected) ── -->
+    <!-- ── Text editing panel ── -->
     <div id="panel-text" class="dr-panel-body hidden">
 
-      <input
-        type="text"
-        id="text-content"
-        class="dr-text-input"
-        placeholder="Your text here"
-        value="Your text here"
-        spellcheck="false"
-      >
+      <!-- Text content input -->
+      <input type="text" id="text-content" class="dr-text-input"
+             placeholder="Your text here" value="Your text here" spellcheck="false">
 
-      <!-- Formatting toolbar row -->
+      <!-- Formatting toolbar -->
       <div class="dr-text-toolbar">
-        <!-- Color picker -->
-        <label class="dr-tb-color" title="Text color">
-          <div class="dr-color-dot" id="text-color-dot" style="background:#000000;"></div>
-          <input type="color" id="text-color" value="#000000">
-        </label>
+
+        <!-- Color swatch + "Color" label -->
+        <div class="dr-tb-color-group">
+          <label class="dr-tb-color-label" title="Text color">
+            <div class="dr-color-dot" id="text-color-dot" style="background:#000000;"></div>
+            <input type="color" id="text-color" value="#000000" tabindex="-1">
+          </label>
+          <span class="dr-color-name">Color</span>
+        </div>
 
         <div class="dr-tb-sep"></div>
 
-        <!-- Bold / Italic -->
-        <button class="dr-tb-btn" id="btn-bold" title="Bold"><strong style="font-size:0.95rem;">T</strong></button>
-        <button class="dr-tb-btn" id="btn-italic" title="Italic"><em style="font-size:0.95rem;">T</em></button>
+        <button class="dr-tb-btn" id="btn-bold"   title="Bold"><b>T</b></button>
+        <button class="dr-tb-btn" id="btn-italic" title="Italic"><i>T</i></button>
 
         <div class="dr-tb-sep"></div>
 
-        <!-- Align -->
-        <button class="dr-tb-btn dr-align-btn active" data-align="left" title="Align left">
+        <button class="dr-tb-btn dr-align-btn active" data-align="left" title="Left">
           <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 3.5h12M2 6.5h8M2 9.5h12M2 12.5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
-        <button class="dr-tb-btn dr-align-btn" data-align="center" title="Align center">
+        <button class="dr-tb-btn dr-align-btn" data-align="center" title="Center">
           <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 3.5h12M4 6.5h8M2 9.5h12M4 12.5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
-        <button class="dr-tb-btn dr-align-btn" data-align="right" title="Align right">
+        <button class="dr-tb-btn dr-align-btn" data-align="right" title="Right">
           <svg width="13" height="13" viewBox="0 0 16 16"><path d="M2 3.5h12M6 6.5h8M2 9.5h12M6 12.5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
         <button class="dr-tb-btn dr-align-btn" data-align="justify" title="Justify">
@@ -245,28 +317,23 @@
         </button>
       </div>
 
-      <!-- Font selector -->
-      <div class="dr-font-row">
-        <select id="font-select" class="dr-font-select">
-          <option value="'GelatoSans', sans-serif">GelatoSans</option>
-          <option value="'Alfa Slab One', Georgia, serif">Alfa Slab One</option>
-          <option value="'Impact', sans-serif">Impact</option>
-          <option value="'Georgia', serif">Georgia</option>
-          <option value="'Courier New', monospace">Courier New</option>
-          <option value="'Arial', sans-serif">Arial</option>
-        </select>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 18l6-6-6-6"/>
-        </svg>
+      <!-- Font picker -->
+      <div class="dr-font-row" id="font-row">
+        <button class="dr-font-trigger" id="font-trigger">
+          <span id="font-label" style="font-family:'GelatoSans',sans-serif;">GelatoSans</span>
+        </button>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dr-font-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        <!-- Dropdown list -->
+        <ul class="dr-font-list hidden" id="font-list" role="listbox"></ul>
       </div>
 
       <!-- Text size -->
       <div class="dr-size-row">
         <span class="dr-row-label">Text size</span>
         <div class="dr-size-ctrl">
-          <button class="dr-size-btn" id="btn-size-minus" aria-label="Decrease size">−</button>
-          <input type="number" id="text-size" class="dr-size-val" value="48" min="8" max="200" aria-label="Font size">
-          <button class="dr-size-btn" id="btn-size-plus" aria-label="Increase size">+</button>
+          <button class="dr-size-btn" id="btn-size-minus" aria-label="Decrease">−</button>
+          <input type="number" id="text-size" class="dr-size-val" value="48" min="8" max="200" aria-label="Size">
+          <button class="dr-size-btn" id="btn-size-plus" aria-label="Increase">+</button>
         </div>
       </div>
 
@@ -274,59 +341,425 @@
       <div class="dr-bend-row">
         <span class="dr-row-label">Bend text</span>
         <input type="number" id="bend-val" class="dr-bend-num" value="0" min="-100" max="100">
-        <input type="range" id="bend-slider" class="dr-bend-slider" value="0" min="-100" max="100" step="1">
       </div>
+      <input type="range" id="bend-slider" class="dr-bend-slider" value="0" min="-100" max="100">
 
-      <!-- Bottom action grid -->
+      <!-- Action grid -->
       <div class="dr-text-actions">
-
-        <button class="dr-ta-btn" id="btn-bring-front" title="Bring to front">
+        <button class="dr-ta-btn" id="btn-bring-front">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="8" width="13" height="13" rx="1"/><path d="M8 3h13v13" stroke-dasharray="3 2"/>
           </svg>
           <span>Bring to front</span>
         </button>
-
-        <button class="dr-ta-btn" id="btn-send-back" title="Send to back">
+        <button class="dr-ta-btn" id="btn-send-back">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <rect x="8" y="3" width="13" height="13" rx="1" stroke-dasharray="3 2"/><rect x="3" y="8" width="13" height="13" rx="1"/>
           </svg>
           <span>Send to back</span>
         </button>
-
-        <button class="dr-ta-btn" title="Print areas">
+        <button class="dr-ta-btn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 2"/>
           </svg>
           <span>Print areas</span>
         </button>
-
-        <button class="dr-ta-btn" id="btn-duplicate" title="Duplicate">
+        <button class="dr-ta-btn" id="btn-duplicate">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="1"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
           </svg>
           <span>Duplicate</span>
         </button>
-
-        <button class="dr-ta-btn dr-ta-delete" id="btn-delete" title="Delete">
+        <button class="dr-ta-btn dr-ta-delete" id="btn-delete">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
           </svg>
           <span>Delete</span>
         </button>
-
       </div>
 
     </div><!-- /#panel-text -->
 
-    <!-- CTA — always visible at bottom -->
+    <!-- CTA — pinned at panel bottom -->
     <div class="dr-cta-wrap">
       <button class="dr-cta-btn">Choose size &amp; quantity</button>
     </div>
 
-  </aside><!-- /.dr-panel -->
+    </aside><!-- /.dr-panel -->
 
-</div><!-- /.dr-root -->
+  </main>
+
+</div><!-- /.dr-studio -->
+
+<!-- ===== CUSTOMER REVIEWS (desktop only) ===== -->
+<section class="reviews-section" id="reviews">
+  <div class="reviews-container">
+    <h2 class="reviews-heading">Customer reviews</h2>
+
+    <!-- Overall rating row -->
+    <div class="reviews-overview">
+      <div class="reviews-score-col">
+        <div class="reviews-big-stars">
+          <span class="rvw-star filled">★</span><span class="rvw-star filled">★</span>
+          <span class="rvw-star filled">★</span><span class="rvw-star filled">★</span>
+          <span class="rvw-star half">★</span>
+        </div>
+        <span class="reviews-count">7220 reviews</span>
+      </div>
+      <div class="reviews-bars-col">
+        <div class="rvw-bar-row"><span class="rvw-bar-label">5 stars</span>
+          <div class="rvw-bar-track"><div class="rvw-bar-fill" style="width:70.8%"></div></div>
+          <span class="rvw-bar-num">5109</span></div>
+        <div class="rvw-bar-row"><span class="rvw-bar-label">4 stars</span>
+          <div class="rvw-bar-track"><div class="rvw-bar-fill" style="width:18.3%"></div></div>
+          <span class="rvw-bar-num">1318</span></div>
+        <div class="rvw-bar-row"><span class="rvw-bar-label">3 stars</span>
+          <div class="rvw-bar-track"><div class="rvw-bar-fill" style="width:5.6%"></div></div>
+          <span class="rvw-bar-num">403</span></div>
+        <div class="rvw-bar-row"><span class="rvw-bar-label">2 stars</span>
+          <div class="rvw-bar-track"><div class="rvw-bar-fill" style="width:2.7%"></div></div>
+          <span class="rvw-bar-num">193</span></div>
+        <div class="rvw-bar-row"><span class="rvw-bar-label">1 star</span>
+          <div class="rvw-bar-track"><div class="rvw-bar-fill" style="width:2.7%"></div></div>
+          <span class="rvw-bar-num">197</span></div>
+      </div>
+    </div>
+
+    <a href="#" class="reviews-howlink">How do reviews work?</a>
+
+    <!-- Review grid -->
+    <div class="reviews-grid">
+
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">May 12, 2026</span></div>
+        <p>I like these t-shirts. They fit well!!</p>
+      </div>
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">May 8, 2026</span></div>
+        <p>Excellent quality.</p>
+      </div>
+
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 29, 2026</span></div>
+        <p>Really nice quality shirts and printing. They also ship fast. This is my go-to custom shirt purveyor.</p>
+      </div>
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 18, 2026</span></div>
+        <p>Everything was great except next time I will probably order a size up! The shirts were a little smaller than I expected.</p>
+      </div>
+
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 17, 2026</span></div>
+        <p>Quality of the shirt was great</p>
+      </div>
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 14, 2026</span></div>
+        <p>The T shirt is a great **, and a great dit</p>
+      </div>
+
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 12, 2026</span></div>
+        <p>its great</p>
+      </div>
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars4">★★★★</span><span class="rvw-star-empty">★</span><span class="rvw-date">April 10, 2026</span></div>
+        <p>Good product not a premium textile but still comfortable enough. Fit is okay but a little smaller than expected, should have gotten a size **. Overall product was sufficient</p>
+      </div>
+
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars4">★★★★</span><span class="rvw-star-empty">★</span><span class="rvw-date">March 10, 2026</span></div>
+        <p>The shirt runs small and shrinks in the wash.</p>
+      </div>
+      <div class="rvw-card">
+        <div class="rvw-meta"><span class="rvw-stars4">★★★★</span><span class="rvw-star-empty">★</span><span class="rvw-date">March 9, 2026</span></div>
+        <p>Delivering what is expected!</p>
+      </div>
+
+    </div><!-- /.reviews-grid -->
+  </div>
+</section>
+
+<!-- ===== FOOTER (shared with index.html) ===== -->
+<footer class="footer" id="contact">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <img src="images/barclalogo.png" alt="Barcaprintshop" class="footer-logo">
+        <p data-en="Premium custom printing based in Barcelona. Creado para ideas creativas."
+           data-ge="პრემიუმ კასტომ პრინტინგი ბარსელონაში. Creado para ideas creativas.">
+          Premium custom printing based in Barcelona.<br>Creado para ideas creativas.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4 data-en="Quick Links" data-ge="სწრაფი ბმულები">Quick Links</h4>
+        <ul>
+          <li><a href="index.html#shop"    data-en="Shop"      data-ge="მაღაზია">Shop</a></li>
+          <li><a href="index.html#story"   data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a></li>
+          <li><a href="index.html#faq"     data-en="FAQ"       data-ge="კითხვები">FAQ</a></li>
+          <li><a href="index.html#contact" data-en="Contact"   data-ge="კონტაქტი">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4 data-en="Follow Us" data-ge="გამოგვყევით">Follow Us</h4>
+        <div class="social-links">
+          <a href="https://instagram.com/marcaprintshop" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/></svg>
+          </a>
+          <a href="https://facebook.com/barcaprintshop" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://wa.me/34603619061" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.47-.148-.67.15-.23.297-.921.967-1.128 1.165-.206.198-.413.223-.71.066-.296-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.781 1.158l-.338-.17-3.51.666.679-3.38-.223-.356a9.9 9.9 0 011.51-4.169c3.852-4.147 10.582-4.357 14.322-.503 3.739 3.853 3.938 10.467.291 14.522-1.811 1.932-4.402 3.01-7.041 3.15l-.355-.071-.271.179.051.3.695 4.236 3.35-.541c4.808-1.781 8.51-5.823 9.234-10.665.779-5.248-1.186-10.253-5.32-13.491-4.134-3.237-10.923-3.116-14.95.357z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4 data-en="Contact" data-ge="კონტაქტი">Contact</h4>
+        <p><a href="mailto:maxprint2019maxprint@gmail.com">maxprint2019maxprint@gmail.com</a></p>
+        <p><a href="tel:+34603619061">+34 603 619 061</a></p>
+        <p data-en="📍 Barcelona, Spain" data-ge="📍 ბარსელონა, ესპანეთი">📍 Barcelona, Spain</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-en="© 2026 Barcaprintshop. All rights reserved."
+         data-ge="© 2026 Barcaprintshop. ყველა უფლება დაცულია.">
+        © 2026 Barcaprintshop. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- Hidden file input for Upload tab -->
+<input type="file" id="upload-input" accept="image/*" style="display:none" aria-hidden="true">
+
+<!-- ==========================================
+     MOBILE-ONLY UI  (hidden on desktop via CSS)
+     ========================================== -->
+
+
+<!-- ── Fixed bottom bar ── -->
+<div id="mob-bottom-bar" class="mob-bottom-bar">
+  <!-- Sub-tray (Text + Upload) — slides open when Add is tapped -->
+  <div id="mob-sub-tray" class="mob-sub-tray mob-hidden">
+    <button class="mob-sub-btn" id="mob-sub-text">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
+      </svg>
+      <span>Text</span>
+    </button>
+    <button class="mob-sub-btn" id="mob-sub-upload">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+      </svg>
+      <span>Upload</span>
+    </button>
+  </div>
+  <!-- Main bar -->
+  <div class="mob-bar-main">
+    <button class="mob-bar-btn" id="mob-btn-add">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      <span>Add</span>
+    </button>
+    <button class="mob-bar-btn" id="mob-btn-product">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/>
+      </svg>
+      <span>Product</span>
+    </button>
+    <button class="mob-bar-btn" id="mob-btn-save">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+        <polyline points="17 21 17 13 7 13 7 21"/>
+        <polyline points="7 3 7 8 15 8"/>
+      </svg>
+      <span>Save</span>
+    </button>
+    <button class="mob-bar-cta" id="mob-btn-choose">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+      </svg>
+      <span>Choose size</span>
+    </button>
+  </div>
+</div>
+
+<!-- ── Edit sheet (slides up when text element is selected) ── -->
+<div id="mob-edit-sheet" class="mob-sheet mob-edit-sheet" aria-hidden="true">
+  <div class="mob-sheet-handle"></div>
+  <div class="mob-sheet-header">
+    <span class="mob-sheet-title">Text settings</span>
+    <button class="mob-sheet-done" id="mob-btn-done">
+      Done
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <!-- Scrollable action pills -->
+  <div class="mob-actions-row">
+    <button class="mob-action-pill" id="mob-act-dup">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="1"/>
+        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+      </svg>
+      <span>Duplicate</span>
+    </button>
+    <button class="mob-action-pill mob-delete-pill" id="mob-act-del">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+      </svg>
+      <span>Delete</span>
+    </button>
+    <button class="mob-action-pill" id="mob-act-bfront">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="8" width="13" height="13" rx="1"/>
+        <path d="M8 3h13v13" stroke-dasharray="3 2"/>
+      </svg>
+      <span>Bring to front</span>
+    </button>
+    <button class="mob-action-pill" id="mob-act-bback">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="3" width="13" height="13" rx="1" stroke-dasharray="3 2"/>
+        <rect x="3" y="8" width="13" height="13" rx="1"/>
+      </svg>
+      <span>Send to back</span>
+    </button>
+    <button class="mob-action-pill">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 2"/>
+      </svg>
+      <span>Print areas</span>
+    </button>
+  </div>
+  <!-- Settings pills -->
+  <div class="mob-settings-row">
+    <div class="mob-setting-pill" id="mob-color-pill">
+      <div class="mob-setting-icon-wrap" style="position:relative;">
+        <div id="mob-color-dot" class="mob-color-circle" style="background:#000;"></div>
+        <input type="color" id="mob-color-input" value="#000000"
+               style="opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer;border:none;padding:0;">
+      </div>
+      <span>Color</span>
+    </div>
+    <div class="mob-setting-pill" id="mob-font-pill">
+      <div class="mob-setting-icon-wrap">
+        <span id="mob-font-preview" style="font-size:1rem;font-weight:700;font-style:italic;font-family:sans-serif;">Aa</span>
+      </div>
+      <span>Font</span>
+    </div>
+    <div class="mob-setting-pill" id="mob-size-pill">
+      <div class="mob-setting-icon-wrap" style="flex-direction:row;gap:4px;">
+        <button class="mob-sz-btn" id="mob-sz-minus">−</button>
+        <span id="mob-sz-val">48</span>
+        <button class="mob-sz-btn" id="mob-sz-plus">+</button>
+      </div>
+      <span>Text size</span>
+    </div>
+    <div class="mob-setting-pill" id="mob-text-pill">
+      <div class="mob-setting-icon-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
+        </svg>
+      </div>
+      <span>Text</span>
+    </div>
+    <div class="mob-setting-pill" id="mob-bend-pill">
+      <div class="mob-setting-icon-wrap" style="flex-direction:row;gap:3px;">
+        <svg width="22" height="14" viewBox="0 0 24 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M2 12 Q12 2 22 12"/>
+        </svg>
+      </div>
+      <span>Bend</span>
+    </div>
+  </div>
+  <!-- Text input row (revealed when Text pill tapped) -->
+  <div id="mob-text-input-row" class="mob-text-input-row mob-hidden">
+    <input type="text" id="mob-text-content" class="mob-text-input" placeholder="Your text here">
+    <button id="mob-text-close" class="mob-text-close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <!-- Bend row (revealed when Bend pill tapped) -->
+  <div id="mob-bend-row" class="mob-bend-row mob-hidden">
+    <span class="mob-bend-label">Bend</span>
+    <input type="range" id="mob-bend-slider" class="mob-bend-slider" value="0" min="-100" max="100">
+    <span id="mob-bend-val-display">0</span>
+    <button id="mob-bend-close" class="mob-text-close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <!-- Font list (revealed when Font pill tapped) -->
+  <div id="mob-font-list-wrap" class="mob-font-list-wrap mob-hidden">
+    <ul id="mob-font-ul" class="mob-font-ul"></ul>
+  </div>
+</div>
+
+<!-- ── Size sheet ── -->
+<div id="mob-size-sheet" class="mob-sheet mob-size-sheet" aria-hidden="true">
+  <div class="mob-sheet-handle"></div>
+  <div class="mob-sheet-header">
+    <span class="mob-sheet-title">Select size</span>
+    <button class="mob-sheet-done" id="mob-size-close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="mob-size-grid" id="mob-size-grid"></div>
+  <div class="mob-size-summary">
+    <span id="mob-size-info">0 items selected</span>
+    <span class="mob-price-info">Article price: <strong>$26.99</strong> &nbsp;·&nbsp; 6+ articles = 10% off</span>
+    <span>Total: <strong id="mob-total-price">$0.00</strong></span>
+  </div>
+  <div class="mob-size-footer">
+    <button class="mob-size-table-btn">📏 Size table</button>
+    <button class="mob-cart-btn" id="mob-add-cart">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+      </svg>
+      Add to cart
+    </button>
+  </div>
+</div>
+
+<!-- ── Product sheet (color & view) ── -->
+<div id="mob-product-sheet" class="mob-sheet mob-product-sheet" aria-hidden="true">
+  <div class="mob-sheet-handle"></div>
+  <div class="mob-sheet-header">
+    <span class="mob-sheet-title">Product</span>
+    <button class="mob-sheet-done" id="mob-product-close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+  <div class="mob-product-body">
+    <div class="mob-product-row">
+      <span class="mob-label">View</span>
+      <div class="mob-view-toggle">
+        <button class="mob-view-btn active" data-view="front">Front</button>
+        <button class="mob-view-btn" data-view="back">Back</button>
+      </div>
+    </div>
+    <div class="mob-product-row">
+      <span class="mob-label">Color: <strong id="mob-active-color">white</strong></span>
+      <div id="mob-swatch-row" class="mob-swatch-row"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop for all sheets -->
+<div id="mob-backdrop" class="mob-backdrop" aria-hidden="true"></div>
 
 <script src="designer.js"></script>
 </body>

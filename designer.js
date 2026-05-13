@@ -1,21 +1,113 @@
 /* ============================================================
-   BARCAPRINTSHOP — DESIGN STUDIO
-   designer.js
+   BARCAPRINTSHOP — DESIGN STUDIO  (designer.js)
    ============================================================ */
 
 (function () {
   'use strict';
 
   /* ─────────────────────────────────────────────────
-     STATE
+     FONT CATALOGUE
   ───────────────────────────────────────────────── */
-  let selectedEl   = null;   // currently selected .dr-text-el
-  let floatBar     = null;   // floating mini-toolbar element
-  let isDragging   = false;
-  let dragOffX     = 0;
-  let dragOffY     = 0;
-  let textCounter  = 0;
-  let currentColor = 'white';
+  const FONTS = [
+    { label: 'GelatoSans',       value: "'GelatoSans', sans-serif" },
+    { label: 'Bebas Neue',       value: "'Bebas Neue', sans-serif" },
+    { label: 'Anton',            value: "'Anton', sans-serif" },
+    { label: 'Oswald',           value: "'Oswald', sans-serif" },
+    { label: 'Russo One',        value: "'Russo One', sans-serif" },
+    { label: 'Black Han Sans',   value: "'Black Han Sans', sans-serif" },
+    { label: 'Righteous',        value: "'Righteous', sans-serif" },
+    { label: 'Montserrat',       value: "'Montserrat', sans-serif" },
+    { label: 'Raleway',          value: "'Raleway', sans-serif" },
+    { label: 'Playfair Display', value: "'Playfair Display', serif" },
+    { label: 'Alfa Slab One',    value: "'Alfa Slab One', serif" },
+    { label: 'Pacifico',         value: "'Pacifico', cursive" },
+    { label: 'Lobster',          value: "'Lobster', cursive" },
+    { label: 'Dancing Script',   value: "'Dancing Script', cursive" },
+    { label: 'Satisfy',          value: "'Satisfy', cursive" },
+    { label: 'Permanent Marker', value: "'Permanent Marker', cursive" },
+  ];
+
+  /* ─────────────────────────────────────────────────
+     DATA STORE  (WeakMap: element → properties)
+  ───────────────────────────────────────────────── */
+  const elData = new WeakMap();
+
+  /* ─────────────────────────────────────────────────
+     COUNTERS / STATE
+  ───────────────────────────────────────────────── */
+  let textCounter = 0;
+  let imgCounter  = 0;
+  let pathCounter = 0;
+  let selectedEl  = null;
+  let currentView = 'front';
+
+  /* ─────────────────────────────────────────────────
+     UNDO / REDO HISTORY
+  ───────────────────────────────────────────────── */
+  const undoStack = [];   // array of JSON snapshots
+  let   undoPtr   = -1;
+  let   historyDebounce = null;
+
+  function serializeZone() {
+    const items = [];
+    printZone.querySelectorAll('.dr-text-el, .dr-img-el').forEach(el => {
+      const d = elData.get(el);
+      if (d) items.push(Object.assign({}, d));
+    });
+    return JSON.stringify(items);
+  }
+
+  function pushHistory() {
+    clearTimeout(historyDebounce);
+    // Drop any redo future
+    undoStack.splice(undoPtr + 1);
+    undoStack.push(serializeZone());
+    undoPtr = undoStack.length - 1;
+    updateUndoBtns();
+  }
+
+  function pushHistoryDebounced(ms) {
+    clearTimeout(historyDebounce);
+    historyDebounce = setTimeout(pushHistory, ms || 400);
+  }
+
+  function updateUndoBtns() {
+    if (btnUndo) btnUndo.disabled = undoPtr <= 0;
+    if (btnRedo) btnRedo.disabled = undoPtr >= undoStack.length - 1;
+  }
+
+  function restoreZone(snapshot) {
+    _deselect(true);
+    Array.from(printZone.querySelectorAll('.dr-text-el, .dr-img-el')).forEach(e => e.remove());
+    const items = JSON.parse(snapshot);
+    items.forEach(item => {
+      if (item._type === 'image') {
+        const el = _createImgEl(item);
+        printZone.appendChild(el);
+        constrainToZone(el);
+      } else {
+        const el = createTextEl(item);
+        printZone.appendChild(el);
+        renderContent(el);
+        clampFontSize(el);
+        constrainToZone(el);
+      }
+    });
+  }
+
+  function doUndo() {
+    if (undoPtr <= 0) return;
+    undoPtr--;
+    restoreZone(undoStack[undoPtr]);
+    updateUndoBtns();
+  }
+
+  function doRedo() {
+    if (undoPtr >= undoStack.length - 1) return;
+    undoPtr++;
+    restoreZone(undoStack[undoPtr]);
+    updateUndoBtns();
+  }
 
   /* ─────────────────────────────────────────────────
      DOM REFS
@@ -23,15 +115,19 @@
   const printZone       = document.getElementById('print-zone');
   const shirtImg        = document.getElementById('shirt-img');
   const viewFrontThumb  = document.getElementById('view-front-thumb');
+  const viewBackThumb   = document.getElementById('view-back-thumb');
   const panelProduct    = document.getElementById('panel-product');
   const panelText       = document.getElementById('panel-text');
   const activeColorName = document.getElementById('active-color-name');
+  const btnUndo         = document.getElementById('btn-undo');
+  const btnRedo         = document.getElementById('btn-redo');
 
-  // Text panel controls
   const inputContent  = document.getElementById('text-content');
   const inputColor    = document.getElementById('text-color');
   const colorDot      = document.getElementById('text-color-dot');
-  const fontSelect    = document.getElementById('font-select');
+  const fontTrigger   = document.getElementById('font-trigger');
+  const fontLabel     = document.getElementById('font-label');
+  const fontList      = document.getElementById('font-list');
   const inputSize     = document.getElementById('text-size');
   const btnBold       = document.getElementById('btn-bold');
   const btnItalic     = document.getElementById('btn-italic');
@@ -41,218 +137,531 @@
   const btnDuplicate  = document.getElementById('btn-duplicate');
   const btnBringFront = document.getElementById('btn-bring-front');
   const btnSendBack   = document.getElementById('btn-send-back');
-  const bendVal       = document.getElementById('bend-val');
+  const bendValInput  = document.getElementById('bend-val');
   const bendSlider    = document.getElementById('bend-slider');
 
   /* ─────────────────────────────────────────────────
-     SIDEBAR TABS
+     CANVAS TEXT MEASUREMENT
   ───────────────────────────────────────────────── */
-  document.querySelectorAll('.dr-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.dr-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
+  let _ctx2d = null;
 
-      if (tab.dataset.tab === 'text') {
-        addText();
-      }
-    });
-  });
-
-  /* ─────────────────────────────────────────────────
-     COLOUR SWATCHES
-  ───────────────────────────────────────────────── */
-  document.querySelectorAll('.dr-swatch').forEach(swatch => {
-    swatch.addEventListener('click', () => {
-      document.querySelectorAll('.dr-swatch').forEach(s => s.classList.remove('selected'));
-      swatch.classList.add('selected');
-      currentColor = swatch.dataset.color;
-      shirtImg.src = swatch.dataset.img;
-      activeColorName.textContent = currentColor;
-      if (viewFrontThumb) viewFrontThumb.src = swatch.dataset.img;
-    });
-  });
-
-  /* ─────────────────────────────────────────────────
-     VIEW BUTTONS (decorative — only Front is active)
-  ───────────────────────────────────────────────── */
-  document.querySelectorAll('.dr-view-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.dr-view-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
-
-  /* ─────────────────────────────────────────────────
-     FULLSCREEN TOGGLE
-  ───────────────────────────────────────────────── */
-  document.getElementById('btn-fullscreen').addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-    } else {
-      document.exitFullscreen().catch(() => {});
+  function measureText(text, fontSize, fontFamily, fontWeight, fontStyle) {
+    if (!_ctx2d) {
+      _ctx2d = document.createElement('canvas').getContext('2d');
     }
-  });
+    const ff = fontFamily.replace(/'/g, '"');
+    _ctx2d.font = `${fontStyle} ${fontWeight} ${Math.round(fontSize)}px ${ff}`;
+    return _ctx2d.measureText(text).width;
+  }
 
-  /* ─────────────────────────────────────────────────
-     ADD TEXT ELEMENT
-  ───────────────────────────────────────────────── */
-  function addText(text) {
-    textCounter++;
-    const label = text || 'Your text here';
-
-    const el = document.createElement('div');
-    el.className   = 'dr-text-el';
-    el.dataset.id  = textCounter;
-    el.textContent = label;
-
-    // Default styles
-    el.style.cssText = [
-      'left: 16px',
-      'top: ' + (16 + (textCounter - 1) * 6) + 'px',
-      'font-size: 48px',
-      'font-weight: 700',
-      'color: #000000',
-      "font-family: 'GelatoSans', sans-serif",
-      'font-style: normal',
-      'text-align: left',
-    ].join(';');
-
-    printZone.appendChild(el);
-    bindTextEl(el);
-    selectElement(el);
+  function escapeXml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   /* ─────────────────────────────────────────────────
-     BIND EVENTS TO A TEXT ELEMENT
+     BUILD SVG — straight or arced text
+  ───────────────────────────────────────────────── */
+  function buildSVG(d) {
+    const { text, bend, fontSize, fontFamily, fontWeight, fontStyle, color } = d;
+    const ff      = fontFamily.replace(/'/g, '"');
+    const rawW    = measureText(text || ' ', fontSize, fontFamily, fontWeight, fontStyle);
+    const pad     = fontSize * 0.25;
+    const W       = Math.max(rawW + pad * 2, 1);
+    // Fixed SVG height for ALL bend values → element never shifts up/down when arc changes
+    const nomH    = Math.ceil(fontSize * 1.4);
+    const absBend = Math.abs(bend);
+
+    if (absBend < 2) {
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.ceil(W)}" height="${nomH}" overflow="visible">
+        <text x="${pad}" y="${Math.round(fontSize)}"
+          font-family="${ff}" font-size="${fontSize}"
+          font-weight="${fontWeight}" font-style="${fontStyle}"
+          fill="${color}">${escapeXml(text)}</text>
+      </svg>`;
+    }
+
+    /* ── ARCED ── */
+    const chord = rawW;
+    const sag   = (absBend / 100) * chord * 0.45;
+    const R     = Math.max(chord / 2 + 1, (chord * chord) / (8 * sag) + sag / 2);
+    const pid   = `p${++pathCounter}`;
+
+    // Visual centre of text (cap-height midpoint) anchored at refY regardless of bend
+    const refY = fontSize * 0.72;
+    let pathD;
+
+    if (bend > 0) {
+      // Rainbow arch: peak is sag above arc endpoints.
+      // Visual centre ≈ y0 - sag/2 → pin to refY → y0 = refY + sag/2
+      const y0 = refY + sag / 2;
+      pathD = `M ${pad},${y0} A ${R},${R} 0 0,0 ${pad + chord},${y0}`;
+    } else {
+      // Frown arch: nadir is sag below arc endpoints.
+      // Visual centre ≈ y0 + sag/2 → pin to refY → y0 = refY - sag/2
+      const y0 = Math.max(fontSize * 0.2, refY - sag / 2);
+      pathD = `M ${pad},${y0} A ${R},${R} 0 0,1 ${pad + chord},${y0}`;
+    }
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${Math.ceil(W)}" height="${nomH}" overflow="visible">
+      <defs><path id="${pid}" d="${pathD}"/></defs>
+      <text font-family="${ff}" font-size="${fontSize}"
+        font-weight="${fontWeight}" font-style="${fontStyle}" fill="${color}">
+        <textPath href="#${pid}" startOffset="50%" text-anchor="middle">${escapeXml(text)}</textPath>
+      </text>
+    </svg>`;
+  }
+
+  /* ─────────────────────────────────────────────────
+     RENDER ELEMENT CONTENT  (updates SVG inside el)
+  ───────────────────────────────────────────────── */
+  function renderContent(el) {
+    const d = elData.get(el);
+    if (!d) return;
+    const content = el.querySelector('.dr-text-content');
+    if (content) content.innerHTML = buildSVG(d);
+  }
+
+  /* ─────────────────────────────────────────────────
+     CLAMP FONT SIZE  so element never overflows zone
+  ───────────────────────────────────────────────── */
+  function clampFontSize(el) {
+    const d = elData.get(el);
+    if (!d) return;
+
+    const maxW = printZone.clientWidth  - 4;
+    const maxH = printZone.clientHeight - 4;
+
+    let changed = false;
+    for (let i = 0; i < 40; i++) {
+      renderContent(el);
+      if (el.offsetWidth <= maxW && el.offsetHeight <= maxH) break;
+      if (d.fontSize <= 8) break;
+      d.fontSize = Math.max(8, d.fontSize - 2);
+      changed = true;
+    }
+    if (changed) {
+      renderContent(el);
+      if (inputSize && selectedEl === el) inputSize.value = Math.round(d.fontSize);
+    }
+  }
+
+  /* ─────────────────────────────────────────────────
+     CONSTRAIN POSITION inside print zone
+  ───────────────────────────────────────────────── */
+  function constrainToZone(el) {
+    const zW = printZone.clientWidth;
+    const zH = printZone.clientHeight;
+    const eW = el.offsetWidth;
+    const eH = el.offsetHeight;
+
+    let l = parseFloat(el.style.left) || 0;
+    let t = parseFloat(el.style.top)  || 0;
+
+    l = Math.max(0, Math.min(l, Math.max(0, zW - eW)));
+    t = Math.max(0, Math.min(t, Math.max(0, zH - eH)));
+
+    el.style.left = l + 'px';
+    el.style.top  = t + 'px';
+  }
+
+  /* ─────────────────────────────────────────────────
+     SHARED ELEMENT HANDLES & BAR BUILDER
+  ───────────────────────────────────────────────── */
+  function addHandlesAndBar(el) {
+    /* Floating action bar */
+    const bar = document.createElement('div');
+    bar.className = 'dr-el-bar';
+    bar.innerHTML = `
+      <button class="dr-el-btn dr-btn-dup" title="Duplicate">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="1"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+        </svg>
+      </button>
+      <button class="dr-el-btn dr-btn-delete" title="Delete">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+        </svg>
+      </button>`;
+    el.appendChild(bar);
+
+    /* Corner handles */
+    ['tl','tr','bl','br'].forEach(c => {
+      const h = document.createElement('span');
+      h.className      = `dr-handle dr-h-${c}`;
+      h.dataset.corner = c;
+      el.appendChild(h);
+    });
+  }
+
+  /* ─────────────────────────────────────────────────
+     CREATE TEXT ELEMENT
+  ───────────────────────────────────────────────── */
+  function createTextEl(overrides) {
+    textCounter++;
+    const d = Object.assign({
+      _type:      'text',
+      text:       'Your text here',
+      bend:       0,
+      fontSize:   48,
+      fontFamily: FONTS[0].value,
+      fontWeight: '700',
+      fontStyle:  'normal',
+      color:      '#000000',
+      textAlign:  'center',
+      left:       16,
+      top:        Math.max(16, Math.round(printZone.clientHeight * 0.3)),
+    }, overrides || {});
+
+    const el = document.createElement('div');
+    el.className  = 'dr-text-el';
+    el.dataset.id = String(textCounter);
+    el.style.left = d.left + 'px';
+    el.style.top  = d.top  + 'px';
+
+    const content = document.createElement('div');
+    content.className = 'dr-text-content';
+    el.appendChild(content);
+
+    addHandlesAndBar(el);
+
+    /* Rotate handle */
+    const rotWrap = document.createElement('div');
+    rotWrap.className = 'dr-rotate-wrap';
+    rotWrap.innerHTML = `
+      <div class="dr-rotate-line"></div>
+      <button class="dr-rotate-btn" title="Rotate" tabindex="-1">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0115-6.7L21 8"/>
+        </svg>
+      </button>`;
+    el.appendChild(rotWrap);
+
+    elData.set(el, d);
+    bindTextEl(el);
+    return el;
+  }
+
+  /* ─────────────────────────────────────────────────
+     CREATE IMAGE ELEMENT
+  ───────────────────────────────────────────────── */
+  function _createImgEl(overrides) {
+    imgCounter++;
+    const d = Object.assign({
+      _type:  'image',
+      src:    '',
+      left:   8,
+      top:    8,
+      width:  120,
+      height: 120,
+    }, overrides || {});
+
+    const el = document.createElement('div');
+    el.className  = 'dr-img-el';
+    el.dataset.id = 'img-' + imgCounter;
+    el.style.cssText = `position:absolute;left:${d.left}px;top:${d.top}px;width:${d.width}px;height:${d.height}px;
+      cursor:grab;user-select:none;border:2px solid transparent;border-radius:2px;line-height:0;`;
+
+    const img = document.createElement('img');
+    img.src   = d.src;
+    img.style.cssText = 'width:100%;height:100%;object-fit:contain;pointer-events:none;display:block;';
+    el.appendChild(img);
+
+    addHandlesAndBar(el);
+    elData.set(el, d);
+    bindImgEl(el);
+    return el;
+  }
+
+  /* ─────────────────────────────────────────────────
+     ADD TEXT (public — used by tab click + init)
+  ───────────────────────────────────────────────── */
+  function addText(overrides) {
+    // Auto-pick white if current shirt is black
+    const activeSwatch = document.querySelector('.dr-swatch.selected');
+    const isBlack = activeSwatch && activeSwatch.dataset.color === 'black';
+    const defaults = isBlack ? { color: '#ffffff' } : {};
+
+    const el = createTextEl(Object.assign(defaults, overrides || {}));
+    printZone.appendChild(el);
+    renderContent(el);
+    clampFontSize(el);
+    constrainToZone(el);
+    selectEl(el);
+    pushHistory();
+  }
+
+  /* ─────────────────────────────────────────────────
+     BIND EVENTS — TEXT ELEMENT
   ───────────────────────────────────────────────── */
   function bindTextEl(el) {
-    el.addEventListener('mousedown', e => {
+    function handleDragStart(e) {
+      if (e.target.classList.contains('dr-handle'))  return;
+      if (e.target.classList.contains('dr-el-btn'))  return;
+      if (e.target.closest('.dr-el-bar'))            return;
+      if (e.target.closest('.dr-rotate-wrap'))       return;
       e.stopPropagation();
-      selectElement(el);
+      if (e.type === 'touchstart') e.preventDefault();
+      selectEl(el);
       startDrag(e, el);
-    });
+    }
+    el.addEventListener('mousedown',  handleDragStart);
+    el.addEventListener('touchstart', handleDragStart, { passive: false });
 
-    // Double-click → focus content input in panel
     el.addEventListener('dblclick', e => {
       e.stopPropagation();
-      inputContent.focus();
-      inputContent.select();
+      if (inputContent) { inputContent.focus(); inputContent.select(); }
+    });
+
+    el.querySelector('.dr-btn-dup').addEventListener('click', e => {
+      e.stopPropagation(); duplicateEl(el);
+    });
+    el.querySelector('.dr-btn-delete').addEventListener('click', e => {
+      e.stopPropagation(); deleteEl(el);
+    });
+
+    el.querySelectorAll('.dr-handle').forEach(h => {
+      h.addEventListener('mousedown', e => {
+        e.stopPropagation(); e.preventDefault();
+        startResize(e, el, h.dataset.corner);
+      });
+      h.addEventListener('touchstart', e => {
+        e.stopPropagation(); e.preventDefault();
+        startResize(e, el, h.dataset.corner);
+      }, { passive: false });
+    });
+  }
+
+  /* ─────────────────────────────────────────────────
+     BIND EVENTS — IMAGE ELEMENT
+  ───────────────────────────────────────────────── */
+  function bindImgEl(el) {
+    function handleDragStart(e) {
+      if (e.target.classList.contains('dr-handle'))  return;
+      if (e.target.classList.contains('dr-el-btn'))  return;
+      if (e.target.closest('.dr-el-bar'))            return;
+      e.stopPropagation();
+      if (e.type === 'touchstart') e.preventDefault();
+      selectEl(el, 'image');
+      startDrag(e, el);
+    }
+    el.addEventListener('mousedown',  handleDragStart);
+    el.addEventListener('touchstart', handleDragStart, { passive: false });
+
+    el.querySelector('.dr-btn-dup').addEventListener('click', e => {
+      e.stopPropagation(); duplicateEl(el);
+    });
+    el.querySelector('.dr-btn-delete').addEventListener('click', e => {
+      e.stopPropagation(); deleteEl(el);
+    });
+
+    el.querySelectorAll('.dr-handle').forEach(h => {
+      h.addEventListener('mousedown', e => {
+        e.stopPropagation(); e.preventDefault();
+        startImgResize(e, el, h.dataset.corner);
+      });
+      h.addEventListener('touchstart', e => {
+        e.stopPropagation(); e.preventDefault();
+        startImgResize(e, el, h.dataset.corner);
+      }, { passive: false });
     });
   }
 
   /* ─────────────────────────────────────────────────
      SELECT / DESELECT
   ───────────────────────────────────────────────── */
-  function selectElement(el) {
+  function selectEl(el, type) {
     if (selectedEl === el) return;
-    if (selectedEl) _deselect();
+    if (selectedEl) _deselect(false);
     selectedEl = el;
     el.classList.add('selected');
-    showTextPanel();
-    populateTextPanel(el);
-    showFloatBar(el);
+    el.style.borderColor = '#3b82f6';
+    el.style.zIndex      = '40';
+
+    const d = elData.get(el);
+    if (d && d._type === 'image') {
+      hideTextPanel(); // show product panel for images
+    } else {
+      showTextPanel();
+      populatePanel(el);
+    }
+    // Mobile: show edit sheet + zoom canvas
+    if (isMobile()) mobShowEditSheet(el);
   }
 
-  function _deselect() {
+  function _deselect(hidePanel) {
     if (!selectedEl) return;
     selectedEl.classList.remove('selected');
+    selectedEl.style.borderColor = '';
+    selectedEl.style.zIndex      = '';
     selectedEl = null;
-    hideTextPanel();
-    removeFloatBar();
+    if (hidePanel !== false) hideTextPanel();
+    // Mobile: hide edit sheet + unzoom
+    if (isMobile()) mobHideEditSheet();
   }
 
-  // Click anywhere outside text element or float bar → deselect
-  document.addEventListener('mousedown', e => {
-    if (!selectedEl) return;
-    if (selectedEl.contains(e.target)) return;
-    if (floatBar && floatBar.contains(e.target)) return;
-    _deselect();
+  /* Click on grey background → deselect */
+  document.getElementById('canvas-wrap').addEventListener('mousedown', e => {
+    if (e.target === document.getElementById('canvas-wrap') ||
+        e.target === document.getElementById('design-canvas') ||
+        e.target === shirtImg) {
+      _deselect();
+    }
+  });
+  printZone.addEventListener('mousedown', e => {
+    if (e.target === printZone) _deselect();
   });
 
   /* ─────────────────────────────────────────────────
-     DRAG
+     TOUCH HELPER
+  ───────────────────────────────────────────────── */
+  function ptOf(e) {
+    if (e.touches      && e.touches.length)        return e.touches[0];
+    if (e.changedTouches && e.changedTouches.length) return e.changedTouches[0];
+    return e;
+  }
+
+  /* ─────────────────────────────────────────────────
+     DRAG (constrained to print zone)
   ───────────────────────────────────────────────── */
   function startDrag(e, el) {
-    if (e.button !== 0) return;
-    isDragging = true;
+    const isTouch = e.type === 'touchstart';
+    if (!isTouch && e.button !== 0) return;
     el.classList.add('is-dragging');
+    el.style.cursor = 'grabbing';
 
-    const zoneRect = printZone.getBoundingClientRect();
-    const elRect   = el.getBoundingClientRect();
+    const pt     = ptOf(e);
+    const zRect  = printZone.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const offX   = pt.clientX - elRect.left;
+    const offY   = pt.clientY - elRect.top;
 
-    dragOffX = e.clientX - elRect.left;
-    dragOffY = e.clientY - elRect.top;
-
-    function onMove(e) {
-      if (!isDragging) return;
-      let x = e.clientX - zoneRect.left - dragOffX;
-      let y = e.clientY - zoneRect.top  - dragOffY;
-      el.style.left = x + 'px';
-      el.style.top  = y + 'px';
-      positionFloatBar(el);
+    function onMove(mv) {
+      if (mv.cancelable) mv.preventDefault();
+      const p = ptOf(mv);
+      const d = elData.get(el);
+      if (!d) return;
+      d.left = p.clientX - zRect.left - offX;
+      d.top  = p.clientY - zRect.top  - offY;
+      el.style.left = d.left + 'px';
+      el.style.top  = d.top  + 'px';
+      constrainToZone(el);
+      d.left = parseFloat(el.style.left);
+      d.top  = parseFloat(el.style.top);
     }
 
     function onUp() {
-      isDragging = false;
       el.classList.remove('is-dragging');
+      el.style.cursor = '';
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup',   onUp);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend',  onUp);
+      pushHistory();
     }
 
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseup',   onUp);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend',  onUp);
   }
 
   /* ─────────────────────────────────────────────────
-     FLOATING MINI-TOOLBAR (duplicate + delete)
+     RESIZE — TEXT: corner drag scales fontSize
   ───────────────────────────────────────────────── */
-  function showFloatBar(el) {
-    removeFloatBar();
+  function startResize(e, el, corner) {
+    selectEl(el);
+    const d = elData.get(el);
+    if (!d) return;
 
-    floatBar = document.createElement('div');
-    floatBar.className = 'dr-float-bar';
-    floatBar.innerHTML = `
-      <button class="dr-float-btn" id="fb-dup" title="Duplicate">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="1"/>
-          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-        </svg>
-      </button>
-      <button class="dr-float-btn dr-float-delete" id="fb-del" title="Delete">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
-        </svg>
-      </button>
-    `;
+    const p0     = ptOf(e);
+    const startX  = p0.clientX;
+    const startY  = p0.clientY;
+    const startSz = d.fontSize;
+    const signX   = corner.includes('r') ?  1 : -1;
+    const signY   = corner.includes('b') ?  1 : -1;
 
-    printZone.appendChild(floatBar);
-    positionFloatBar(el);
+    document.body.style.cursor = `${corner}-resize`;
 
-    floatBar.querySelector('#fb-del').addEventListener('click', e => {
-      e.stopPropagation();
-      deleteSelected();
-    });
-    floatBar.querySelector('#fb-dup').addEventListener('click', e => {
-      e.stopPropagation();
-      duplicateSelected();
-    });
-  }
-
-  function positionFloatBar(el) {
-    if (!floatBar) return;
-    // centre horizontally above the element, within print-zone coordinates
-    const cx = el.offsetLeft + el.offsetWidth  / 2;
-    const ty = el.offsetTop  - 42;             // 42px above element top
-    floatBar.style.left = cx + 'px';
-    floatBar.style.top  = Math.max(-38, ty) + 'px';
-  }
-
-  function removeFloatBar() {
-    if (floatBar) {
-      floatBar.remove();
-      floatBar = null;
+    function onMove(mv) {
+      if (mv.cancelable) mv.preventDefault();
+      const p  = ptOf(mv);
+      const dx = (p.clientX - startX) * signX;
+      const dy = (p.clientY - startY) * signY;
+      d.fontSize = Math.max(8, startSz + (dx + dy) * 0.35);
+      renderContent(el);
+      clampFontSize(el);
+      constrainToZone(el);
+      if (inputSize) inputSize.value = Math.round(d.fontSize);
     }
+
+    function onUp() {
+      document.body.style.cursor = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup',   onUp);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend',  onUp);
+      pushHistory();
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup',   onUp);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend',  onUp);
+  }
+
+  /* ─────────────────────────────────────────────────
+     RESIZE — IMAGE: corner drag resizes element
+  ───────────────────────────────────────────────── */
+  function startImgResize(e, el, corner) {
+    selectEl(el, 'image');
+    const d = elData.get(el);
+    if (!d) return;
+
+    const p0     = ptOf(e);
+    const startX = p0.clientX;
+    const startY = p0.clientY;
+    const startW = d.width;
+    const startH = d.height;
+    const signX  = corner.includes('r') ?  1 : -1;
+    const signY  = corner.includes('b') ?  1 : -1;
+
+    const maxW = printZone.clientWidth  - 4;
+    const maxH = printZone.clientHeight - 4;
+
+    document.body.style.cursor = `${corner}-resize`;
+
+    function onMove(mv) {
+      if (mv.cancelable) mv.preventDefault();
+      const p  = ptOf(mv);
+      const dx = (p.clientX - startX) * signX;
+      const dy = (p.clientY - startY) * signY;
+      const avg = (dx + dy) / 2;
+      d.width  = Math.max(20, Math.min(maxW, startW + avg));
+      d.height = Math.max(20, Math.min(maxH, startH + avg));
+      el.style.width  = d.width  + 'px';
+      el.style.height = d.height + 'px';
+      constrainToZone(el);
+    }
+
+    function onUp() {
+      document.body.style.cursor = '';
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup',   onUp);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend',  onUp);
+      pushHistory();
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup',   onUp);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend',  onUp);
   }
 
   /* ─────────────────────────────────────────────────
@@ -262,160 +671,363 @@
     panelProduct.classList.add('hidden');
     panelText.classList.remove('hidden');
   }
-
   function hideTextPanel() {
     panelText.classList.add('hidden');
     panelProduct.classList.remove('hidden');
   }
 
   /* ─────────────────────────────────────────────────
-     POPULATE TEXT PANEL FROM ELEMENT
+     POPULATE TEXT PANEL FROM ELEMENT DATA
   ───────────────────────────────────────────────── */
-  function populateTextPanel(el) {
-    inputContent.value = el.textContent.trim();
+  function populatePanel(el) {
+    const d = elData.get(el);
+    if (!d) return;
 
-    const hexColor = rgbToHex(el.style.color) || '#000000';
-    inputColor.value       = hexColor;
-    colorDot.style.background = hexColor;
+    inputContent.value        = d.text;
+    inputColor.value          = d.color;
+    colorDot.style.background = d.color;
+    inputSize.value           = Math.round(d.fontSize);
 
-    inputSize.value = parseInt(el.style.fontSize) || 48;
-
-    // Font family — match select option
-    const fam = el.style.fontFamily || '';
-    const opt = Array.from(fontSelect.options).find(o => o.value === fam);
-    if (opt) fontSelect.value = fam;
-
-    // Bold / Italic
-    const isBold   = el.style.fontWeight === '700' || el.style.fontWeight === 'bold';
-    const isItalic = el.style.fontStyle  === 'italic';
-    btnBold.classList.toggle('active', isBold);
-    btnItalic.classList.toggle('active', isItalic);
-
-    // Align
-    const align = el.style.textAlign || 'left';
-    document.querySelectorAll('.dr-align-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.align === align);
+    const match = FONTS.find(f => f.value === d.fontFamily) || FONTS[0];
+    fontLabel.textContent      = match.label;
+    fontLabel.style.fontFamily = match.value;
+    fontList.querySelectorAll('li').forEach(li => {
+      li.classList.toggle('selected', li.dataset.font === d.fontFamily);
     });
 
-    // Bend (cosmetic only)
-    bendVal.value    = 0;
-    bendSlider.value = 0;
+    btnBold.classList.toggle('active',   d.fontWeight === '700' || d.fontWeight === 'bold');
+    btnItalic.classList.toggle('active', d.fontStyle  === 'italic');
+
+    document.querySelectorAll('.dr-align-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.align === d.textAlign);
+    });
+
+    bendValInput.value = d.bend;
+    bendSlider.value   = d.bend;
+
+    // Also sync mobile sheet
+    mobPopulateSheet(el);
   }
 
   /* ─────────────────────────────────────────────────
      TEXT PANEL → LIVE UPDATES
   ───────────────────────────────────────────────── */
 
-  // Text content
-  inputContent.addEventListener('input', () => {
+  function updateAndRender(key, value) {
     if (!selectedEl) return;
-    selectedEl.textContent = inputContent.value;
-    positionFloatBar(selectedEl);
-  });
-
-  // Text color
-  inputColor.addEventListener('input', () => {
-    if (!selectedEl) return;
-    selectedEl.style.color     = inputColor.value;
-    colorDot.style.background  = inputColor.value;
-  });
-
-  // Font
-  fontSelect.addEventListener('change', () => {
-    if (!selectedEl) return;
-    selectedEl.style.fontFamily = fontSelect.value;
-  });
-
-  // Size via number input
-  inputSize.addEventListener('change', () => {
-    applySize(parseInt(inputSize.value) || 48);
-  });
-
-  // Size via − / + buttons
-  btnSizeMinus.addEventListener('click', () => {
-    applySize(Math.max(8, (parseInt(inputSize.value) || 48) - 4));
-  });
-  btnSizePlus.addEventListener('click', () => {
-    applySize(Math.min(200, (parseInt(inputSize.value) || 48) + 4));
-  });
-
-  function applySize(val) {
-    inputSize.value = val;
-    if (!selectedEl) return;
-    selectedEl.style.fontSize = val + 'px';
-    positionFloatBar(selectedEl);
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    d[key] = value;
+    renderContent(selectedEl);
+    clampFontSize(selectedEl);
+    constrainToZone(selectedEl);
+    pushHistory();
   }
 
-  // Bold
+  inputContent.addEventListener('input', () => {
+    if (!selectedEl) return;
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    d.text = inputContent.value;
+    renderContent(selectedEl);
+    clampFontSize(selectedEl);
+    constrainToZone(selectedEl);
+    pushHistoryDebounced(600);
+  });
+
+  inputColor.addEventListener('input', () => {
+    colorDot.style.background = inputColor.value;
+    if (!selectedEl) return;
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    d.color = inputColor.value;
+    renderContent(selectedEl);
+    constrainToZone(selectedEl);
+    pushHistoryDebounced(400);
+  });
+
+  inputSize.addEventListener('change', () => {
+    const v = Math.max(8, Math.min(200, parseInt(inputSize.value) || 48));
+    inputSize.value = v;
+    updateAndRender('fontSize', v);
+  });
+
+  btnSizeMinus.addEventListener('click', () => {
+    if (!selectedEl) return;
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    d.fontSize = Math.max(8, d.fontSize - 4);
+    inputSize.value = Math.round(d.fontSize);
+    renderContent(selectedEl);
+    constrainToZone(selectedEl);
+    pushHistory();
+  });
+
+  btnSizePlus.addEventListener('click', () => {
+    if (!selectedEl) return;
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    d.fontSize += 4;
+    inputSize.value = Math.round(d.fontSize);
+    renderContent(selectedEl);
+    clampFontSize(selectedEl);
+    constrainToZone(selectedEl);
+    pushHistory();
+  });
+
   btnBold.addEventListener('click', () => {
     if (!selectedEl) return;
-    const isBold = selectedEl.style.fontWeight === '700' || selectedEl.style.fontWeight === 'bold';
-    selectedEl.style.fontWeight = isBold ? '400' : '700';
-    btnBold.classList.toggle('active', !isBold);
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    const on = d.fontWeight === '700' || d.fontWeight === 'bold';
+    d.fontWeight = on ? '400' : '700';
+    btnBold.classList.toggle('active', !on);
+    renderContent(selectedEl);
+    clampFontSize(selectedEl);
+    constrainToZone(selectedEl);
+    pushHistory();
   });
 
-  // Italic
   btnItalic.addEventListener('click', () => {
     if (!selectedEl) return;
-    const isItalic = selectedEl.style.fontStyle === 'italic';
-    selectedEl.style.fontStyle = isItalic ? 'normal' : 'italic';
-    btnItalic.classList.toggle('active', !isItalic);
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    const on = d.fontStyle === 'italic';
+    d.fontStyle = on ? 'normal' : 'italic';
+    btnItalic.classList.toggle('active', !on);
+    renderContent(selectedEl);
+    clampFontSize(selectedEl);
+    constrainToZone(selectedEl);
+    pushHistory();
   });
 
-  // Alignment
   document.querySelectorAll('.dr-align-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (!selectedEl) return;
-      selectedEl.style.textAlign = btn.dataset.align;
+      const d = elData.get(selectedEl);
+      if (!d) return;
+      d.textAlign = btn.dataset.align;
       document.querySelectorAll('.dr-align-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      renderContent(selectedEl);
+      pushHistory();
     });
   });
 
-  // Bend (cosmetic sync only — not applied to element)
-  bendSlider.addEventListener('input', () => { bendVal.value    = bendSlider.value; });
-  bendVal.addEventListener('change',   () => { bendSlider.value = bendVal.value;    });
+  /* ── Bend slider ── */
+  function applyBend(val) {
+    const v = Math.max(-100, Math.min(100, parseInt(val) || 0));
+    bendSlider.value   = v;
+    bendValInput.value = v;
+    if (!selectedEl) return;
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    d.bend = v;
+    renderContent(selectedEl);
+    clampFontSize(selectedEl);
+    constrainToZone(selectedEl);
+    pushHistoryDebounced(400);
+  }
+
+  bendSlider.addEventListener('input',   () => applyBend(bendSlider.value));
+  bendValInput.addEventListener('change',() => applyBend(bendValInput.value));
 
   /* ─────────────────────────────────────────────────
-     ACTIONS: Delete / Duplicate / Z-order
+     FONT DROPDOWN
   ───────────────────────────────────────────────── */
-  btnDelete.addEventListener('click', deleteSelected);
+  FONTS.forEach((f, i) => {
+    const li = document.createElement('li');
+    li.textContent       = f.label;
+    li.style.fontFamily  = f.value;
+    li.dataset.font      = f.value;
+    li.dataset.label     = f.label;
+    li.setAttribute('role', 'option');
+    if (i === 0) li.classList.add('selected');
+    li.addEventListener('click', e => {
+      e.stopPropagation();
+      fontList.querySelectorAll('li').forEach(l => l.classList.remove('selected'));
+      li.classList.add('selected');
+      fontLabel.textContent      = f.label;
+      fontLabel.style.fontFamily = f.value;
+      closeFontList();
+      updateAndRender('fontFamily', f.value);
+    });
+    fontList.appendChild(li);
+  });
 
-  function deleteSelected() {
-    if (!selectedEl) return;
-    selectedEl.remove();
-    selectedEl = null;
-    removeFloatBar();
-    hideTextPanel();
+  document.getElementById('font-row').addEventListener('click', e => {
+    e.stopPropagation();
+    fontList.classList.toggle('hidden');
+  });
+
+  function closeFontList() { fontList.classList.add('hidden'); }
+
+  document.addEventListener('mousedown', e => {
+    if (!document.getElementById('font-row').contains(e.target)) closeFontList();
+  }, true);
+
+  /* ─────────────────────────────────────────────────
+     ACTIONS: delete / duplicate / z-order
+  ───────────────────────────────────────────────── */
+  function deleteEl(el) {
+    if (!el) return;
+    if (el === selectedEl) { selectedEl = null; hideTextPanel(); }
+    el.remove();
+    pushHistory();
   }
 
-  btnDuplicate.addEventListener('click', duplicateSelected);
+  function duplicateEl(el) {
+    if (!el) return;
+    const orig = elData.get(el);
+    if (!orig) return;
 
-  function duplicateSelected() {
-    if (!selectedEl) return;
-    textCounter++;
-    const clone = document.createElement('div');
-    clone.className   = 'dr-text-el';
-    clone.dataset.id  = textCounter;
-    clone.textContent = selectedEl.textContent;
-    // Copy computed styles
-    clone.style.cssText = selectedEl.style.cssText;
-    clone.style.left    = (parseInt(selectedEl.style.left) || 0) + 18 + 'px';
-    clone.style.top     = (parseInt(selectedEl.style.top)  || 0) + 18 + 'px';
-    printZone.appendChild(clone);
-    bindTextEl(clone);
-    selectElement(clone);
+    if (orig._type === 'image') {
+      const clone = _createImgEl(Object.assign({}, orig, { left: orig.left + 18, top: orig.top + 18 }));
+      printZone.appendChild(clone);
+      constrainToZone(clone);
+      selectEl(clone, 'image');
+    } else {
+      const clone = createTextEl(Object.assign({}, orig, { left: orig.left + 18, top: orig.top + 18 }));
+      printZone.appendChild(clone);
+      renderContent(clone);
+      clampFontSize(clone);
+      constrainToZone(clone);
+      selectEl(clone);
+    }
+    pushHistory();
   }
+
+  btnDelete.addEventListener('click',     () => deleteEl(selectedEl));
+  btnDuplicate.addEventListener('click',  () => duplicateEl(selectedEl));
 
   btnBringFront.addEventListener('click', () => {
     if (!selectedEl) return;
-    printZone.appendChild(selectedEl);   // move to end = highest z
-    if (floatBar) printZone.appendChild(floatBar);
+    printZone.appendChild(selectedEl);
+    pushHistory();
   });
-
   btnSendBack.addEventListener('click', () => {
     if (!selectedEl) return;
     printZone.insertBefore(selectedEl, printZone.firstChild);
+    pushHistory();
+  });
+
+  /* ─────────────────────────────────────────────────
+     UNDO / REDO BUTTONS
+  ───────────────────────────────────────────────── */
+  if (btnUndo) btnUndo.addEventListener('click', doUndo);
+  if (btnRedo) btnRedo.addEventListener('click', doRedo);
+
+  /* ─────────────────────────────────────────────────
+     SIDEBAR TABS
+  ───────────────────────────────────────────────── */
+  document.querySelectorAll('.dr-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.dr-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      if (tab.dataset.tab === 'text')   addText();
+      if (tab.dataset.tab === 'upload') triggerUpload();
+    });
+  });
+
+  /* ─────────────────────────────────────────────────
+     UPLOAD IMAGE
+  ───────────────────────────────────────────────── */
+  const uploadInput = document.getElementById('upload-input');
+
+  function triggerUpload() {
+    if (uploadInput) uploadInput.click();
+  }
+
+  if (uploadInput) {
+    uploadInput.addEventListener('change', () => {
+      const file = uploadInput.files[0];
+      if (!file || !file.type.startsWith('image/')) return;
+      uploadInput.value = ''; // reset so same file can be re-picked
+
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const src = ev.target.result;
+        const maxSide = Math.min(printZone.clientWidth, printZone.clientHeight) * 0.7;
+        const el = _createImgEl({ src, left: 8, top: 8, width: maxSide, height: maxSide });
+        printZone.appendChild(el);
+        constrainToZone(el);
+        selectEl(el, 'image');
+        pushHistory();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ─────────────────────────────────────────────────
+     COLOUR SWATCHES — with auto text-color on black
+  ───────────────────────────────────────────────── */
+  document.querySelectorAll('.dr-swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+      const prevSwatch = document.querySelector('.dr-swatch.selected');
+      const prevColor  = prevSwatch ? prevSwatch.dataset.color : 'white';
+
+      document.querySelectorAll('.dr-swatch').forEach(s => s.classList.remove('selected'));
+      sw.classList.add('selected');
+      activeColorName.textContent = sw.dataset.color;
+
+      if (viewFrontThumb) viewFrontThumb.src = sw.dataset.img;
+      if (viewBackThumb)  viewBackThumb.src  = sw.dataset.back || sw.dataset.img;
+
+      shirtImg.src = currentView === 'back'
+        ? (sw.dataset.back || sw.dataset.img)
+        : sw.dataset.img;
+
+      // Auto-adjust text colour: black shirt → white text; leaving black → black text
+      const goingBlack  = sw.dataset.color === 'black';
+      const leavingBlack = prevColor === 'black';
+
+      if (goingBlack || leavingBlack) {
+        printZone.querySelectorAll('.dr-text-el').forEach(el => {
+          const d = elData.get(el);
+          if (!d) return;
+          // Only auto-switch if colour is "default" for the previous state
+          if (goingBlack  && (d.color === '#000000' || d.color === '#000')) {
+            d.color = '#ffffff';
+            renderContent(el);
+            if (el === selectedEl) {
+              inputColor.value          = '#ffffff';
+              colorDot.style.background = '#ffffff';
+            }
+          } else if (leavingBlack && (d.color === '#ffffff' || d.color === '#fff')) {
+            d.color = '#000000';
+            renderContent(el);
+            if (el === selectedEl) {
+              inputColor.value          = '#000000';
+              colorDot.style.background = '#000000';
+            }
+          }
+        });
+        pushHistory();
+      }
+    });
+  });
+
+  /* ─────────────────────────────────────────────────
+     VIEW BUTTONS
+  ───────────────────────────────────────────────── */
+  document.querySelectorAll('.dr-view-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dr-view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentView = btn.dataset.view;
+      const activeSwatch = document.querySelector('.dr-swatch.selected');
+      if (activeSwatch) {
+        shirtImg.src = currentView === 'back'
+          ? (activeSwatch.dataset.back || activeSwatch.dataset.img)
+          : activeSwatch.dataset.img;
+      }
+      // Reposition print zone for front vs back (do NOT hide — both views are editable)
+      printZone.classList.toggle('back-view', currentView === 'back');
+      // After reposition, re-clamp all elements in case new zone is smaller
+      printZone.querySelectorAll('.dr-text-el').forEach(el => {
+        constrainToZone(el);
+      });
+    });
   });
 
   /* ─────────────────────────────────────────────────
@@ -423,46 +1035,521 @@
   ───────────────────────────────────────────────── */
   document.addEventListener('keydown', e => {
     const tag = document.activeElement.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+      // Allow Ctrl+Z / Ctrl+Y even in inputs
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); return; }
+      if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) { e.preventDefault(); doRedo(); return; }
+      return;
+    }
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); return; }
+    if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))) { e.preventDefault(); doRedo(); return; }
 
     if (!selectedEl) return;
 
-    if (e.key === 'Delete' || e.key === 'Backspace') {
-      e.preventDefault();
-      deleteSelected();
-    }
-    if (e.key === 'Escape') {
-      _deselect();
-    }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-      e.preventDefault();
-      duplicateSelected();
-    }
+    if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteEl(selectedEl); return; }
+    if (e.key === 'Escape') { _deselect(); return; }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'd') { e.preventDefault(); duplicateEl(selectedEl); return; }
 
-    // Nudge with arrow keys
     const step = e.shiftKey ? 10 : 1;
-    const l = parseInt(selectedEl.style.left) || 0;
-    const t = parseInt(selectedEl.style.top)  || 0;
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); selectedEl.style.left = (l - step) + 'px'; positionFloatBar(selectedEl); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); selectedEl.style.left = (l + step) + 'px'; positionFloatBar(selectedEl); }
-    if (e.key === 'ArrowUp')    { e.preventDefault(); selectedEl.style.top  = (t - step) + 'px'; positionFloatBar(selectedEl); }
-    if (e.key === 'ArrowDown')  { e.preventDefault(); selectedEl.style.top  = (t + step) + 'px'; positionFloatBar(selectedEl); }
+    const d    = elData.get(selectedEl);
+    if (!d) return;
+
+    let moved = false;
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); d.left -= step; moved = true; }
+    if (e.key === 'ArrowRight') { e.preventDefault(); d.left += step; moved = true; }
+    if (e.key === 'ArrowUp')    { e.preventDefault(); d.top  -= step; moved = true; }
+    if (e.key === 'ArrowDown')  { e.preventDefault(); d.top  += step; moved = true; }
+
+    if (moved) {
+      selectedEl.style.left = d.left + 'px';
+      selectedEl.style.top  = d.top  + 'px';
+      constrainToZone(selectedEl);
+      d.left = parseFloat(selectedEl.style.left);
+      d.top  = parseFloat(selectedEl.style.top);
+      pushHistoryDebounced(300);
+    }
   });
 
   /* ─────────────────────────────────────────────────
-     UTILITY
+     NAVBAR
   ───────────────────────────────────────────────── */
-  function rgbToHex(rgb) {
-    if (!rgb) return '#000000';
-    if (rgb.startsWith('#')) return rgb;
-    const m = rgb.match(/\d+/g);
-    if (!m || m.length < 3) return '#000000';
-    return '#' + m.slice(0, 3).map(n => parseInt(n).toString(16).padStart(2, '0')).join('');
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      navbar.style.boxShadow = window.scrollY > 10
+        ? '0 2px 16px rgba(0,0,0,0.10)' : 'none';
+    }, { passive: true });
   }
 
+  const hamburger  = document.querySelector('.hamburger');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => {
+      const open = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', String(!open));
+      hamburger.classList.toggle('open', !open);
+      mobileMenu.classList.toggle('active', !open);
+      mobileMenu.setAttribute('aria-hidden', String(open));
+    });
+  }
+
+  let currentLang = 'en';
+  function updateLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-en]').forEach(el => {
+      el.innerHTML = lang === 'ge' ? (el.dataset.ge || el.dataset.en) : el.dataset.en;
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+  }
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => updateLanguage(btn.dataset.lang));
+  });
+
   /* ─────────────────────────────────────────────────
-     INIT — place one default text on load
+     INIT
   ───────────────────────────────────────────────── */
-  addText('Your text here');
+  window.addEventListener('load', () => {
+    // Seed initial history so undo can't go before initial state
+    addText({ text: 'Your text here' });
+    // addText calls pushHistory → undoPtr = 1 (empty state at 0, one element at 1)
+    // Seed an empty state at index 0 so undo goes to blank canvas
+    undoStack.unshift('[]');
+    undoPtr = 1;
+    updateUndoBtns();
+  });
+
+  /* ═══════════════════════════════════════════════════════════
+     MOBILE UI
+     ═══════════════════════════════════════════════════════════ */
+
+  function isMobile() { return window.innerWidth <= 768; }
+
+  /* ── Sheet management ── */
+  const mobBackdrop = document.getElementById('mob-backdrop');
+
+  function mobOpenSheet(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('mob-sheet-open');
+    el.setAttribute('aria-hidden', 'false');
+    if (mobBackdrop) {
+      mobBackdrop.classList.add('mob-backdrop-on');
+      mobBackdrop.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function mobCloseSheet(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('mob-sheet-open');
+    el.setAttribute('aria-hidden', 'true');
+    // Hide backdrop only if no other sheets are open
+    const anyOpen = document.querySelector('.mob-sheet.mob-sheet-open');
+    if (!anyOpen && mobBackdrop) {
+      mobBackdrop.classList.remove('mob-backdrop-on');
+      mobBackdrop.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function mobCloseAllSheets() {
+    document.querySelectorAll('.mob-sheet').forEach(s => {
+      s.classList.remove('mob-sheet-open');
+      s.setAttribute('aria-hidden', 'true');
+    });
+    if (mobBackdrop) {
+      mobBackdrop.classList.remove('mob-backdrop-on');
+      mobBackdrop.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  /* Backdrop tap closes all sheets */
+  if (mobBackdrop) {
+    mobBackdrop.addEventListener('click', () => {
+      mobCloseAllSheets();
+      _deselect();
+    });
+  }
+
+  /* ── Canvas wrap zoom ── */
+  const canvasWrap = document.getElementById('canvas-wrap');
+  function mobZoomIn()  { if (canvasWrap) canvasWrap.classList.add('mob-zoomed'); }
+  function mobZoomOut() { if (canvasWrap) canvasWrap.classList.remove('mob-zoomed'); }
+
+  /* ── Edit sheet show/hide ── */
+  function mobShowEditSheet(el) {
+    mobZoomIn();
+    mobOpenSheet('mob-edit-sheet');
+  }
+  function mobHideEditSheet() {
+    mobZoomOut();
+    mobCloseSheet('mob-edit-sheet');
+    // Reset pill sub-rows
+    document.getElementById('mob-text-input-row')  && document.getElementById('mob-text-input-row').classList.add('mob-hidden');
+    document.getElementById('mob-font-list-wrap')  && document.getElementById('mob-font-list-wrap').classList.add('mob-hidden');
+  }
+
+  /* ── Populate mobile edit sheet from element data ── */
+  function mobPopulateSheet(el) {
+    if (!el) return;
+    const d = elData.get(el);
+    if (!d) return;
+
+    const dotEl   = document.getElementById('mob-color-dot');
+    const colInpt = document.getElementById('mob-color-input');
+    const szVal   = document.getElementById('mob-sz-val');
+    const fPrev   = document.getElementById('mob-font-preview');
+
+    if (dotEl)   dotEl.style.background = d.color;
+    if (colInpt) colInpt.value          = d.color;
+    if (szVal)   szVal.textContent       = Math.round(d.fontSize);
+    if (fPrev) {
+      const match = FONTS.find(f => f.value === d.fontFamily) || FONTS[0];
+      fPrev.style.fontFamily = match.value;
+    }
+    // Sync text content input if visible
+    const mobTxtContent = document.getElementById('mob-text-content');
+    if (mobTxtContent) mobTxtContent.value = d.text || '';
+    // Sync bend slider
+    const mobBSlider = document.getElementById('mob-bend-slider');
+    const mobBDisp   = document.getElementById('mob-bend-val-display');
+    if (mobBSlider) mobBSlider.value         = d.bend || 0;
+    if (mobBDisp)   mobBDisp.textContent     = d.bend || 0;
+    // Sync font list selected state
+    const mobFontUl = document.getElementById('mob-font-ul');
+    if (mobFontUl) {
+      mobFontUl.querySelectorAll('li').forEach(li => {
+        li.classList.toggle('mob-selected', li.dataset.font === d.fontFamily);
+      });
+    }
+  }
+
+  /* ── Bottom bar buttons ── */
+  const mobBtnAdd     = document.getElementById('mob-btn-add');
+  const mobSubTray    = document.getElementById('mob-sub-tray');
+  const mobSubText    = document.getElementById('mob-sub-text');
+  const mobSubUpload  = document.getElementById('mob-sub-upload');
+  const mobBtnProduct = document.getElementById('mob-btn-product');
+  const mobBtnSave    = document.getElementById('mob-btn-save');
+  const mobBtnChoose  = document.getElementById('mob-btn-choose');
+
+  // Add — toggle sub-tray
+  if (mobBtnAdd && mobSubTray) {
+    mobBtnAdd.addEventListener('click', () => {
+      const open = !mobSubTray.classList.contains('mob-hidden');
+      mobSubTray.classList.toggle('mob-hidden', open);
+    });
+  }
+
+  // Sub-tray: Text
+  if (mobSubText) {
+    mobSubText.addEventListener('click', () => {
+      mobSubTray && mobSubTray.classList.add('mob-hidden');
+      addText({ text: 'Your text here' });
+    });
+  }
+
+  // Sub-tray: Upload
+  if (mobSubUpload) {
+    mobSubUpload.addEventListener('click', () => {
+      mobSubTray && mobSubTray.classList.add('mob-hidden');
+      document.getElementById('upload-input') && document.getElementById('upload-input').click();
+    });
+  }
+
+  // Product
+  if (mobBtnProduct) {
+    mobBtnProduct.addEventListener('click', () => {
+      mobOpenSheet('mob-product-sheet');
+    });
+  }
+
+  // Save (same as desktop Save button)
+  if (mobBtnSave) {
+    mobBtnSave.addEventListener('click', () => {
+      // Placeholder – mirrors desktop Save button
+      const h2 = document.createElement('div');
+      h2.textContent = 'Design saved!';
+      Object.assign(h2.style, {
+        position:'fixed', top:'80px', left:'50%', transform:'translateX(-50%)',
+        background:'#009688', color:'#fff', padding:'10px 22px', borderRadius:'8px',
+        fontFamily:"'GelatoSans',sans-serif", fontSize:'0.9rem', fontWeight:'700',
+        zIndex:'9999', pointerEvents:'none'
+      });
+      document.body.appendChild(h2);
+      setTimeout(() => h2.remove(), 1800);
+    });
+  }
+
+  // Choose size
+  if (mobBtnChoose) {
+    mobBtnChoose.addEventListener('click', () => {
+      mobOpenSheet('mob-size-sheet');
+    });
+  }
+
+  // Fullscreen button
+  const mobFsBtn = document.getElementById('mob-fs-btn');
+  if (mobFsBtn) {
+    mobFsBtn.addEventListener('click', () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen && document.exitFullscreen();
+      } else {
+        document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+      }
+    });
+  }
+
+  /* ── Edit sheet buttons ── */
+  const mobBtnDone   = document.getElementById('mob-btn-done');
+  const mobActDup    = document.getElementById('mob-act-dup');
+  const mobActDel    = document.getElementById('mob-act-del');
+  const mobActBfront = document.getElementById('mob-act-bfront');
+  const mobActBback  = document.getElementById('mob-act-bback');
+
+  if (mobBtnDone)   mobBtnDone.addEventListener('click',   () => _deselect());
+  if (mobActDup)    mobActDup.addEventListener('click',    () => selectedEl && duplicateEl(selectedEl));
+  if (mobActDel)    mobActDel.addEventListener('click',    () => selectedEl && deleteEl(selectedEl));
+  if (mobActBfront) mobActBfront.addEventListener('click', () => document.getElementById('btn-bring-front').click());
+  if (mobActBback)  mobActBback.addEventListener('click',  () => document.getElementById('btn-send-back').click());
+
+  /* ── Color pill ── */
+  const mobColorInput = document.getElementById('mob-color-input');
+  const mobColorDot   = document.getElementById('mob-color-dot');
+  if (mobColorInput) {
+    mobColorInput.addEventListener('input', () => {
+      if (mobColorDot) mobColorDot.style.background = mobColorInput.value;
+      // Sync desktop and trigger update
+      const deskColor = document.getElementById('text-color');
+      if (deskColor) {
+        deskColor.value = mobColorInput.value;
+        deskColor.dispatchEvent(new Event('input'));
+      }
+    });
+  }
+
+  /* ── Size pill ── */
+  const mobSzMinus = document.getElementById('mob-sz-minus');
+  const mobSzPlus  = document.getElementById('mob-sz-plus');
+  const mobSzVal   = document.getElementById('mob-sz-val');
+
+  function mobUpdateSize(delta) {
+    if (!selectedEl) return;
+    const d = elData.get(selectedEl);
+    if (!d) return;
+    const newSz = Math.max(8, Math.min(200, Math.round(d.fontSize) + delta));
+    d.fontSize = newSz;
+    if (mobSzVal) mobSzVal.textContent = newSz;
+    renderContent(selectedEl);
+    clampFontSize(selectedEl);
+    constrainToZone(selectedEl);
+    if (inputSize) inputSize.value = newSz;
+    pushHistoryDebounced(400);
+  }
+  if (mobSzMinus) mobSzMinus.addEventListener('click', e => { e.stopPropagation(); mobUpdateSize(-2); });
+  if (mobSzPlus)  mobSzPlus.addEventListener('click',  e => { e.stopPropagation(); mobUpdateSize(+2); });
+
+  /* ── Text pill — reveals input row ── */
+  const mobTextPill      = document.getElementById('mob-text-pill');
+  const mobTextInputRow  = document.getElementById('mob-text-input-row');
+  const mobTextContent   = document.getElementById('mob-text-content');
+  const mobTextClose     = document.getElementById('mob-text-close');
+
+  if (mobTextPill && mobTextInputRow) {
+    mobTextPill.addEventListener('click', () => {
+      mobTextInputRow.classList.toggle('mob-hidden');
+      document.getElementById('mob-font-list-wrap') && document.getElementById('mob-font-list-wrap').classList.add('mob-hidden');
+      if (!mobTextInputRow.classList.contains('mob-hidden') && mobTextContent) {
+        mobTextContent.focus();
+        mobTextContent.select();
+      }
+    });
+  }
+  if (mobTextClose && mobTextInputRow) {
+    mobTextClose.addEventListener('click', () => mobTextInputRow.classList.add('mob-hidden'));
+  }
+  if (mobTextContent) {
+    mobTextContent.addEventListener('input', () => {
+      const deskContent = document.getElementById('text-content');
+      if (deskContent) {
+        deskContent.value = mobTextContent.value;
+        deskContent.dispatchEvent(new Event('input'));
+      }
+    });
+  }
+
+  /* ── Font pill — reveals font list ── */
+  const mobFontPill     = document.getElementById('mob-font-pill');
+  const mobFontListWrap = document.getElementById('mob-font-list-wrap');
+  const mobFontUl       = document.getElementById('mob-font-ul');
+
+  // Build mobile font list once
+  if (mobFontUl) {
+    FONTS.forEach(f => {
+      const li = document.createElement('li');
+      li.textContent       = f.label;
+      li.style.fontFamily  = f.value;
+      li.dataset.font      = f.value;
+      li.addEventListener('click', () => {
+        // Mark selected
+        mobFontUl.querySelectorAll('li').forEach(x => x.classList.remove('mob-selected'));
+        li.classList.add('mob-selected');
+        // Update preview
+        const fPrev = document.getElementById('mob-font-preview');
+        if (fPrev) fPrev.style.fontFamily = f.value;
+        // Sync desktop font list click
+        const deskLi = fontList.querySelector(`li[data-font="${CSS.escape(f.value)}"]`);
+        if (deskLi) deskLi.click();
+        else {
+          if (selectedEl) {
+            const d = elData.get(selectedEl);
+            if (d) { d.fontFamily = f.value; renderContent(selectedEl); clampFontSize(selectedEl); constrainToZone(selectedEl); pushHistory(); }
+          }
+        }
+        mobFontListWrap && mobFontListWrap.classList.add('mob-hidden');
+      });
+      mobFontUl.appendChild(li);
+    });
+  }
+
+  if (mobFontPill && mobFontListWrap) {
+    mobFontPill.addEventListener('click', () => {
+      mobFontListWrap.classList.toggle('mob-hidden');
+      mobTextInputRow && mobTextInputRow.classList.add('mob-hidden');
+    });
+  }
+
+  /* ── Bend pill — reveals bend slider ── */
+  const mobBendPill    = document.getElementById('mob-bend-pill');
+  const mobBendRow     = document.getElementById('mob-bend-row');
+  const mobBendSlider  = document.getElementById('mob-bend-slider');
+  const mobBendValDisp = document.getElementById('mob-bend-val-display');
+  const mobBendClose   = document.getElementById('mob-bend-close');
+
+  if (mobBendPill && mobBendRow) {
+    mobBendPill.addEventListener('click', () => {
+      mobBendRow.classList.toggle('mob-hidden');
+      document.getElementById('mob-font-list-wrap') && document.getElementById('mob-font-list-wrap').classList.add('mob-hidden');
+      document.getElementById('mob-text-input-row') && document.getElementById('mob-text-input-row').classList.add('mob-hidden');
+    });
+  }
+  if (mobBendClose && mobBendRow) {
+    mobBendClose.addEventListener('click', () => mobBendRow.classList.add('mob-hidden'));
+  }
+  if (mobBendSlider) {
+    mobBendSlider.addEventListener('input', () => {
+      const val = parseInt(mobBendSlider.value);
+      if (mobBendValDisp) mobBendValDisp.textContent = val;
+      // Sync desktop bend slider and trigger update
+      const deskBendSlider = document.getElementById('bend-slider');
+      const deskBendVal    = document.getElementById('bend-val');
+      if (deskBendSlider) { deskBendSlider.value = val; deskBendSlider.dispatchEvent(new Event('input')); }
+      if (deskBendVal)    { deskBendVal.value = val; }
+    });
+  }
+
+  /* ── Size sheet — build size rows ── */
+  const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
+  const PRICE_PER = 26.99;
+  const sizeQtys  = {};
+  SIZES.forEach(s => { sizeQtys[s] = 0; });
+
+  function mobUpdateSizeTotal() {
+    const total    = Object.values(sizeQtys).reduce((a, b) => a + b, 0);
+    const totalPrc = Object.values(sizeQtys).reduce((a, b) => a + b, 0) * PRICE_PER;
+    const disc     = total >= 6 ? 0.9 : 1;
+    const infoEl   = document.getElementById('mob-size-info');
+    const priceEl  = document.getElementById('mob-total-price');
+    if (infoEl)  infoEl.textContent  = `${total} item${total !== 1 ? 's' : ''} selected`;
+    if (priceEl) priceEl.textContent = `$${(totalPrc * disc).toFixed(2)}`;
+  }
+
+  const mobSizeGrid = document.getElementById('mob-size-grid');
+  if (mobSizeGrid) {
+    SIZES.forEach(size => {
+      const row = document.createElement('div');
+      row.className = 'mob-size-row';
+      row.innerHTML = `
+        <span class="mob-size-label">${size}</span>
+        <div class="mob-size-qty">
+          <button class="mob-qty-btn mob-qty-minus" data-size="${size}">−</button>
+          <span class="mob-qty-val" id="mob-qty-${size}">0</span>
+          <button class="mob-qty-btn mob-qty-plus" data-size="${size}">+</button>
+        </div>`;
+      mobSizeGrid.appendChild(row);
+    });
+
+    mobSizeGrid.addEventListener('click', e => {
+      const btn  = e.target.closest('.mob-qty-btn');
+      if (!btn) return;
+      const size = btn.dataset.size;
+      if (!size) return;
+      const isMinus = btn.classList.contains('mob-qty-minus');
+      sizeQtys[size] = Math.max(0, sizeQtys[size] + (isMinus ? -1 : 1));
+      const valEl = document.getElementById(`mob-qty-${size}`);
+      if (valEl) valEl.textContent = sizeQtys[size];
+      mobUpdateSizeTotal();
+    });
+  }
+
+  document.getElementById('mob-size-close') &&
+    document.getElementById('mob-size-close').addEventListener('click', () => mobCloseSheet('mob-size-sheet'));
+
+  document.getElementById('mob-add-cart') &&
+    document.getElementById('mob-add-cart').addEventListener('click', () => {
+      const total = Object.values(sizeQtys).reduce((a, b) => a + b, 0);
+      if (total === 0) { alert('Please select at least one size.'); return; }
+      alert(`🛒 Added ${total} item(s) to cart!\nWe'll contact you via WhatsApp to confirm your order.`);
+      mobCloseSheet('mob-size-sheet');
+    });
+
+  /* ── Product sheet — view & color ── */
+  const mobViewBtns = document.querySelectorAll('.mob-view-btn');
+  mobViewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      mobViewBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Trigger desktop view button
+      const deskBtn = document.querySelector(`.dr-view-btn[data-view="${btn.dataset.view}"]`);
+      if (deskBtn) deskBtn.click();
+    });
+  });
+
+  // Clone color swatches into mobile product sheet
+  const mobSwatchRow = document.getElementById('mob-swatch-row');
+  if (mobSwatchRow) {
+    document.querySelectorAll('.dr-swatch').forEach(sw => {
+      const clone = sw.cloneNode(true);
+      clone.addEventListener('click', () => {
+        // Click corresponding desktop swatch to trigger all existing logic
+        sw.click();
+        // Sync selected state visually
+        mobSwatchRow.querySelectorAll('.dr-swatch').forEach(c => c.classList.remove('selected'));
+        clone.classList.add('selected');
+        const mobActiveColor = document.getElementById('mob-active-color');
+        if (mobActiveColor) mobActiveColor.textContent = clone.dataset.color;
+      });
+      mobSwatchRow.appendChild(clone);
+    });
+  }
+
+  document.getElementById('mob-product-close') &&
+    document.getElementById('mob-product-close').addEventListener('click', () => mobCloseSheet('mob-product-sheet'));
+
+  /* ── Deselect on canvas-wrap / zone touch ── */
+  if (canvasWrap) {
+    canvasWrap.addEventListener('touchstart', e => {
+      if (e.target === canvasWrap ||
+          e.target === document.getElementById('design-canvas') ||
+          e.target === shirtImg) {
+        _deselect();
+      }
+    }, { passive: true });
+  }
+  printZone.addEventListener('touchstart', e => {
+    if (e.target === printZone) _deselect();
+  }, { passive: true });
 
 })();
