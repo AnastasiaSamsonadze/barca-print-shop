@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Barcaprintshop - Premium custom printing for t-shirts, hoodies, bags, and accessories. Based in Barcelona. Turn your creative ideas into reality.">
+    <meta name="description" content="Barcaprintshop - Impresión personalizada premium de camisetas, sudaderas, bolsas y accesorios. Con sede en Barcelona. Convierte tus ideas creativas en realidad.">
     <meta name="keywords" content="custom printing, t-shirt printing, bag printing, Barcelona, personalized products, creative printing, Georgian">
     <meta name="author" content="Barcaprintshop">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Barcaprintshop - Premium Custom Printing">
-    <meta property="og:description" content="Turn your creative ideas into reality with premium custom printing for t-shirts, bags, and accessories. Based in Barcelona.">
+    <meta property="og:title" content="Barcaprintshop - Impresión Personalizada Premium">
+    <meta property="og:description" content="Convierte tus ideas creativas en realidad con impresión personalizada premium para camisetas, bolsas y accesorios. Con sede en Barcelona.">
     <meta property="og:type" content="business.business">
     <meta property="og:url" content="https://barcaprintshop.com">
     <meta property="og:image" content="images/barclalogo.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Barcaprintshop - Premium Custom Printing">
-    <meta name="twitter:description" content="Premium custom printing for t-shirts, bags, and accessories. Based in Barcelona.">
+    <meta name="twitter:title" content="Barcaprintshop - Impresión Personalizada Premium">
+    <meta name="twitter:description" content="Impresión personalizada premium para camisetas, bolsas y accesorios. Con sede en Barcelona.">
     <meta name="theme-color" content="#000000">
 
-    <title>Barcaprintshop | Premium Custom Printing & Personalized Products</title>
+    <title>Barcaprintshop | Impresión Personalizada Premium & Productos Personalizados</title>
     <link rel="icon" type="image/png" href="images/barclalogo.png">
     <link rel="canonical" href="https://barcaprintshop.com">
     <link rel="stylesheet" href="style.css">
@@ -26,40 +26,8 @@
 
     <!-- ===== ANNOUNCEMENT BAR ===== -->
     <div class="announce-bar" role="banner" aria-label="Announcements">
-      <div class="announce-track">
-        <!-- Message 1 -->
-                <div class="announce-msg">
-                    <span data-en="Shop Open 24-7 — Order anytime, we ship worldwide" data-ge="მაღაზია ღია — შეუკვეთეთ ნებისმიერ დროს, ვაგზავნით მთელ მსოფლიოში">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:6px;">
-                            <circle cx="10" cy="10" r="9" stroke="#111" stroke-width="2" fill="none"/>
-                            <rect x="9.2" y="4" width="1.6" height="6.5" rx="0.8" fill="#111"/>
-                            <rect x="10.1" y="10.1" width="5.2" height="1.6" rx="0.8" transform="rotate(45 10.1 10.1)" fill="#111"/>
-                        </svg>
-                        Shop Open — Order anytime, we ship worldwide
-                    </span>
-                </div>
-                <!-- Message 2 -->
-                <div class="announce-msg">
-                    <span data-en="Subscribe to our newsletter" data-ge="გამოიწერეთ ჩვენი ბიულეტენი">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:6px;">
-                            <rect x="2" y="4" width="16" height="12" rx="2.5" stroke="#111" stroke-width="2" fill="none"/>
-                            <polyline points="3,5 10,12 17,5" fill="none" stroke="#111" stroke-width="2"/>
-                        </svg>
-                        Subscribe to our newsletter
-                    </span>
-                    <a href="#contact" class="ann-link" data-en="Subscribe now" data-ge="გამოიწერეთ">Subscribe now</a>
-                </div>
-                <!-- Message 1 copy (seamless loop) -->
-                <div class="announce-msg" aria-hidden="true">
-                    <span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:6px;">
-                            <circle cx="10" cy="10" r="9" stroke="#111" stroke-width="2" fill="none"/>
-                            <rect x="9.2" y="4" width="1.6" height="6.5" rx="0.8" fill="#111"/>
-                            <rect x="10.1" y="10.1" width="5.2" height="1.6" rx="0.8" transform="rotate(45 10.1 10.1)" fill="#111"/>
-                        </svg>
-                        Shop Open — Order anytime, we ship worldwide
-                    </span>
-                </div>
+      <div class="announce-msg" id="announce-msg">
+        <!-- Message content will be injected by JS -->
       </div>
     </div>
 
@@ -74,17 +42,17 @@
 
             <!-- Nav Links (desktop center) -->
             <nav class="nav-menu" aria-label="Main navigation">
-                <a href="#shop" class="nav-link" data-en="Shop" data-ge="მაღაზია">Shop</a>
-                <a href="#story" class="nav-link" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a>
+                <a href="#shop" class="nav-link" data-en="Tienda" data-ge="მაღაზია">Tienda</a>
+                <a href="#story" class="nav-link" data-en="Nuestra Historia" data-ge="ჩვენს შესახებ">Nuestra Historia</a>
                 <a href="#faq" class="nav-link" data-en="FAQ" data-ge="კითხვები">FAQ</a>
-                <a href="#contact" class="nav-link" data-en="Contact" data-ge="კონტაქტი">Contact</a>
+                <a href="#contact" class="nav-link" data-en="Contacto" data-ge="კონტაქტი">Contacto</a>
             </nav>
 
             <!-- Right actions -->
             <div class="navbar-actions">
                 <!-- Language switcher -->
                 <div class="lang-switcher" role="group" aria-label="Language">
-                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn active" data-lang="en">ES</button>
                     <span class="lang-sep">/</span>
                     <button class="lang-btn" data-lang="ge">GE</button>
                 </div>
@@ -112,10 +80,10 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" aria-hidden="true">
         <nav class="mobile-nav">
-            <a href="#shop" class="mobile-nav-link" data-en="Shop" data-ge="მაღაზია">Shop</a>
-            <a href="#story" class="mobile-nav-link" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a>
+            <a href="#shop" class="mobile-nav-link" data-en="Tienda" data-ge="მაღაზია">Tienda</a>
+            <a href="#story" class="mobile-nav-link" data-en="Nuestra Historia" data-ge="ჩვენს შესახებ">Nuestra Historia</a>
             <a href="#faq" class="mobile-nav-link" data-en="FAQ" data-ge="კითხვები">FAQ</a>
-            <a href="#contact" class="mobile-nav-link" data-en="Contact" data-ge="კონტაქტი">Contact</a>
+            <a href="#contact" class="mobile-nav-link" data-en="Contacto" data-ge="კონტაქტი">Contacto</a>
         </nav>
     </div>
 
@@ -126,25 +94,25 @@
             <!-- Left: copy -->
             <div class="hero-content">
                 <h1 class="hero-headline"
-                    data-en="Turn Your Creative Ideas Into Reality"
+                    data-en="Convierte Tus Ideas Creativas en Realidad"
                     data-ge="აქციეთ თქვენი კრეატიული იდეები რეალობად">
-                    Turn Your Creative Ideas Into Reality
+                    Convierte Tus Ideas Creativas en Realidad
                 </h1>
 
                 <p class="hero-subheadline"
-                   data-en="Premium custom printing for t-shirts, hoodies, bags &amp; accessories. Based in Barcelona. Created for creative minds."
+                   data-en="Impresión personalizada premium para camisetas, sudaderas, bolsas &amp; accesorios. Con sede en Barcelona. Creado para mentes creativas."
                    data-ge="პრემიუმ კასტომ პრინტინგი მაისურებისთვის, ფენელებისთვის, ჩანთებისთვის და აქსესუარებისთვის. ბარსელონაში. შექმნილი კრეატიული გონებებისთვის.">
-                    Premium custom printing for t-shirts, hoodies, bags &amp; accessories. Based in Barcelona. Created for creative minds.
+                    Impresión personalizada premium para camisetas, sudaderas, bolsas &amp; accesorios. Con sede en Barcelona. Creado para mentes creativas.
                 </p>
 
                 <div class="hero-ctas">
                     <a href="designer.html" class="btn btn-primary"
-                       data-en="Start Creating" data-ge="შექმნის დაწყება">
-                        Start Creating
+                       data-en="Empieza a Crear" data-ge="შექმნის დაწყება">
+                        Empieza a Crear
                     </a>
                     <a href="#shop" class="btn btn-secondary"
-                       data-en="Shop for yourself" data-ge="თქვენთვის შეიძინეთ">
-                        Shop for yourself
+                       data-en="Compra para ti" data-ge="თქვენთვის შეიძინეთ">
+                        Compra para ti
                     </a>
                 </div>
 
@@ -159,16 +127,16 @@
                         <svg viewBox="0 0 20 20" class="star" aria-hidden="true"><path d="M10 1l2.39 4.84 5.34.78-3.86 3.76.91 5.32L10 13.27l-4.78 2.51.91-5.32L2.27 6.62l5.34-.78z"/></svg>
                     </div>
                     <span class="review-text"
-                          data-en="5.0 &middot; based on Google &amp; Facebook reviews"
-                          data-ge="5.0 &middot; Google &amp; Facebook-ის მიმოხილვების საფუძველზე">
-                        5.0 &middot; based on Google &amp; Facebook reviews
+                          data-en="5.0 &middot; basado en reseñas de Google y Facebook"
+                          data-ge="5.0 &middot; Google &amp; Facebook-ის მიმოხილვების საფუძვლით">
+                        5.0 &middot; basado en reseñas de Google y Facebook
                     </span>
                 </div>
             </div>
 
             <!-- Right: hero image -->
             <div class="hero-visual">
-                <img src="images/heroimage.png" alt="" role="presentation" class="hero-image" draggable="false">
+                <img src="images/heroimagefr.png" alt="" role="presentation" class="hero-image" draggable="false">
             </div>
 
         </div>
@@ -177,53 +145,40 @@
     <!-- ===== BESTSELLERS CAROUSEL ===== -->
     <section class="carousel-section" id="bestsellers">
         <div class="carousel-header">
-            <h2 class="carousel-title" data-en="Bestsellers" data-ge="ბესტსელერები">Bestsellers</h2>
-            <a href="#shop" class="carousel-show-all" data-en="Show all" data-ge="ყველა">Show all</a>
+            <h2 class="carousel-title" data-en="Más Vendidos" data-ge="ბესტსელერები">Más Vendidos</h2>
+            <a href="#shop" class="carousel-show-all" data-en="Ver todo" data-ge="ყველა">Ver todo</a>
         </div>
         <div class="carousel-wrapper">
             <div class="carousel-track" id="bestsellers-track">
-                <!-- 7 product placeholders -->
                 <div class="carousel-card black-card">
-                    <div class="carousel-card-img black-rect"></div>
-                    <p class="carousel-card-type" data-en="T-Shirt" data-ge="მაისური">T-Shirt</p>
-                    <p class="carousel-card-name">Custom Design</p>
-                    <p class="carousel-card-price">From €15</p>
+                    <div class="carousel-card-img"><img src="images/photo1.PNG" alt="Bestseller 1" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Camiseta" data-ge="მაისური">Camiseta</p>
+                    <p class="carousel-card-name">Bestseller 1</p>
+                    <p class="carousel-card-price">€20</p>
                 </div>
                 <div class="carousel-card black-card">
-                    <div class="carousel-card-img black-rect"></div>
-                    <p class="carousel-card-type" data-en="Hoodie" data-ge="ფენელი">Hoodie</p>
-                    <p class="carousel-card-name">Custom Design</p>
-                    <p class="carousel-card-price">From €28</p>
+                    <div class="carousel-card-img"><img src="images/photo2.PNG" alt="Bestseller 2" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Camiseta" data-ge="მაისური">Camiseta</p>
+                    <p class="carousel-card-name">Bestseller 2</p>
+                    <p class="carousel-card-price">€20</p>
                 </div>
                 <div class="carousel-card black-card">
-                    <div class="carousel-card-img black-rect"></div>
-                    <p class="carousel-card-type" data-en="Tote Bag" data-ge="ჩანთა">Tote Bag</p>
-                    <p class="carousel-card-name">Custom Design</p>
-                    <p class="carousel-card-price">From €12</p>
+                    <div class="carousel-card-img"><img src="images/photo3.PNG" alt="Bestseller 3" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Camiseta" data-ge="მაისური">Camiseta</p>
+                    <p class="carousel-card-name">Bestseller 3</p>
+                    <p class="carousel-card-price">€20</p>
                 </div>
                 <div class="carousel-card black-card">
-                    <div class="carousel-card-img black-rect"></div>
-                    <p class="carousel-card-type" data-en="Cap" data-ge="ქუდი">Cap</p>
-                    <p class="carousel-card-name">Custom Design</p>
-                    <p class="carousel-card-price">From €16</p>
+                    <div class="carousel-card-img"><img src="images/photo4.PNG" alt="Bestseller 4" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Camiseta" data-ge="მაისური">Camiseta</p>
+                    <p class="carousel-card-name">Bestseller 4</p>
+                    <p class="carousel-card-price">€20</p>
                 </div>
                 <div class="carousel-card black-card">
-                    <div class="carousel-card-img black-rect"></div>
-                    <p class="carousel-card-type" data-en="Mug" data-ge="ჭიქა">Mug</p>
-                    <p class="carousel-card-name">Custom Design</p>
-                    <p class="carousel-card-price">From €8</p>
-                </div>
-                <div class="carousel-card black-card">
-                    <div class="carousel-card-img black-rect"></div>
-                    <p class="carousel-card-type" data-en="Keychain" data-ge="საკიდი">Keychain</p>
-                    <p class="carousel-card-name">Custom Design</p>
-                    <p class="carousel-card-price">From €5</p>
-                </div>
-                <div class="carousel-card black-card">
-                    <div class="carousel-card-img black-rect"></div>
-                    <p class="carousel-card-type" data-en="Apron" data-ge="წინსაფარი">Apron</p>
-                    <p class="carousel-card-name">Custom Design</p>
-                    <p class="carousel-card-price">From €18</p>
+                    <div class="carousel-card-img"><img src="images/photo5.PNG" alt="Bestseller 5" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Camiseta" data-ge="მაისური">Camiseta</p>
+                    <p class="carousel-card-name">Bestseller 5</p>
+                    <p class="carousel-card-price">€20</p>
                 </div>
             </div>
             <button class="carousel-arrow carousel-arrow-left" aria-label="Previous" data-target="bestsellers-track">
@@ -238,41 +193,40 @@
     <!-- ===== NEW ARRIVALS CAROUSEL ===== -->
     <section class="carousel-section" id="new-arrivals">
         <div class="carousel-header">
-            <h2 class="carousel-title" data-en="New Arrivals" data-ge="სიახლეები">New Arrivals</h2>
-            <a href="#shop" class="carousel-show-all" data-en="Show all" data-ge="ყველა">Show all</a>
+            <h2 class="carousel-title" data-en="Nuestros Productos" data-ge="ჩვენი პროდუქტები">Nuestros Productos</h2>
+            <a href="#shop" class="carousel-show-all" data-en="Ver todo" data-ge="ყველა">Ver todo</a>
         </div>
         <div class="carousel-wrapper">
             <div class="carousel-track" id="arrivals-track">
-                <!-- 5 promo placeholders -->
-                <div class="carousel-card gray-card">
-                    <div class="carousel-card-img gray-rect"></div>
-                    <p class="carousel-card-type" data-en="T-Shirt" data-ge="მაისური">T-Shirt</p>
-                    <p class="carousel-card-name">New Design</p>
-                    <p class="carousel-card-price">From €15</p>
+                <div class="carousel-card black-card">
+                    <div class="carousel-card-img"><img src="images/products1.PNG" alt="Product 1" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Camiseta" data-ge="მაისური">Camiseta</p>
+                    <p class="carousel-card-name">Product 1</p>
+                    <p class="carousel-card-price">€20</p>
                 </div>
-                <div class="carousel-card gray-card">
-                    <div class="carousel-card-img gray-rect"></div>
-                    <p class="carousel-card-type" data-en="Hoodie" data-ge="ფენელი">Hoodie</p>
-                    <p class="carousel-card-name">New Design</p>
-                    <p class="carousel-card-price">From €28</p>
+                <div class="carousel-card black-card">
+                    <div class="carousel-card-img"><img src="images/products2.PNG" alt="Tote Bag" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Bolsa Tote" data-ge="ტოტე ჩანთა">Bolsa Tote</p>
+                    <p class="carousel-card-name">Tote Bag</p>
+                    <p class="carousel-card-price">€10</p>
                 </div>
-                <div class="carousel-card gray-card">
-                    <div class="carousel-card-img gray-rect"></div>
-                    <p class="carousel-card-type" data-en="Tote Bag" data-ge="ჩანთა">Tote Bag</p>
-                    <p class="carousel-card-name">New Design</p>
-                    <p class="carousel-card-price">From €12</p>
+                <div class="carousel-card black-card">
+                    <div class="carousel-card-img"><img src="images/products3.PNG" alt="Bracelet Key Chain" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Pulsera/Llavero" data-ge="სამაჯური/გასაღების ჯაჩვი">Pulsera/Llavero</p>
+                    <p class="carousel-card-name">Bracelet Key Chain</p>
+                    <p class="carousel-card-price">€9</p>
                 </div>
-                <div class="carousel-card gray-card">
-                    <div class="carousel-card-img gray-rect"></div>
-                    <p class="carousel-card-type" data-en="Cap" data-ge="ქუდი">Cap</p>
-                    <p class="carousel-card-name">New Design</p>
-                    <p class="carousel-card-price">From €16</p>
+                <div class="carousel-card black-card">
+                    <div class="carousel-card-img"><img src="images/products4.PNG" alt="Mug" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Taza" data-ge="ჭიქა">Taza</p>
+                    <p class="carousel-card-name">Mug</p>
+                    <p class="carousel-card-price">€8</p>
                 </div>
-                <div class="carousel-card gray-card">
-                    <div class="carousel-card-img gray-rect"></div>
-                    <p class="carousel-card-type" data-en="Mug" data-ge="ჭიქა">Mug</p>
-                    <p class="carousel-card-name">New Design</p>
-                    <p class="carousel-card-price">From €8</p>
+                <div class="carousel-card black-card">
+                    <div class="carousel-card-img"><img src="images/products5.PNG" alt="Cap" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
+                    <p class="carousel-card-type" data-en="Gorra" data-ge="ქუდი">Gorra</p>
+                    <p class="carousel-card-name">Cap</p>
+                    <p class="carousel-card-price">€7</p>
                 </div>
             </div>
             <button class="carousel-arrow carousel-arrow-left" aria-label="Previous" data-target="arrivals-track">
@@ -282,158 +236,209 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
         </div>
-    </section>
+        </section>
 
-    <!-- ===== EDITORIAL BANNER ===== -->
-    <section class="editorial-banner">
-        <div class="editorial-inner">
-            <div class="editorial-copy">
-                <h2 class="editorial-headline"
-                    data-en="Georgian Roots.&lt;br&gt;Barcelona Streets."
-                    data-ge="ქართული ფესვები.&lt;br&gt;ბარსელონის ქუჩები.">
-                    Georgian Roots.<br>Barcelona Streets.
-                </h2>
-                <p class="editorial-sub"
-                   data-en="Wear where you come from. We print your heritage, your slang, your flag — on anything. Because your story deserves to be seen."
-                   data-ge="ატარე იქიდან, სადაც მოხვედი. ჩვენ ვბეჭდავთ შენს წარმომავლობას, ჟარგონს, დროშას — ნებისმიერ ნივთზე. რადგან შენი ამბავი ღირს ნახვისა.">
-                    Wear where you come from. We print your heritage, your slang, your flag — on anything. Because your story deserves to be seen.
-                </p>
-                <a href="#shop" class="btn btn-editorial"
-                   data-en="Create your piece" data-ge="შექმენი შენი ნივთი">
-                    Create your piece
-                </a>
+        <!-- ===== VIDEO TEASER SECTION ===== -->
+        <section class="homepage-2nd-teaser">
+            <div class="container">
+                <div class="homepage-2nd-teaser__video-teaser">
+                    <video class="homepage-2nd-teaser__mobile-video" preload="none" playsinline muted loop autoplay poster="images/heroimage.png">
+                        <source src="videos/index-video-mobile.mp4" type="video/mp4">
+                    </video>
+                    <video class="homepage-2nd-teaser__desktop-video" preload="none" playsinline muted loop autoplay poster="images/heroimage.png">
+                        <source src="videos/index-video.mp4" type="video/mp4">
+                    </video>
+                    <div class="homepage-2nd-teaser__text-wrapper">
+                        <h2 class="homepage-2nd-teaser__headline">
+                            <span>Crea tu estilo.<br>Cero energía mainstream</span>
+                        </h2>
+                        <p>
+                            Esta temporada, deja tu huella. Diseña tu propia ropa y accesorios con Barcaprintshop—donde tus ideas se convierten en arte ponible. Destácate, mantente original y deja brillar tu creatividad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- ===== GOOGLE REVIEWS ===== -->
+    <section class="grev-section">
+        <div class="grev-container">
+            <h2 class="grev-heading" data-en="Lo que dicen nuestros clientes" data-ge="რას ამბობენ ჩვენი მომხმარებლები">Lo que dicen nuestros clientes</h2>
+
+            <div class="grev-carousel-wrap">
+                <!-- Prev -->
+                <button class="grev-nav grev-prev" aria-label="Previous">
+                    <svg width="9" height="16" viewBox="0 0 9 16" fill="none"><path d="M8 1L1 8l7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+
+                <div class="grev-overflow">
+                    <div class="grev-track" id="grev-track">
+
+                        <!-- Review 1 -->
+                        <article class="grev-card">
+                            <div class="grev-card-top">
+                                <div class="grev-stars" aria-label="5 out of 5 stars">
+                                    <svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg>
+                                </div>
+                                <span class="grev-badge">
+                                    <svg class="grev-g" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Google Review
+                                </span>
+                            </div>
+                            <p class="grev-title" data-en="¡Calidad increíble!" data-ge="განსაცვიფრებელი ხარისხი!">¡Calidad increíble!</p>
+                            <p class="grev-body" data-en="Pedí camisetas personalizadas para todo mi grupo y todos se volvieron locos. La impresión es nítida, los colores son vivos y llegó mucho más rápido de lo esperado." data-ge="შევუკვეთე კასტომ მაისურები ჩემს გუნდს და ყველა გაგიჟდა. პრინტი მკვეთრია, ფერები ნათელია და ჩამოვიდა გაცილებით სწრაფად, ვიდრე ველოდი.">Pedí camisetas personalizadas para todo mi grupo y todos se volvieron locos. La impresión es nítida, los colores son vivos y llegó mucho más rápido de lo esperado.</p>
+                            <footer class="grev-author">Maria G. &mdash; <time>hace 2 días</time></footer>
+                        </article>
+
+                        <!-- Review 2 -->
+                        <article class="grev-card">
+                            <div class="grev-card-top">
+                                <div class="grev-stars" aria-label="5 out of 5 stars">
+                                    <svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg>
+                                </div>
+                                <span class="grev-badge">
+                                    <svg class="grev-g" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Google Review
+                                </span>
+                            </div>
+                            <p class="grev-title" data-en="Perfecto para nuestro evento" data-ge="სრულყოფილი ჩვენი ღონისძიებისთვის">Perfecto para nuestro evento</p>
+                            <p class="grev-body" data-en="Pedí 20 camisetas personalizadas para la fiesta de la empresa. El equipo fue muy atento y la calidad superó con creces lo que pagamos. Volveré a pedir." data-ge="შევუკვეთე 20 კასტომ მაისური კომპანიის წვეულებისთვის. გუნდი ძალიან პასუხისმგებელი იყო და ხარისხი გაცილებით მაღალი გამოდგა ვიდრე ველოდი.">Pedí 20 camisetas personalizadas para la fiesta de la empresa. El equipo fue muy atento y la calidad superó con creces lo que pagamos. Volveré a pedir.</p>
+                            <footer class="grev-author">Luca M. &mdash; <time>hace 4 días</time></footer>
+                        </article>
+
+                        <!-- Review 3 -->
+                        <article class="grev-card">
+                            <div class="grev-card-top">
+                                <div class="grev-stars" aria-label="5 out of 5 stars">
+                                    <svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg>
+                                </div>
+                                <span class="grev-badge">
+                                    <svg class="grev-g" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Google Review
+                                </span>
+                            </div>
+                            <p class="grev-title" data-en="La mejor imprenta de BCN" data-ge="საუკეთესო პრინტ შოპი BCN-ში">La mejor imprenta de BCN</p>
+                            <p class="grev-body" data-en="Llevo usando Barcaprintshop para todos nuestros drops de merch. Calidad constante cada vez, precios justos y realmente les importa tu visión." data-ge="ვიყენებ Barcaprintshop-ს ჩვენი ყველა მერჩისთვის. ყოველ ჯერზე სტაბილური ხარისხი, სამართლიანი ფასები და ნამდვილად ანგარიშობენ შენს კონცეფციას.">Llevo usando Barcaprintshop para todos nuestros drops de merch. Calidad constante cada vez, precios justos y realmente les importa tu visión.</p>
+                            <footer class="grev-author">Sofia R. &mdash; <time>hace 1 semana</time></footer>
+                        </article>
+
+                        <!-- Review 4 -->
+                        <article class="grev-card">
+                            <div class="grev-card-top">
+                                <div class="grev-stars" aria-label="5 out of 5 stars">
+                                    <svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg>
+                                </div>
+                                <span class="grev-badge">
+                                    <svg class="grev-g" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Google Review
+                                </span>
+                            </div>
+                            <p class="grev-title" data-en="48h y acabado perfecto" data-ge="48 საათი და სრულყოფილი მოხვედრა">48h y acabado perfecto</p>
+                            <p class="grev-body" data-en="Last-minute hoodie order for a birthday. They delivered in under 48 hours with zero quality drop. That kind of service is rare — highly recommend." data-ge="ბოლო წუთს შევუკვეთე ჰუდი დაბადების დღისთვის. მიაწოდეს 48 საათში, ხარისხის გარეშე. ასეთი სერვისი იშვიათია — ძლიერ გირჩევ.">Last-minute hoodie order for a birthday. They delivered in under 48 hours with zero quality drop. That kind of service is rare — highly recommend.</p>
+                            <footer class="grev-author">Nico T. &mdash; <time>hace 1 semana</time></footer>
+                        </article>
+
+                        <!-- Review 5 -->
+                        <article class="grev-card">
+                            <div class="grev-card-top">
+                                <div class="grev-stars" aria-label="5 out of 5 stars">
+                                    <svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg><svg viewBox="0 0 20 20"><use href="#star-filled"/></svg>
+                                </div>
+                                <span class="grev-badge">
+                                    <svg class="grev-g" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Google Review
+                                </span>
+                            </div>
+                            <p class="grev-title" data-en="Regalos personalizados increíbles" data-ge="შესანიშნავი კასტომ საჩუქრები">Regalos personalizados increíbles</p>
+                            <p class="grev-body" data-en="Pedí tazas y llaveros personalizados como regalos. A cada persona le encantaron. Super fácil de diseñar y el acabado es impecable." data-ge="შევუკვეთე პერსონალიზებული ჭიქები და საკიდები საჩუქრად.">Pedí tazas y llaveros personalizados como regalos. A cada persona le encantaron. Super fácil de diseñar y el acabado es impecable.</p>
+                            <footer class="grev-author">Ana K. &mdash; <time>hace 2 semanas</time></footer>
+                        </article>
+
+                    </div>
+                </div>
+
+                <!-- Next -->
+                <button class="grev-nav grev-next" aria-label="Next">
+                    <svg width="9" height="16" viewBox="0 0 9 16" fill="none"><path d="M1 1l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+
+            <!-- Footer rating line -->
+            <div class="grev-footer">
+                <span class="grev-rating-line" data-en="Valorado con <strong>4.9</strong> / 5 basado en <strong>248 reseñas de Google</strong>. Mostrando reseñas de 4 y 5 estrellas." data-ge="შეფასება <strong>4.9</strong> / 5, <strong>248 Google-ის შეფასების</strong> საფუძვლით.">
+                    Valorado con <strong>4.9</strong> / 5 basado en <strong>248 reseñas de Google</strong>. Mostrando reseñas de 4 y 5 estrellas.
+                </span>
+                <svg class="grev-google-wordmark" viewBox="0 0 272 92" xmlns="http://www.w3.org/2000/svg" aria-label="Google">
+                    <path fill="#4285F4" d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
+                    <path fill="#EA4335" d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
+                    <path fill="#FBBC05" d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z"/>
+                    <path fill="#34A853" d="M225 3v65h-9.5V3h9.5z"/>
+                    <path fill="#EA4335" d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.95 0-11.84 4.37-11.59 12.93z"/>
+                    <path fill="#4285F4" d="M35.29 41.41V32h31.91c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 34.61.36 15.33 16.32-.13 35.5-.13c10.5 0 17.98 4.12 23.6 9.49l-6.64 6.64c-4.03-3.78-9.49-6.72-16.97-6.72-13.86 0-24.7 11.17-24.7 25.03 0 13.86 10.84 25.03 24.7 25.03 8.99 0 14.11-3.61 17.39-6.89 2.66-2.66 4.41-6.46 5.1-11.65l-22.49.01z"/>
+                </svg>
             </div>
         </div>
+
+        <!-- Reusable star SVG sprite -->
+        <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+            <symbol id="star-filled" viewBox="0 0 20 20">
+                <path fill="#FBBC04" d="M10 1l2.39 6.26H19l-5.33 3.87 2.04 6.26L10 13.51l-5.71 3.88 2.04-6.26L1 7.26h6.61z"/>
+            </symbol>
+        </svg>
     </section>
 
-    <!-- ===== TRUST STRIP ===== -->
-    <section class="trust-section">
-        <div class="trust-container">
-            <div class="trust-item">
-                <span class="trust-icon">🎨</span>
-                <div>
-                    <strong data-en="Premium Quality" data-ge="პრემიუმ ხარისხი">Premium Quality</strong>
-                    <p data-en="Professional printing &amp; materials" data-ge="პროფესიონალური პრინტი და მასალები">Professional printing &amp; materials</p>
+    <!-- ===== SOBRE NOSOTROS ===== -->
+    <section class="about-section">
+        <div class="about-left">
+            <p class="about-label" data-en="Barcaprintshop" data-ge="ბარკაპრინტშოპი">Barcaprintshop</p>
+            <h2 class="about-heading" data-en="SOBRE NOSOTROS" data-ge="ჩვენს შესახებ">SOBRE NOSOTROS</h2>
+
+            <div class="about-features">
+                <div class="about-feature">
+                    <div class="about-icon-wrap">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                    </div>
+                    <div>
+                        <h3 data-en="Crear" data-ge="შექმენი">Crear</h3>
+                        <p data-en="Barcaprintshop lets you design fully custom products — from tees to tote bags — with your art, your vibe, your vision." data-ge="ბარკაპრინტშოპი გაძლევს საშუალებას შექმნა სრულიად კასტომ პროდუქტები — მაისურებიდან ჩანთებამდე — შენი ხელოვნებით, შენი სტილით.">Barcaprintshop lets you design fully custom products — from tees to tote bags — with your art, your vibe, your vision.</p>
+                    </div>
+                </div>
+                <div class="about-feature">
+                    <div class="about-icon-wrap">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    </div>
+                    <div>
+                        <h3 data-en="Tienda" data-ge="მაღაზია">Tienda</h3>
+                        <p data-en="Explora nuestras colecciones listas o personaliza cualquier artículo con tus fotos, textos y gráficos. Merch fácil." data-ge="დაათვალიერე ჩვენი მზა კოლექცია ან პერსონალიზე ნებისმიერი პროდუქტი შენი ფოტოებით, ტექსტითა და გრაფიკით.">Explora nuestras colecciones listas o personaliza cualquier artículo con tus fotos, textos y gráficos. Merch fácil.</p>
+                    </div>
                 </div>
             </div>
-            <div class="trust-item">
-                <span class="trust-icon">⚡</span>
-                <div>
-                    <strong data-en="Fast Turnaround" data-ge="სწრაფი შესრულება">Fast Turnaround</strong>
-                    <p data-en="Quick delivery in Barcelona area" data-ge="სწრაფი მიწოდება ბარსელონაში">Quick delivery in Barcelona area</p>
-                </div>
-            </div>
-            <div class="trust-item">
-                <span class="trust-icon">✏️</span>
-                <div>
-                    <strong data-en="Fully Custom" data-ge="სრულად კასტომი">Fully Custom</strong>
-                    <p data-en="Your design, your way" data-ge="თქვენი დიზაინი, თქვენი გზით">Your design, your way</p>
-                </div>
-            </div>
-            <div class="trust-item">
-                <span class="trust-icon">📍</span>
-                <div>
-                    <strong data-en="Based in Barcelona" data-ge="ბარსელონაში">Based in Barcelona</strong>
-                    <p>con sede en Barcelona</p>
-                </div>
+
+            <div class="about-actions">
+                <a href="designer.html" class="btn-about-fill" data-en="Crear ahora" data-ge="შექმენი ახლა">Crear ahora</a>
+                <a href="#shop" class="btn-about-outline" data-en="Comprar ahora" data-ge="შეიძინე ახლა">Comprar ahora</a>
             </div>
         </div>
-    </section>
 
-    <!-- ===== PRODUCTS ===== -->
-    <section id="shop" class="products">
-        <div class="products-container">
-            <h2 class="section-title" data-en="Our Products" data-ge="ჩვენი პროდუქცია">Our Products</h2>
-            <p class="section-subtitle"
-               data-en="Everything custom. Everything yours."
-               data-ge="ყველაფერი კასტომი. ყველაფერი თქვენია.">
-                Everything custom. Everything yours.
-            </p>
-
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/400x400/f5f5f5/333?text=T-Shirt" alt="Custom T-Shirt">
-                    </div>
-                    <div class="product-info">
-                        <h3 data-en="T-Shirts" data-ge="მაისურები">T-Shirts</h3>
-                        <p data-en="Premium cotton, full-colour print" data-ge="პრემიუმ ბამბა, სრულფერადი პრინტი">Premium cotton, full-colour print</p>
-                        <span class="price">From €15</span>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/400x400/f5f5f5/333?text=Hoodie" alt="Custom Hoodie">
-                    </div>
-                    <div class="product-info">
-                        <h3 data-en="Hoodies" data-ge="ფენელები">Hoodies</h3>
-                        <p data-en="Warm &amp; comfortable custom prints" data-ge="თბილი და კომფორტული კასტომ პრინტი">Warm &amp; comfortable custom prints</p>
-                        <span class="price">From €28</span>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/400x400/f5f5f5/333?text=Tote+Bag" alt="Tote Bag">
-                    </div>
-                    <div class="product-info">
-                        <h3 data-en="Tote Bags" data-ge="ჩანთები">Tote Bags</h3>
-                        <p data-en="Eco-friendly &amp; personalised" data-ge="ეკო-მეგობრული და პერსონალიზებული">Eco-friendly &amp; personalised</p>
-                        <span class="price">From €12</span>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/400x400/f5f5f5/333?text=Mug" alt="Custom Mug">
-                    </div>
-                    <div class="product-info">
-                        <h3 data-en="Mugs" data-ge="ჭიქები">Mugs</h3>
-                        <p data-en="Perfect for gifting or branding" data-ge="შესანიშნავი საჩუქრად ან ბრენდინგად">Perfect for gifting or branding</p>
-                        <span class="price">From €8</span>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/400x400/f5f5f5/333?text=Keychain" alt="Keychain">
-                    </div>
-                    <div class="product-info">
-                        <h3 data-en="Keychains" data-ge="საკიდები">Keychains</h3>
-                        <p data-en="Small gifts with big personality" data-ge="პატარა საჩუქრები, დიდი პიროვნება">Small gifts with big personality</p>
-                        <span class="price">From €5</span>
-                    </div>
-                </div>
-
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="https://via.placeholder.com/400x400/f5f5f5/333?text=Cap" alt="Custom Cap">
-                    </div>
-                    <div class="product-info">
-                        <h3 data-en="Caps" data-ge="ქუდები">Caps</h3>
-                        <p data-en="Stylish embroidered headwear" data-ge="ელეგანტური ნაქარგი ქუდები">Stylish embroidered headwear</p>
-                        <span class="price">From €16</span>
-                    </div>
-                </div>
-            </div>
+        <div class="about-right">
+            <img src="images/bottom-image.PNG" alt="Barcaprintshop" class="about-img" onerror="this.style.background='#e8e8e8';this.removeAttribute('src')">
         </div>
     </section>
 
     <!-- ===== CTA BAND ===== -->
     <section class="cta-section">
         <div class="cta-container">
-            <h2 data-en="Ready to Create Something Amazing?"
+            <h2 data-en="¡Listo para Crear Algo Increíble?"
                 data-ge="მზად ხართ რაიმე განსაცვიფრებელი შექმნისთვის?">
-                Ready to Create Something Amazing?
+                ¡Listo para Crear Algo Increíble?
             </h2>
-            <p data-en="Start your custom printing journey today."
+            <p data-en="Comienza hoy tu viaje de impresión personalizada."
                data-ge="დაიწყეთ თქვენი კასტომ პრინტინგის მოგზაურობა დღეს.">
-                Start your custom printing journey today.
+                Comienza hoy tu viaje de impresión personalizada.
             </p>
             <a href="#shop" class="btn btn-yellow"
-               data-en="Get Started" data-ge="დაიწყეთ">
-                Get Started
+               data-en="Comenzar" data-ge="დაიწყეთ">
+                Comenzar
             </a>
         </div>
     </section>
@@ -444,24 +449,24 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <img src="images/barclalogo.png" alt="Barcaprintshop" class="footer-logo">
-                    <p data-en="Premium custom printing based in Barcelona. Creado para ideas creativas."
+                    <p data-en="Impresión personalizada premium con sede en Barcelona. Creado para ideas creativas."
                        data-ge="პრემიუმ კასტომ პრინტინგი ბარსელონაში. Creado para ideas creativas.">
                         Premium custom printing based in Barcelona.<br>Creado para ideas creativas.
                     </p>
                 </div>
 
                 <div class="footer-section">
-                    <h4 data-en="Quick Links" data-ge="სწრაფი ბმულები">Quick Links</h4>
+                    <h4 data-en="Enlaces Rápidos" data-ge="სწრაფი ბმულები">Enlaces Rápidos</h4>
                     <ul>
-                        <li><a href="#shop" data-en="Shop" data-ge="მაღაზია">Shop</a></li>
-                        <li><a href="#story" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a></li>
+                        <li><a href="#shop" data-en="Tienda" data-ge="მაღაზია">Tienda</a></li>
+                        <li><a href="#story" data-en="Nuestra Historia" data-ge="ჩვენს შესახებ">Nuestra Historia</a></li>
                         <li><a href="#faq" data-en="FAQ" data-ge="კითხვები">FAQ</a></li>
-                        <li><a href="#contact" data-en="Contact" data-ge="კონტაქტი">Contact</a></li>
+                        <li><a href="#contact" data-en="Contact" data-ge="კონტაქტი">Contacto</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h4 data-en="Follow Us" data-ge="გამოგვყევით">Follow Us</h4>
+                    <h4 data-en="Síguenos" data-ge="გამოგვყევით">Síguenos</h4>
                     <div class="social-links">
                         <a href="https://instagram.com/marcaprintshop" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/></svg>
@@ -476,7 +481,7 @@
                 </div>
 
                 <div class="footer-section">
-                    <h4 data-en="Contact" data-ge="კონტაქტი">Contact</h4>
+                    <h4 data-en="Contact" data-ge="კონტაქტი">Contacto</h4>
                     <p><a href="mailto:maxprint2019maxprint@gmail.com">maxprint2019maxprint@gmail.com</a></p>
                     <p><a href="tel:+34603619061">+34 603 619 061</a></p>
                     <p data-en="📍 Barcelona, Spain" data-ge="📍 ბარსელონა, ესპანეთი">📍 Barcelona, Spain</p>
@@ -484,9 +489,9 @@
             </div>
 
             <div class="footer-bottom">
-                <p data-en="© 2026 Barcaprintshop. All rights reserved."
+                <p data-en="© 2026 Barcaprintshop. Todos los derechos reservados."
                    data-ge="© 2026 Barcaprintshop. ყველა უფლება დაცულია.">
-                    © 2026 Barcaprintshop. All rights reserved.
+                    © 2026 Barcaprintshop. Todos los derechos reservados.
                 </p>
             </div>
         </div>
@@ -517,6 +522,46 @@
                 updateLanguage(currentLang);
             });
         });
+
+        // ── Announcement Bar Cycling ──────────────────────────────────
+        const announceMessages = [
+          {
+            html: `<span data-en="Tienda Abierta 24-7 — Pide cuando quieras, enviamos a todo el mundo" data-ge="მაღაზია ღია — შეუკვეთეთ ნებისმიერ დროს, ვაგზავნით მთელ მსოფლიოში">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:6px;">
+                <circle cx="10" cy="10" r="9" stroke="#111" stroke-width="2" fill="none"/>
+                <rect x="9.2" y="4" width="1.6" height="6.5" rx="0.8" fill="#111"/>
+                <rect x="10.1" y="10.1" width="5.2" height="1.6" rx="0.8" transform="rotate(45 10.1 10.1)" fill="#111"/>
+              </svg>
+              Tienda Abierta — Pide cuando quieras, enviamos a todo el mundo
+            </span>`
+          },
+          {
+            html: `<span data-en="Suscríbete a nuestro boletín" data-ge="გამოიწერეთ ჩვენი ბიულეტენი">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="vertical-align:middle;margin-right:6px;">
+                <rect x="2" y="4" width="16" height="12" rx="2.5" stroke="#111" stroke-width="2" fill="none"/>
+                <polyline points="3,5 10,12 17,5" fill="none" stroke="#111" stroke-width="2"/>
+              </svg>
+              Suscríbete a nuestro boletín
+            </span><a href="#contact" class="ann-link" data-en="Suscríbete ahora" data-ge="გამოიწერეთ">Suscríbete ahora</a>`
+          }
+        ];
+        let announceIndex = 0;
+        const announceMsg = document.getElementById('announce-msg');
+        function showAnnounceMsg(idx) {
+          if (!announceMsg) return;
+          announceMsg.style.opacity = '0';
+          setTimeout(() => {
+            announceMsg.innerHTML = announceMessages[idx].html;
+            updateLanguage(currentLang);
+            announceMsg.style.opacity = '1';
+          }, 300);
+        }
+        function nextAnnounceMsg() {
+          announceIndex = (announceIndex + 1) % announceMessages.length;
+          showAnnounceMsg(announceIndex);
+        }
+        showAnnounceMsg(announceIndex);
+        setInterval(nextAnnounceMsg, 6000);
 
         // ── Mobile Menu ──────────────────────────────────────────────
         const hamburger = document.querySelector('.hamburger');
@@ -556,6 +601,39 @@
             });
         });
 
+        // ── Google Reviews Carousel ──────────────────────────────────
+        (function () {
+            const track   = document.getElementById('grev-track');
+            const prev    = document.querySelector('.grev-prev');
+            const next    = document.querySelector('.grev-next');
+            if (!track || !prev || !next) return;
+
+            let index = 0;
+            function getVisible() {
+                return window.innerWidth <= 480 ? 1
+                     : window.innerWidth <= 768 ? 1
+                     : window.innerWidth <= 1024 ? 3
+                     : 5;
+            }
+            function getCardWidth() {
+                const card = track.querySelector('.grev-card');
+                if (!card) return 260;
+                return card.offsetWidth + 20; // 20 = gap
+            }
+            function maxIndex() {
+                return Math.max(0, track.children.length - getVisible());
+            }
+            function update() {
+                track.style.transform = `translateX(-${index * getCardWidth()}px)`;
+                prev.disabled = index === 0;
+                next.disabled = index >= maxIndex();
+            }
+            prev.addEventListener('click', () => { if (index > 0) { index--; update(); } });
+            next.addEventListener('click', () => { if (index < maxIndex()) { index++; update(); } });
+            window.addEventListener('resize', () => { index = Math.min(index, maxIndex()); update(); });
+            update();
+        })();
+
         // ── Smooth scroll ────────────────────────────────────────────
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', e => {
@@ -566,3 +644,7 @@
     </script>
 </body>
 </html>
+
+
+
+
