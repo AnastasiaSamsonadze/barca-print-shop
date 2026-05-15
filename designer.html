@@ -126,14 +126,6 @@
         <span>Products</span>
       </button>
 
-      <button class="dr-tab" data-tab="designs" role="tab" title="Designs">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <circle cx="8.5" cy="8.5" r="1.5"/>
-          <path d="M21 15l-5-5L5 21"/>
-        </svg>
-        <span>Designs</span>
-      </button>
 
       <button class="dr-tab active" data-tab="text" role="tab" title="Text">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -196,6 +188,8 @@
 
     </div>
 
+  <div class="dr-product-picker hidden" id="dr-product-picker" aria-label="Choose product"></div>
+
     <!-- Canvas (shirt + print zone) -->
     <div class="dr-canvas-wrap" id="canvas-wrap">
       <div class="dr-canvas" id="design-canvas">
@@ -228,7 +222,7 @@
     <!-- ── Product info panel ── -->
     <div id="panel-product" class="dr-panel-body">
 
-      <h2 class="dr-product-title">Men's T-Shirt</h2>
+      <h2 class="dr-product-title" id="active-product-title">Men's T-Shirt</h2>
 
       <span class="dr-eco-badge" title="Eco-friendly">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="#1a7a4a">
@@ -257,7 +251,7 @@
       </div>
 
       <div class="dr-color-label">
-        Product color: <strong id="active-color-name">white</strong>
+        <span id="variant-label-prefix">Product color:</span> <strong id="active-color-name">white</strong>
       </div>
 
       <div class="dr-color-grid" id="color-grid">
@@ -745,6 +739,10 @@
   </div>
   <div class="mob-product-body">
     <div class="mob-product-row">
+      <span class="mob-label">Product</span>
+      <div id="mob-product-grid" class="mob-product-grid"></div>
+    </div>
+    <div class="mob-product-row">
       <span class="mob-label">View</span>
       <div class="mob-view-toggle">
         <button class="mob-view-btn active" data-view="front">Front</button>
@@ -752,7 +750,7 @@
       </div>
     </div>
     <div class="mob-product-row">
-      <span class="mob-label">Color: <strong id="mob-active-color">white</strong></span>
+      <span class="mob-label" id="mob-variant-label">Color: <strong id="mob-active-color">white</strong></span>
       <div id="mob-swatch-row" class="mob-swatch-row"></div>
     </div>
   </div>

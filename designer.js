@@ -40,6 +40,128 @@
   let pathCounter = 0;
   let selectedEl  = null;
   let currentView = 'front';
+  let activeProductId = 'shirt';
+
+  const PRODUCTS = [
+    {
+      id: 'shirt',
+      title: "Men's T-Shirt",
+      variantLabel: 'Product color',
+      views: ['front', 'back'],
+      zones: {
+        front: { top: 12, left: 28, width: 45, height: 84 },
+        back:  { top: 11, left: 27, width: 46, height: 85 },
+      },
+      variants: [
+        { name: 'white', image: 'images/whiteshirt.webp', backImage: 'images/whiteback.webp', swatch: '#FFFFFF', dark: false },
+        { name: 'black', image: 'images/blackshirt.webp', backImage: 'images/blackshirt-back.webp', swatch: '#111111', dark: true },
+        { name: 'gray', image: 'images/grayshirt.webp', backImage: 'images/grayback.webp', swatch: '#888888', dark: false },
+      ],
+    },
+    {
+      id: 'cap',
+      title: 'Classic Cap',
+      variantLabel: 'Cap color',
+      views: ['front'],
+      zones: {
+        front: { top: 23, left: 24, width: 52, height: 39 },
+      },
+      variants: [
+        { name: 'black', image: 'images/cap-black-model.png', swatch: '#111111', dark: true },
+        { name: 'blue', image: 'images/cap-blue-model.png', swatch: '#355B8C', dark: true },
+        { name: 'gray', image: 'images/cap-gray-model.png', swatch: '#9CA3AF', dark: false },
+        { name: 'pink', image: 'images/cap-pink-model.png', swatch: '#F4A5B8', dark: false },
+        { name: 'red', image: 'images/cap-red-model.png', swatch: '#D23636', dark: true },
+        { name: 'white', image: 'images/cap-white-model.png', swatch: '#FFFFFF', dark: false },
+      ],
+    },
+    {
+      id: 'keychain',
+      title: 'Keychain',
+      variantLabel: 'Keychain shape',
+      views: ['front'],
+      zones: {
+        front: { top: 34, left: 24, width: 52, height: 44 },
+      },
+      variants: [
+        {
+          name: 'heart',
+          image: 'images/keychain-heart-model.webp',
+          swatch: '#F38EA6',
+          dark: false,
+          zones: {
+            front: {
+              top: 40,
+              left: 19,
+              width: 62,
+              height: 58,
+              clipPath: 'polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 50%)',
+            },
+          },
+        },
+        {
+          name: 'hex',
+          image: 'images/keychain-hex-model.png',
+          swatch: '#B0B7C3',
+          dark: false,
+          zones: {
+            front: { top: 48, left: 20, width: 60, height: 48 },
+          },
+        },
+        {
+          name: 'rectangle',
+          image: 'images/keychain-rectangle-model.png',
+          swatch: '#D6D6D6',
+          dark: false,
+          zones: {
+            front: { top: 35, left: 18, width: 70, height: 61 },
+          },
+        },
+        {
+          name: 'round',
+          image: 'images/keychain-round-model.png',
+          swatch: '#E8E8E8',
+          dark: false,
+          zones: {
+            front: { top: 52, left: 15, width: 83, height: 44, shape: 'round', lockCircle: true },
+          },
+        },
+      ],
+    },
+    {
+      id: 'totebag',
+      title: 'Tote Bag',
+      variantLabel: 'Bag color',
+      views: ['front'],
+      zones: {
+        front: { top: 39, left: 23, width: 54, height: 58 },
+      },
+      variants: [
+        { name: 'black', image: 'images/totebag-model-black.png', swatch: '#111111', dark: true },
+        { name: 'gray', image: 'images/totebag-model-gray.png', swatch: '#9CA3AF', dark: false },
+        { name: 'white', image: 'images/totebag-model-white.png', swatch: '#FFFFFF', dark: false },
+      ],
+    },
+    {
+      id: 'cup',
+      title: 'Ceramic Cup',
+      variantLabel: 'Cup style',
+      views: ['front'],
+      zones: {
+        front: { top: 22, left: 21, width: 51, height: 62 },
+      },
+      variants: [
+        { name: 'white', image: 'images/white cup.png', swatch: '#FFFFFF', dark: false },
+      ],
+    },
+  ];
+
+  const productById = {};
+  const selectedVariantByProduct = {};
+  PRODUCTS.forEach(product => {
+    productById[product.id] = product;
+    selectedVariantByProduct[product.id] = 0;
+  });
 
   /* ─────────────────────────────────────────────────
      UNDO / REDO HISTORY
@@ -118,6 +240,10 @@
   const viewBackThumb   = document.getElementById('view-back-thumb');
   const panelProduct    = document.getElementById('panel-product');
   const panelText       = document.getElementById('panel-text');
+  const productPicker   = document.getElementById('dr-product-picker');
+  const colorGrid       = document.getElementById('color-grid');
+  const activeProductTitle = document.getElementById('active-product-title');
+  const variantLabelPrefix = document.getElementById('variant-label-prefix');
   const activeColorName = document.getElementById('active-color-name');
   const btnUndo         = document.getElementById('btn-undo');
   const btnRedo         = document.getElementById('btn-redo');
@@ -139,6 +265,283 @@
   const btnSendBack   = document.getElementById('btn-send-back');
   const bendValInput  = document.getElementById('bend-val');
   const bendSlider    = document.getElementById('bend-slider');
+
+  const viewFrontBtn = document.querySelector('.dr-view-btn[data-view="front"]');
+  const viewBackBtn  = document.querySelector('.dr-view-btn[data-view="back"]');
+
+  function getActiveProduct() {
+    return productById[activeProductId] || PRODUCTS[0];
+  }
+
+  function getActiveVariant() {
+    const product = getActiveProduct();
+    const idx = selectedVariantByProduct[product.id] || 0;
+    return product.variants[Math.max(0, Math.min(idx, product.variants.length - 1))];
+  }
+
+  function updateImageAndThumbs() {
+    const variant = getActiveVariant();
+    if (!variant) return;
+    const frontSrc = variant.image;
+    const backSrc = variant.backImage || variant.image;
+
+    if (viewFrontThumb) viewFrontThumb.src = frontSrc;
+    if (viewBackThumb)  viewBackThumb.src = backSrc;
+    shirtImg.src = currentView === 'back' ? backSrc : frontSrc;
+  }
+
+  function applyPrintZoneByProduct() {
+    const product = getActiveProduct();
+    const activeVariant = getActiveVariant();
+    const variantZones = activeVariant && activeVariant.zones ? activeVariant.zones : null;
+    const zone =
+      (variantZones && (variantZones[currentView] || variantZones.front)) ||
+      product.zones[currentView] ||
+      product.zones.front;
+    if (!zone) return;
+
+    printZone.classList.remove('zone-round', 'back-view');
+    if (zone.shape === 'round' || zone.lockCircle) {
+      printZone.classList.add('zone-round');
+    }
+    if (currentView === 'back') {
+      printZone.classList.add('back-view');
+    }
+
+    let widthPct = zone.width;
+    let heightPct = zone.height;
+
+    // Only auto-compute circle height when a zone height is not explicitly provided.
+    if (
+      zone.lockCircle &&
+      (zone.height === undefined || zone.height === null) &&
+      shirtImg &&
+      shirtImg.clientWidth &&
+      shirtImg.clientHeight
+    ) {
+      heightPct = widthPct * (shirtImg.clientWidth / shirtImg.clientHeight);
+    }
+
+    printZone.style.top = `${zone.top}%`;
+    printZone.style.left = `${zone.left}%`;
+    printZone.style.width = `${widthPct}%`;
+    printZone.style.height = `${heightPct}%`;
+    printZone.style.clipPath = zone.clipPath || 'none';
+  }
+
+  function setViewButtonsForProduct() {
+    const product = getActiveProduct();
+    const supportsBack = product.views.includes('back');
+
+    if (viewBackBtn) {
+      viewBackBtn.style.display = supportsBack ? '' : 'none';
+    }
+
+    if (!supportsBack && currentView === 'back') {
+      currentView = 'front';
+    }
+
+    if (viewFrontBtn) viewFrontBtn.classList.toggle('active', currentView === 'front');
+    if (viewBackBtn) viewBackBtn.classList.toggle('active', currentView === 'back' && supportsBack);
+
+    const mobFrontBtn = document.querySelector('.mob-view-btn[data-view="front"]');
+    const mobBackBtn = document.querySelector('.mob-view-btn[data-view="back"]');
+    if (mobBackBtn) mobBackBtn.style.display = supportsBack ? '' : 'none';
+    if (mobFrontBtn) mobFrontBtn.classList.toggle('active', currentView === 'front');
+    if (mobBackBtn) mobBackBtn.classList.toggle('active', currentView === 'back' && supportsBack);
+  }
+
+  function maybeAutoAdjustTextColor(previousVariant, nextVariant) {
+    if (!previousVariant || !nextVariant) return;
+    const goingDark = !!nextVariant.dark && !previousVariant.dark;
+    const leavingDark = !!previousVariant.dark && !nextVariant.dark;
+
+    if (!goingDark && !leavingDark) return;
+
+    printZone.querySelectorAll('.dr-text-el').forEach(el => {
+      const d = elData.get(el);
+      if (!d) return;
+
+      if (goingDark && (d.color === '#000000' || d.color === '#000')) {
+        d.color = '#ffffff';
+        renderContent(el);
+        if (el === selectedEl) {
+          inputColor.value = '#ffffff';
+          colorDot.style.background = '#ffffff';
+        }
+      } else if (leavingDark && (d.color === '#ffffff' || d.color === '#fff')) {
+        d.color = '#000000';
+        renderContent(el);
+        if (el === selectedEl) {
+          inputColor.value = '#000000';
+          colorDot.style.background = '#000000';
+        }
+      }
+    });
+  }
+
+  function renderVariantSwatches() {
+    if (!colorGrid) return;
+    const product = getActiveProduct();
+    const selectedIdx = selectedVariantByProduct[product.id] || 0;
+
+    colorGrid.innerHTML = '';
+    product.variants.forEach((variant, index) => {
+      const sw = document.createElement('button');
+      sw.type = 'button';
+      sw.className = 'dr-swatch';
+      if (index === selectedIdx) sw.classList.add('selected');
+      sw.dataset.index = String(index);
+      sw.dataset.color = variant.name;
+      sw.title = variant.name;
+      sw.style.setProperty('--sw', variant.swatch || '#d0d0d0');
+      sw.innerHTML = `
+        <svg class="dr-swatch-check" width="12" height="12" viewBox="0 0 12 12">
+          <path d="M2 6l3 3 5-5" stroke="#333" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
+      colorGrid.appendChild(sw);
+    });
+  }
+
+  function renderDesktopProductPicker() {
+    if (!productPicker) return;
+    productPicker.innerHTML = '';
+
+    PRODUCTS.forEach(product => {
+      const option = document.createElement('button');
+      option.type = 'button';
+      option.className = 'dr-product-option';
+      option.dataset.productId = product.id;
+      if (product.id === activeProductId) option.classList.add('active');
+      option.innerHTML = `
+        <img src="${product.variants[0].image}" alt="${product.title}">
+        <span>${product.title}</span>`;
+
+      option.addEventListener('click', e => {
+        e.stopPropagation();
+        applyProduct(product.id);
+        hideProductPicker();
+      });
+
+      productPicker.appendChild(option);
+    });
+  }
+
+  function renderMobileProductCards() {
+    const mobProductGrid = document.getElementById('mob-product-grid');
+    if (!mobProductGrid) return;
+
+    mobProductGrid.innerHTML = '';
+    PRODUCTS.forEach(product => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'mob-product-card';
+      if (product.id === activeProductId) card.classList.add('active');
+      card.dataset.productId = product.id;
+      card.innerHTML = `
+        <img src="${product.variants[0].image}" alt="${product.title}">
+        <span>${product.title}</span>`;
+
+      card.addEventListener('click', () => {
+        applyProduct(product.id);
+      });
+
+      mobProductGrid.appendChild(card);
+    });
+  }
+
+  function syncMobileSwatches() {
+    const mobSwatchRow = document.getElementById('mob-swatch-row');
+    const mobVariantLabel = document.getElementById('mob-variant-label');
+    if (!mobSwatchRow) return;
+
+    const product = getActiveProduct();
+    const selectedIdx = selectedVariantByProduct[product.id] || 0;
+    const variant = product.variants[selectedIdx] || product.variants[0];
+
+    mobSwatchRow.innerHTML = '';
+    product.variants.forEach((variant, index) => {
+      const sw = document.createElement('button');
+      sw.type = 'button';
+      sw.className = 'dr-swatch';
+      if (index === selectedIdx) sw.classList.add('selected');
+      sw.dataset.index = String(index);
+      sw.dataset.color = variant.name;
+      sw.title = variant.name;
+      sw.style.setProperty('--sw', variant.swatch || '#d0d0d0');
+      sw.innerHTML = `
+        <svg class="dr-swatch-check" width="12" height="12" viewBox="0 0 12 12">
+          <path d="M2 6l3 3 5-5" stroke="#333" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`;
+      mobSwatchRow.appendChild(sw);
+    });
+
+    if (mobVariantLabel) {
+      if (mobVariantLabel.childNodes.length > 0) {
+        mobVariantLabel.childNodes[0].nodeValue = `${product.variantLabel}: `;
+      }
+      const mobActiveColor = mobVariantLabel.querySelector('strong');
+      if (mobActiveColor) {
+        mobActiveColor.textContent = variant ? variant.name : '';
+      }
+    }
+  }
+
+  function setActiveVariant(index, options) {
+    const opts = options || {};
+    const product = getActiveProduct();
+    const prevVariant = getActiveVariant();
+
+    const safeIndex = Math.max(0, Math.min(index, product.variants.length - 1));
+    selectedVariantByProduct[product.id] = safeIndex;
+    const nextVariant = getActiveVariant();
+
+    if (activeColorName) activeColorName.textContent = nextVariant.name;
+    renderVariantSwatches();
+    syncMobileSwatches();
+    updateImageAndThumbs();
+    applyPrintZoneByProduct();
+    printZone.querySelectorAll('.dr-text-el, .dr-img-el').forEach(el => {
+      constrainToZone(el);
+    });
+
+    if (opts.autoTextColor !== false) {
+      maybeAutoAdjustTextColor(prevVariant, nextVariant);
+    }
+
+    if (!opts.silent) {
+      pushHistoryDebounced(250);
+    }
+  }
+
+  function applyProduct(productId) {
+    if (!productById[productId]) return;
+    activeProductId = productId;
+
+    const product = getActiveProduct();
+    if (activeProductTitle) activeProductTitle.textContent = product.title;
+    if (variantLabelPrefix) variantLabelPrefix.textContent = `${product.variantLabel}:`;
+
+    setViewButtonsForProduct();
+    applyPrintZoneByProduct();
+    setActiveVariant(selectedVariantByProduct[product.id] || 0, { silent: true });
+
+    printZone.querySelectorAll('.dr-text-el, .dr-img-el').forEach(el => {
+      constrainToZone(el);
+    });
+
+    renderDesktopProductPicker();
+    renderMobileProductCards();
+  }
+
+  function hideProductPicker() {
+    if (productPicker) productPicker.classList.add('hidden');
+  }
+
+  function toggleProductPicker() {
+    if (!productPicker) return;
+    productPicker.classList.toggle('hidden');
+  }
 
   /* ─────────────────────────────────────────────────
      CANVAS TEXT MEASUREMENT
@@ -382,10 +785,9 @@
      ADD TEXT (public — used by tab click + init)
   ───────────────────────────────────────────────── */
   function addText(overrides) {
-    // Auto-pick white if current shirt is black
-    const activeSwatch = document.querySelector('.dr-swatch.selected');
-    const isBlack = activeSwatch && activeSwatch.dataset.color === 'black';
-    const defaults = isBlack ? { color: '#ffffff' } : {};
+    // Auto-pick white text on dark product variants
+    const activeVariant = getActiveVariant();
+    const defaults = activeVariant && activeVariant.dark ? { color: '#ffffff' } : {};
 
     const el = createTextEl(Object.assign(defaults, overrides || {}));
     printZone.appendChild(el);
@@ -864,6 +1266,16 @@
 
   document.addEventListener('mousedown', e => {
     if (!document.getElementById('font-row').contains(e.target)) closeFontList();
+
+    const productsTab = document.querySelector('.dr-tab[data-tab="products"]');
+    if (
+      productPicker &&
+      !productPicker.classList.contains('hidden') &&
+      !productPicker.contains(e.target) &&
+      (!productsTab || !productsTab.contains(e.target))
+    ) {
+      hideProductPicker();
+    }
   }, true);
 
   /* ─────────────────────────────────────────────────
@@ -924,6 +1336,11 @@
     tab.addEventListener('click', () => {
       document.querySelectorAll('.dr-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
+      if (tab.dataset.tab === 'products') {
+        toggleProductPicker();
+        return;
+      }
+      hideProductPicker();
       if (tab.dataset.tab === 'text')   addText();
       if (tab.dataset.tab === 'upload') triggerUpload();
     });
@@ -961,70 +1378,32 @@
   /* ─────────────────────────────────────────────────
      COLOUR SWATCHES — with auto text-color on black
   ───────────────────────────────────────────────── */
-  document.querySelectorAll('.dr-swatch').forEach(sw => {
-    sw.addEventListener('click', () => {
-      const prevSwatch = document.querySelector('.dr-swatch.selected');
-      const prevColor  = prevSwatch ? prevSwatch.dataset.color : 'white';
-
-      document.querySelectorAll('.dr-swatch').forEach(s => s.classList.remove('selected'));
-      sw.classList.add('selected');
-      activeColorName.textContent = sw.dataset.color;
-
-      if (viewFrontThumb) viewFrontThumb.src = sw.dataset.img;
-      if (viewBackThumb)  viewBackThumb.src  = sw.dataset.back || sw.dataset.img;
-
-      shirtImg.src = currentView === 'back'
-        ? (sw.dataset.back || sw.dataset.img)
-        : sw.dataset.img;
-
-      // Auto-adjust text colour: black shirt → white text; leaving black → black text
-      const goingBlack  = sw.dataset.color === 'black';
-      const leavingBlack = prevColor === 'black';
-
-      if (goingBlack || leavingBlack) {
-        printZone.querySelectorAll('.dr-text-el').forEach(el => {
-          const d = elData.get(el);
-          if (!d) return;
-          // Only auto-switch if colour is "default" for the previous state
-          if (goingBlack  && (d.color === '#000000' || d.color === '#000')) {
-            d.color = '#ffffff';
-            renderContent(el);
-            if (el === selectedEl) {
-              inputColor.value          = '#ffffff';
-              colorDot.style.background = '#ffffff';
-            }
-          } else if (leavingBlack && (d.color === '#ffffff' || d.color === '#fff')) {
-            d.color = '#000000';
-            renderContent(el);
-            if (el === selectedEl) {
-              inputColor.value          = '#000000';
-              colorDot.style.background = '#000000';
-            }
-          }
-        });
-        pushHistory();
-      }
+  if (colorGrid) {
+    colorGrid.addEventListener('click', e => {
+      const sw = e.target.closest('.dr-swatch');
+      if (!sw) return;
+      const idx = parseInt(sw.dataset.index, 10);
+      if (Number.isNaN(idx)) return;
+      setActiveVariant(idx);
     });
-  });
+  }
 
   /* ─────────────────────────────────────────────────
      VIEW BUTTONS
   ───────────────────────────────────────────────── */
   document.querySelectorAll('.dr-view-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      const product = getActiveProduct();
+      if (btn.dataset.view === 'back' && !product.views.includes('back')) return;
+
       document.querySelectorAll('.dr-view-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentView = btn.dataset.view;
-      const activeSwatch = document.querySelector('.dr-swatch.selected');
-      if (activeSwatch) {
-        shirtImg.src = currentView === 'back'
-          ? (activeSwatch.dataset.back || activeSwatch.dataset.img)
-          : activeSwatch.dataset.img;
-      }
-      // Reposition print zone for front vs back (do NOT hide — both views are editable)
-      printZone.classList.toggle('back-view', currentView === 'back');
+      setViewButtonsForProduct();
+      updateImageAndThumbs();
+      applyPrintZoneByProduct();
       // After reposition, re-clamp all elements in case new zone is smaller
-      printZone.querySelectorAll('.dr-text-el').forEach(el => {
+      printZone.querySelectorAll('.dr-text-el, .dr-img-el').forEach(el => {
         constrainToZone(el);
       });
     });
@@ -1112,6 +1491,10 @@
      INIT
   ───────────────────────────────────────────────── */
   window.addEventListener('load', () => {
+    renderDesktopProductPicker();
+    renderMobileProductCards();
+    applyProduct('shirt');
+
     // Seed initial history so undo can't go before initial state
     addText({ text: 'Your text here' });
     // addText calls pushHistory → undoPtr = 1 (empty state at 0, one element at 1)
@@ -1262,6 +1645,9 @@
   // Product
   if (mobBtnProduct) {
     mobBtnProduct.addEventListener('click', () => {
+      renderMobileProductCards();
+      syncMobileSwatches();
+      setViewButtonsForProduct();
       mobOpenSheet('mob-product-sheet');
     });
   }
@@ -1509,6 +1895,9 @@
   const mobViewBtns = document.querySelectorAll('.mob-view-btn');
   mobViewBtns.forEach(btn => {
     btn.addEventListener('click', () => {
+      const product = getActiveProduct();
+      if (btn.dataset.view === 'back' && !product.views.includes('back')) return;
+
       mobViewBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       // Trigger desktop view button
@@ -1517,21 +1906,14 @@
     });
   });
 
-  // Clone color swatches into mobile product sheet
   const mobSwatchRow = document.getElementById('mob-swatch-row');
   if (mobSwatchRow) {
-    document.querySelectorAll('.dr-swatch').forEach(sw => {
-      const clone = sw.cloneNode(true);
-      clone.addEventListener('click', () => {
-        // Click corresponding desktop swatch to trigger all existing logic
-        sw.click();
-        // Sync selected state visually
-        mobSwatchRow.querySelectorAll('.dr-swatch').forEach(c => c.classList.remove('selected'));
-        clone.classList.add('selected');
-        const mobActiveColor = document.getElementById('mob-active-color');
-        if (mobActiveColor) mobActiveColor.textContent = clone.dataset.color;
-      });
-      mobSwatchRow.appendChild(clone);
+    mobSwatchRow.addEventListener('click', e => {
+      const sw = e.target.closest('.dr-swatch');
+      if (!sw) return;
+      const idx = parseInt(sw.dataset.index, 10);
+      if (Number.isNaN(idx)) return;
+      setActiveVariant(idx);
     });
   }
 

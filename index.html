@@ -24,6 +24,16 @@
 </head>
 <body>
 
+    <!-- ===== LOADING SCREEN ===== -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-container">
+            <div class="loading-logo-wrapper">
+                <img src="images/barclalogo.png" alt="" class="loading-logo" draggable="false">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== ANNOUNCEMENT BAR ===== -->
     <div class="announce-bar" role="banner" aria-label="Announcements">
       <div class="announce-msg" id="announce-msg">
@@ -136,7 +146,7 @@
 
             <!-- Right: hero image -->
             <div class="hero-visual">
-                <img src="images/heroimagefr.png" alt="" role="presentation" class="hero-image" draggable="false">
+                <img src="images/heroimage.png" alt="" role="presentation" class="hero-image" draggable="false">
             </div>
 
         </div>
@@ -144,7 +154,7 @@
 
     <!-- ===== BESTSELLERS CAROUSEL ===== -->
     <section class="carousel-section" id="bestsellers">
-        <div class="carousel-header">
+        <div class="carousel-header scroll-animate">
             <h2 class="carousel-title" data-en="Más Vendidos" data-ge="ბესტსელერები">Más Vendidos</h2>
             <a href="#shop" class="carousel-show-all" data-en="Ver todo" data-ge="ყველა">Ver todo</a>
         </div>
@@ -190,9 +200,32 @@
         </div>
     </section>
 
+
+        <!-- ===== VIDEO TEASER SECTION ===== -->
+        <section class="homepage-2nd-teaser">
+            <div class="container">
+                <div class="homepage-2nd-teaser__video-teaser">
+                    <video class="homepage-2nd-teaser__mobile-video" preload="none" playsinline muted loop autoplay poster="images/heroimage.png">
+                        <source src="videos/index-video-mobile.mp4" type="video/mp4">
+                    </video>
+                    <video class="homepage-2nd-teaser__desktop-video" preload="none" playsinline muted loop autoplay poster="images/heroimage.png">
+                        <source src="videos/index-video.mp4" type="video/mp4">
+                    </video>
+                    <div class="homepage-2nd-teaser__text-wrapper">
+                        <h2 class="homepage-2nd-teaser__headline">
+                            <span>Crea tu estilo.<br>Cero energía mainstream</span>
+                        </h2>
+                        <p>
+                            Esta temporada, deja tu huella. Diseña tu propia ropa y accesorios con Barcaprintshop—donde tus ideas se convierten en arte ponible. Destácate, mantente original y deja brillar tu creatividad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     <!-- ===== NEW ARRIVALS CAROUSEL ===== -->
     <section class="carousel-section" id="new-arrivals">
-        <div class="carousel-header">
+        <div class="carousel-header scroll-animate">
             <h2 class="carousel-title" data-en="Nuestros Productos" data-ge="ჩვენი პროდუქტები">Nuestros Productos</h2>
             <a href="#shop" class="carousel-show-all" data-en="Ver todo" data-ge="ყველა">Ver todo</a>
         </div>
@@ -238,27 +271,6 @@
         </div>
         </section>
 
-        <!-- ===== VIDEO TEASER SECTION ===== -->
-        <section class="homepage-2nd-teaser">
-            <div class="container">
-                <div class="homepage-2nd-teaser__video-teaser">
-                    <video class="homepage-2nd-teaser__mobile-video" preload="none" playsinline muted loop autoplay poster="images/heroimage.png">
-                        <source src="videos/index-video-mobile.mp4" type="video/mp4">
-                    </video>
-                    <video class="homepage-2nd-teaser__desktop-video" preload="none" playsinline muted loop autoplay poster="images/heroimage.png">
-                        <source src="videos/index-video.mp4" type="video/mp4">
-                    </video>
-                    <div class="homepage-2nd-teaser__text-wrapper">
-                        <h2 class="homepage-2nd-teaser__headline">
-                            <span>Crea tu estilo.<br>Cero energía mainstream</span>
-                        </h2>
-                        <p>
-                            Esta temporada, deja tu huella. Diseña tu propia ropa y accesorios con Barcaprintshop—donde tus ideas se convierten en arte ponible. Destácate, mantente original y deja brillar tu creatividad.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
     <!-- ===== EDITORIAL BANNER ===== -->
     <section class="editorial-banner">
@@ -350,7 +362,7 @@
     <!-- ===== GOOGLE REVIEWS ===== -->
     <section class="grev-section">
         <div class="grev-container">
-            <h2 class="grev-heading" data-en="Lo que dicen nuestros clientes" data-ge="რას ამბობენ ჩვენი მომხმარებლები">Lo que dicen nuestros clientes</h2>
+            <h2 class="grev-heading scroll-animate" data-en="Lo que dicen nuestros clientes" data-ge="რას ამბობენ ჩვენი მომხმარებლები">Lo que dicen nuestros clientes</h2>
 
             <div class="grev-carousel-wrap">
                 <!-- Prev -->
@@ -476,9 +488,9 @@
 
     <!-- ===== SOBRE NOSOTROS ===== -->
     <section class="about-section">
-        <div class="about-left">
+        <div class="about-left scroll-animate-left">
             <p class="about-label" data-en="Barcaprintshop" data-ge="ბარკაპრინტშოპი">Barcaprintshop</p>
-            <h2 class="about-heading" data-en="SOBRE NOSOTROS" data-ge="ჩვენს შესახებ">SOBRE NOSOTROS</h2>
+            <h2 class="about-heading scroll-animate" data-en="SOBRE NOSOTROS" data-ge="ჩვენს შესახებ">SOBRE NOSOTROS</h2>
 
             <div class="about-features">
                 <div class="about-feature">
@@ -507,23 +519,23 @@
             </div>
         </div>
 
-        <div class="about-right">
-            <img src="images/bottom-image.PNG" alt="Barcaprintshop" class="about-img" onerror="this.style.background='#e8e8e8';this.removeAttribute('src')">
+        <div class="about-right scroll-animate-scale">
+            <img src="images/bottom-img.jpg" alt="Barcaprintshop" class="about-img" onerror="this.style.background='#e8e8e8';this.removeAttribute('src')">
         </div>
     </section>
 
     <!-- ===== CTA BAND ===== -->
     <section class="cta-section">
         <div class="cta-container">
-            <h2 data-en="¡Listo para Crear Algo Increíble?"
+            <h2 class="scroll-animate" data-en="¡Listo para Crear Algo Increíble?"
                 data-ge="მზად ხართ რაიმე განსაცვიფრებელი შექმნისთვის?">
                 ¡Listo para Crear Algo Increíble?
             </h2>
-            <p data-en="Comienza hoy tu viaje de impresión personalizada."
+            <p class="scroll-animate" data-en="Comienza hoy tu viaje de impresión personalizada."
                data-ge="დაიწყეთ თქვენი კასტომ პრინტინგის მოგზაურობა დღეს.">
                 Comienza hoy tu viaje de impresión personalizada.
             </p>
-            <a href="#shop" class="btn btn-yellow"
+            <a href="#shop" class="btn btn-yellow scroll-animate"
                data-en="Comenzar" data-ge="დაიწყეთ">
                 Comenzar
             </a>
@@ -585,6 +597,19 @@
     </footer>
 
     <script>
+        // ── Loading Screen & Hero Animations ────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            
+            // Auto-hide loading screen after 3.3 seconds
+            setTimeout(() => {
+                if (loadingScreen) {
+                    loadingScreen.classList.add('hidden');
+                    loadingScreen.style.pointerEvents = 'none';
+                }
+            }, 3300);
+        });
+
         // ── Language Toggle ──────────────────────────────────────────
         let currentLang = 'en';
         const langBtns = document.querySelectorAll('.lang-btn');
@@ -728,6 +753,106 @@
                 if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
             });
         });
+
+        // ── Scroll-Triggered Animations using Intersection Observer ───
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Add animations to specific sections
+        document.querySelectorAll('.carousel-section').forEach(section => {
+            const header = section.querySelector('.carousel-header');
+            if (header) observer.observe(header);
+            section.querySelectorAll('.carousel-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // Animate trust items
+        document.querySelectorAll('.trust-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        // Animate reviews
+        document.querySelectorAll('.grev-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Animate about section
+        const aboutSection = document.querySelector('.about-section');
+        if (aboutSection) {
+            const aboutLeft = aboutSection.querySelector('.about-left');
+            const aboutRight = aboutSection.querySelector('.about-right');
+            const aboutHeading = aboutSection.querySelector('.about-heading');
+            if (aboutHeading) observer.observe(aboutHeading);
+            aboutSection.querySelectorAll('.about-feature').forEach(feature => {
+                observer.observe(feature);
+            });
+            if (aboutLeft) aboutLeft.classList.add('scroll-animate-left');
+            if (aboutRight) aboutRight.classList.add('scroll-animate-scale');
+            if (aboutLeft) observer.observe(aboutLeft);
+            if (aboutRight) observer.observe(aboutRight);
+        }
+
+        // Animate editorial banner
+        const editorialBanner = document.querySelector('.editorial-banner');
+        if (editorialBanner) {
+            const headline = editorialBanner.querySelector('.editorial-headline');
+            if (headline) {
+                headline.classList.add('scroll-animate');
+                observer.observe(headline);
+            }
+        }
+
+        // Animate CTA section
+        const ctaSection = document.querySelector('.cta-section');
+        if (ctaSection) {
+            const heading = ctaSection.querySelector('h2');
+            const desc = ctaSection.querySelector('p');
+            const btn = ctaSection.querySelector('.btn');
+            if (heading) {
+                heading.classList.add('scroll-animate');
+                observer.observe(heading);
+            }
+            if (desc) {
+                desc.classList.add('scroll-animate');
+                observer.observe(desc);
+            }
+            if (btn) {
+                btn.classList.add('scroll-animate');
+                observer.observe(btn);
+            }
+        }
+
+        // Animate footer
+        const footer = document.querySelector('.footer');
+        if (footer) {
+            footer.querySelectorAll('.footer-section').forEach((section, idx) => {
+                section.classList.add('scroll-animate');
+                section.style.animationDelay = (idx * 0.1) + 's';
+                observer.observe(section);
+            });
+        }
+
+        // Animate video teaser
+        const videoTeaser = document.querySelector('.homepage-2nd-teaser');
+        if (videoTeaser) {
+            const textWrapper = videoTeaser.querySelector('.homepage-2nd-teaser__text-wrapper');
+            if (textWrapper) {
+                textWrapper.classList.add('scroll-animate');
+                observer.observe(textWrapper);
+            }
+        }
     </script>
 </body>
 </html>
