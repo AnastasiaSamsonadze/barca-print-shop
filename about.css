@@ -1,0 +1,509 @@
+.about-page {
+    background: #f4f1ea;
+}
+
+.about-page main {
+    overflow: clip;
+}
+
+.about-film-hero {
+    position: relative;
+    height: 180vh;
+    --hero-progress: 0;
+}
+
+.about-film-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.about-film-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transform-origin: center center;
+    transform: scale(calc(1 - (var(--hero-progress) * 0.13)));
+    border-radius: calc(var(--hero-progress) * 34px);
+    margin: calc(var(--hero-progress) * 32px) auto 0;
+    width: calc(100% - (var(--hero-progress) * 96px));
+    box-shadow: 0 28px 80px rgba(0, 0, 0, calc(var(--hero-progress) * 0.22));
+    transition: width 0.08s linear, margin 0.08s linear, border-radius 0.08s linear, box-shadow 0.08s linear;
+}
+
+.about-film-video,
+.about-film-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.about-film-video {
+    object-fit: cover;
+}
+
+.about-film-overlay {
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1;
+}
+
+.about-film-copy {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 5rem;
+    opacity: calc(1 - (var(--hero-progress) * 1.15));
+    transform: translateY(calc(var(--hero-progress) * -40px));
+    transition: opacity 0.08s linear, transform 0.08s linear;
+}
+
+.about-film-kicker {
+    margin-bottom: 1.15rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.about-film-title {
+    max-width: 12ch;
+    font-size: clamp(3.4rem, 8vw, 7rem);
+    line-height: 0.94;
+    letter-spacing: -0.05em;
+    font-weight: 800;
+}
+
+.about-film-title span {
+    display: block;
+}
+
+.about-film-title-white {
+    color: #ffffff;
+}
+
+.about-film-title-yellow {
+    color: #ffd700;
+}
+
+.about-film-scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 1.8rem;
+    z-index: 2;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 52px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 8px;
+    opacity: calc(1 - (var(--hero-progress) * 1.5));
+    transition: opacity 0.08s linear;
+}
+
+.about-film-scroll span {
+    display: block;
+    width: 4px;
+    height: 12px;
+    border-radius: 999px;
+    background: #ffd700;
+    animation: aboutScrollPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes aboutScrollPulse {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translateY(10px);
+        opacity: 1;
+    }
+}
+
+.about-section-shell {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: clamp(4.5rem, 7vw, 7rem) 2rem;
+}
+
+.about-founder-grid {
+    min-height: 90vh;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+}
+
+.about-founder-card {
+    order: 1;
+}
+
+.about-founder-copy {
+    order: 2;
+}
+
+.about-founder-card {
+    background: linear-gradient(180deg, #ffffff 0%, #eceef2 100%);
+    border-radius: 24px;
+    padding: 1.15rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.1);
+}
+
+.about-founder-media {
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+}
+
+.about-founder-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+}
+
+.about-founder-card:hover img {
+    transform: scale(1.03);
+}
+
+.about-foundation-label {
+    margin-bottom: 1rem;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #ffd700;
+}
+
+.about-founder-title,
+.about-community-title {
+    font-size: clamp(2.3rem, 4.5vw, 4.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+    font-weight: 800;
+    color: #111111;
+    max-width: 11ch;
+    margin-bottom: 1.25rem;
+}
+
+.about-founder-lead,
+.about-founder-body {
+    max-width: 36rem;
+    font-size: 1rem;
+    line-height: 1.9;
+    color: #505050;
+}
+
+.about-founder-body {
+    margin-top: 1rem;
+}
+
+.about-founder-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.about-founder-link {
+    font-weight: 700;
+    color: #111111;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.about-values {
+    padding-top: 0;
+}
+
+.about-values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.about-value-card {
+    background: #1f252c;
+    color: #ffffff;
+    border-radius: 22px;
+    padding: 1.6rem;
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.08);
+}
+
+.about-value-number {
+    margin-bottom: 1rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffd700;
+}
+
+.about-value-card h3 {
+    font-size: 1.35rem;
+    line-height: 1.1;
+    margin-bottom: 0.8rem;
+}
+
+.about-value-card p {
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.8;
+}
+
+.about-community {
+    padding-top: clamp(4rem, 6vw, 5.5rem);
+    padding-bottom: clamp(4rem, 6vw, 6.5rem);
+}
+
+.about-community-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.about-community-copy {
+    flex: 1;
+}
+
+.about-follow-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0 1.5rem;
+    border-radius: 999px;
+    background: #111111;
+    color: #ffffff;
+    font-weight: 800;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.about-follow-btn:hover {
+    background: #ffd700;
+    color: #111111;
+    transform: translateY(-2px);
+}
+
+.about-community-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.9rem;
+}
+
+.about-community-card {
+    position: relative;
+    display: block;
+    min-height: 400px;
+    overflow: hidden;
+    border-radius: 24px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+.about-community-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.about-community-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.3s ease;
+    z-index: 1;
+}
+
+.about-community-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.about-community-card:hover img {
+    transform: scale(1.04);
+    filter: brightness(0.78);
+}
+
+.about-community-card:hover::before {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.about-community-card:hover .about-community-overlay {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.about-community-mobile-cta {
+    display: none;
+}
+
+.about-follow-btn-full {
+    width: 100%;
+}
+
+.about-scroll-in {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.about-scroll-in.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 1100px) {
+    .about-founder-grid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .about-founder-copy,
+    .about-founder-card {
+        order: initial;
+    }
+
+    .about-values-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-community-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .about-community-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .about-film-hero {
+        height: 85vh;
+    }
+
+    .about-film-stage {
+        position: relative;
+        height: 85vh;
+    }
+
+    .about-film-frame {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .about-film-copy {
+        padding: 8rem 1.25rem 3rem;
+    }
+
+    .about-film-title {
+        font-size: clamp(2.6rem, 12vw, 4rem);
+        line-height: 0.98;
+    }
+
+    .about-film-scroll {
+        display: none;
+    }
+
+    .about-section-shell {
+        padding: 3rem 1rem;
+    }
+
+    .about-founder-grid {
+        gap: 1.5rem;
+    }
+
+    .about-founder-copy {
+        order: 1;
+    }
+
+    .about-founder-card {
+        order: 2;
+    }
+
+    .about-founder-title,
+    .about-community-title {
+        max-width: none;
+        font-size: clamp(1.9rem, 9vw, 3rem);
+    }
+
+    .about-founder-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .about-founder-actions .btn,
+    .about-founder-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .about-founder-card {
+        padding: 0.9rem;
+    }
+
+    .about-founder-media {
+        aspect-ratio: 16 / 9;
+    }
+
+    .about-value-card {
+        padding: 1.35rem;
+    }
+
+    .about-community-grid {
+        grid-auto-flow: column;
+        grid-auto-columns: 70%;
+        grid-template-columns: none;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 0.3rem;
+        scrollbar-width: none;
+    }
+
+    .about-community-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .about-community-card {
+        min-height: 320px;
+        scroll-snap-align: start;
+    }
+
+    .about-community-head .about-follow-btn {
+        display: none;
+    }
+
+    .about-community-mobile-cta {
+        display: block;
+        margin-top: 1.25rem;
+    }
+}

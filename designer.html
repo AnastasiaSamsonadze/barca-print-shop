@@ -22,12 +22,18 @@
   <!-- Google Fonts — 15 designer-quality typefaces -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Black+Han+Sans&family=Dancing+Script:wght@400;700&family=Lobster&family=Montserrat:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;600;700&family=Pacifico&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@400;700&family=Righteous&family=Russo+One&family=Satisfy&family=Alfa+Slab+One&display=swap" rel="stylesheet">
 
   <!-- Shared brand styles (navbar + footer live here) -->
   <link rel="stylesheet" href="style.css">
   <!-- Studio-specific styles -->
   <link rel="stylesheet" href="designer.css">
+  <style>
+    .announce-bar { display: none !important; }
+    .navbar { top: 0 !important; }
+    .mobile-menu { top: 100px !important; }
+  </style>
 </head>
 <body>
 
@@ -74,11 +80,14 @@
 <header class="navbar" id="navbar">
   <div class="navbar-container">
     <a href="index.html" class="navbar-logo">
-      <img src="images/barclalogo.png" alt="Barcaprintshop Logo" class="logo-img">
+      <div class="brand-wrapper">
+        <img src="images/barclalogo.png" alt="Barcaprintshop Logo" class="logo-img">
+        <span class="brand-name">Barcaprintshop</span>
+      </div>
     </a>
     <nav class="nav-menu" aria-label="Main navigation">
       <a href="index.html#shop"    class="nav-link" data-en="Shop"      data-ge="მაღაზია">Shop</a>
-      <a href="index.html#story"   class="nav-link" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a>
+      <a href="about.html"         class="nav-link" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a>
       <a href="index.html#faq"     class="nav-link" data-en="FAQ"       data-ge="კითხვები">FAQ</a>
       <a href="index.html#contact" class="nav-link" data-en="Contact"   data-ge="კონტაქტი">Contact</a>
     </nav>
@@ -106,7 +115,7 @@
 <div class="mobile-menu" aria-hidden="true">
   <nav class="mobile-nav">
     <a href="index.html#shop"    class="mobile-nav-link" data-en="Shop"      data-ge="მაღაზია">Shop</a>
-    <a href="index.html#story"   class="mobile-nav-link" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a>
+    <a href="about.html"         class="mobile-nav-link" data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a>
     <a href="index.html#faq"     class="mobile-nav-link" data-en="FAQ"       data-ge="კითხვები">FAQ</a>
     <a href="index.html#contact" class="mobile-nav-link" data-en="Contact"   data-ge="კონტაქტი">Contact</a>
   </nav>
@@ -117,35 +126,15 @@
 
   <!-- ── LEFT SIDEBAR ── -->
   <aside class="dr-sidebar">
-    <nav class="dr-tabs" role="tablist">
+    <h3 class="dr-side-title">Select Product</h3>
+    <div class="dr-product-picker" id="dr-product-picker" aria-label="Choose product"></div>
 
-      <button class="dr-tab" data-tab="products" role="tab" title="Products">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/>
-        </svg>
-        <span>Products</span>
-      </button>
+    <div class="dr-side-tools">
+      <button class="dr-side-tool-btn" id="dr-sidebar-add-text" type="button">+ Add text</button>
+      <button class="dr-side-tool-btn" id="dr-sidebar-upload" type="button">+ Upload image</button>
+    </div>
 
-
-      <button class="dr-tab active" data-tab="text" role="tab" title="Text">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
-        </svg>
-        <span>Text</span>
-      </button>
-
-      <button class="dr-tab" data-tab="upload" role="tab" title="Upload">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-        </svg>
-        <span>Upload</span>
-      </button>
-
-    </nav>
-
-    <div class="dr-sidebar-sep"></div>
-
-    <div class="dr-undoredo">
+    <div class="dr-undoredo dr-undoredo-row">
       <button class="dr-undoredo-btn" id="btn-undo" disabled title="Undo">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 7v6h6"/><path d="M3 13C5 7.5 10 4 16 5.5c4 1 7 4.5 7 9"/>
@@ -187,8 +176,6 @@
       </button>
 
     </div>
-
-  <div class="dr-product-picker hidden" id="dr-product-picker" aria-label="Choose product"></div>
 
     <!-- Canvas (shirt + print zone) -->
     <div class="dr-canvas-wrap" id="canvas-wrap">
@@ -314,7 +301,7 @@
       <!-- Font picker -->
       <div class="dr-font-row" id="font-row">
         <button class="dr-font-trigger" id="font-trigger">
-          <span id="font-label" style="font-family:'GelatoSans',sans-serif;">GelatoSans</span>
+          <span id="font-label" style="font-family:'Inter',sans-serif;">GelatoSans</span>
         </button>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dr-font-chevron"><path d="M9 18l6-6-6-6"/></svg>
         <!-- Dropdown list -->
@@ -351,12 +338,6 @@
             <rect x="8" y="3" width="13" height="13" rx="1" stroke-dasharray="3 2"/><rect x="3" y="8" width="13" height="13" rx="1"/>
           </svg>
           <span>Send to back</span>
-        </button>
-        <button class="dr-ta-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 2"/>
-          </svg>
-          <span>Print areas</span>
         </button>
         <button class="dr-ta-btn" id="btn-duplicate">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -395,9 +376,9 @@
     <div class="reviews-overview">
       <div class="reviews-score-col">
         <div class="reviews-big-stars">
-          <span class="rvw-star filled">★</span><span class="rvw-star filled">★</span>
-          <span class="rvw-star filled">★</span><span class="rvw-star filled">★</span>
-          <span class="rvw-star half">★</span>
+          <span class="rvw-star filled">&#9733;</span><span class="rvw-star filled">&#9733;</span>
+          <span class="rvw-star filled">&#9733;</span><span class="rvw-star filled">&#9733;</span>
+          <span class="rvw-star half">&#9733;</span>
         </div>
         <span class="reviews-count">7220 reviews</span>
       </div>
@@ -426,47 +407,47 @@
     <div class="reviews-grid">
 
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">May 12, 2026</span></div>
+        <div class="rvw-meta"><span class="rvw-stars5">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-date">May 12, 2026</span></div>
         <p>I like these t-shirts. They fit well!!</p>
       </div>
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">May 8, 2026</span></div>
+        <div class="rvw-meta"><span class="rvw-stars5">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-date">May 8, 2026</span></div>
         <p>Excellent quality.</p>
       </div>
 
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 29, 2026</span></div>
+        <div class="rvw-meta"><span class="rvw-stars5">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-date">April 29, 2026</span></div>
         <p>Really nice quality shirts and printing. They also ship fast. This is my go-to custom shirt purveyor.</p>
       </div>
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 18, 2026</span></div>
+        <div class="rvw-meta"><span class="rvw-stars5">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-date">April 18, 2026</span></div>
         <p>Everything was great except next time I will probably order a size up! The shirts were a little smaller than I expected.</p>
       </div>
 
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 17, 2026</span></div>
+        <div class="rvw-meta"><span class="rvw-stars5">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-date">April 17, 2026</span></div>
         <p>Quality of the shirt was great</p>
       </div>
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 14, 2026</span></div>
-        <p>The T shirt is a great **, and a great dit</p>
+        <div class="rvw-meta"><span class="rvw-stars5">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-date">April 14, 2026</span></div>
+        <p>The T-shirt is great, and the print quality is excellent.</p>
       </div>
 
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars5">★★★★★</span><span class="rvw-date">April 12, 2026</span></div>
+        <div class="rvw-meta"><span class="rvw-stars5">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-date">April 12, 2026</span></div>
         <p>its great</p>
       </div>
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars4">★★★★</span><span class="rvw-star-empty">★</span><span class="rvw-date">April 10, 2026</span></div>
-        <p>Good product not a premium textile but still comfortable enough. Fit is okay but a little smaller than expected, should have gotten a size **. Overall product was sufficient</p>
+        <div class="rvw-meta"><span class="rvw-stars4">&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-star-empty">&#9733;</span><span class="rvw-date">April 10, 2026</span></div>
+        <p>Good product. Not premium textile, but still comfortable. Fit is a little smaller than expected, so I should have ordered one size up.</p>
       </div>
 
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars4">★★★★</span><span class="rvw-star-empty">★</span><span class="rvw-date">March 10, 2026</span></div>
+        <div class="rvw-meta"><span class="rvw-stars4">&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-star-empty">&#9733;</span><span class="rvw-date">March 10, 2026</span></div>
         <p>The shirt runs small and shrinks in the wash.</p>
       </div>
       <div class="rvw-card">
-        <div class="rvw-meta"><span class="rvw-stars4">★★★★</span><span class="rvw-star-empty">★</span><span class="rvw-date">March 9, 2026</span></div>
+        <div class="rvw-meta"><span class="rvw-stars4">&#9733;&#9733;&#9733;&#9733;</span><span class="rvw-star-empty">&#9733;</span><span class="rvw-date">March 9, 2026</span></div>
         <p>Delivering what is expected!</p>
       </div>
 
@@ -489,7 +470,7 @@
         <h4 data-en="Quick Links" data-ge="სწრაფი ბმულები">Quick Links</h4>
         <ul>
           <li><a href="index.html#shop"    data-en="Shop"      data-ge="მაღაზია">Shop</a></li>
-          <li><a href="index.html#story"   data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a></li>
+          <li><a href="about.html"         data-en="Our Story" data-ge="ჩვენს შესახებ">Our Story</a></li>
           <li><a href="index.html#faq"     data-en="FAQ"       data-ge="კითხვები">FAQ</a></li>
           <li><a href="index.html#contact" data-en="Contact"   data-ge="კონტაქტი">Contact</a></li>
         </ul>
@@ -503,9 +484,7 @@
           <a href="https://facebook.com/barcaprintshop" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </a>
-          <a href="https://wa.me/34603619061" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.47-.148-.67.15-.23.297-.921.967-1.128 1.165-.206.198-.413.223-.71.066-.296-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.781 1.158l-.338-.17-3.51.666.679-3.38-.223-.356a9.9 9.9 0 011.51-4.169c3.852-4.147 10.582-4.357 14.322-.503 3.739 3.853 3.938 10.467.291 14.522-1.811 1.932-4.402 3.01-7.041 3.15l-.355-.071-.271.179.051.3.695 4.236 3.35-.541c4.808-1.781 8.51-5.823 9.234-10.665.779-5.248-1.186-10.253-5.32-13.491-4.134-3.237-10.923-3.116-14.95.357z"/></svg>
-          </a>
+
         </div>
       </div>
       <div class="footer-section">
@@ -581,11 +560,25 @@
   </div>
 </div>
 
+<!-- ── Mobile corner history actions ── -->
+<div class="mob-corner-actions" aria-label="History actions">
+  <button class="mob-corner-btn" id="mob-btn-undo" type="button" title="Undo" aria-label="Undo" disabled>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 7v6h6"/><path d="M3 13C5 7.5 10 4 16 5.5c4 1 7 4.5 7 9"/>
+    </svg>
+  </button>
+  <button class="mob-corner-btn" id="mob-btn-redo" type="button" title="Redo" aria-label="Redo" disabled>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 7v6h-6"/><path d="M21 13C19 7.5 14 4 8 5.5c-4 1-7 4.5-7 9"/>
+    </svg>
+  </button>
+</div>
+
 <!-- ── Edit sheet (slides up when text element is selected) ── -->
 <div id="mob-edit-sheet" class="mob-sheet mob-edit-sheet" aria-hidden="true">
   <div class="mob-sheet-handle"></div>
   <div class="mob-sheet-header">
-    <span class="mob-sheet-title">Text settings</span>
+    <span class="mob-sheet-title" id="mob-edit-title">Text settings</span>
     <button class="mob-sheet-done" id="mob-btn-done">
       Done
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -623,12 +616,6 @@
       </svg>
       <span>Send to back</span>
     </button>
-    <button class="mob-action-pill">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 2"/>
-      </svg>
-      <span>Print areas</span>
-    </button>
   </div>
   <!-- Settings pills -->
   <div class="mob-settings-row">
@@ -660,7 +647,7 @@
           <path d="M4 7V4h16v3M9 20h6M12 4v16"/>
         </svg>
       </div>
-      <span>Text</span>
+      <span>Text edit</span>
     </div>
     <div class="mob-setting-pill" id="mob-bend-pill">
       <div class="mob-setting-icon-wrap" style="flex-direction:row;gap:3px;">
@@ -693,7 +680,41 @@
   </div>
   <!-- Font list (revealed when Font pill tapped) -->
   <div id="mob-font-list-wrap" class="mob-font-list-wrap mob-hidden">
-    <ul id="mob-font-ul" class="mob-font-ul"></ul>
+    <div class="mob-font-modal-card">
+      <div class="mob-font-modal-head">
+        <span class="mob-font-modal-title">Choose font</span>
+        <button id="mob-font-close" class="mob-text-close" type="button" aria-label="Close font list">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <ul id="mob-font-ul" class="mob-font-ul"></ul>
+    </div>
+  </div>
+  <div id="mob-img-controls" class="mob-img-controls mob-hidden">
+    <div class="mob-img-row">
+      <span class="mob-img-label">Filter</span>
+      <div class="mob-chip-row" id="mob-filter-row">
+        <button type="button" class="mob-chip active" data-filter="color">Color</button>
+        <button type="button" class="mob-chip" data-filter="bw">B/W</button>
+      </div>
+    </div>
+    <div class="mob-img-row">
+      <span class="mob-img-label">Fit</span>
+      <div class="mob-chip-row" id="mob-fit-row">
+        <button type="button" class="mob-chip active" data-fit="contain">Fit</button>
+        <button type="button" class="mob-chip" data-fit="fill">Fill</button>
+        <button type="button" class="mob-chip" data-fit="cover">Crop</button>
+      </div>
+    </div>
+    <div class="mob-img-row">
+      <span class="mob-img-label">Opacity</span>
+      <div class="mob-opacity-wrap">
+        <input type="range" id="mob-img-opacity" class="mob-opacity-slider" min="20" max="100" step="1" value="100">
+        <span id="mob-img-opacity-val" class="mob-opacity-val">100%</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -743,16 +764,17 @@
       <div id="mob-product-grid" class="mob-product-grid"></div>
     </div>
     <div class="mob-product-row">
-      <span class="mob-label">View</span>
-      <div class="mob-view-toggle">
-        <button class="mob-view-btn active" data-view="front">Front</button>
-        <button class="mob-view-btn" data-view="back">Back</button>
-      </div>
-    </div>
-    <div class="mob-product-row">
       <span class="mob-label" id="mob-variant-label">Color: <strong id="mob-active-color">white</strong></span>
       <div id="mob-swatch-row" class="mob-swatch-row"></div>
     </div>
+  </div>
+</div>
+
+<!-- Persistent mobile view toggle -->
+<div class="mob-view-float" aria-label="Product view toggle">
+  <div class="mob-view-toggle">
+    <button class="mob-view-btn active" data-view="front">Front</button>
+    <button class="mob-view-btn" data-view="back">Back</button>
   </div>
 </div>
 

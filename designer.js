@@ -41,6 +41,7 @@
   let selectedEl  = null;
   let currentView = 'front';
   let activeProductId = 'shirt';
+  const zoneSnapshots = {};
 
   const PRODUCTS = [
     {
@@ -56,6 +57,9 @@
         { name: 'white', image: 'images/whiteshirt.webp', backImage: 'images/whiteback.webp', swatch: '#FFFFFF', dark: false },
         { name: 'black', image: 'images/blackshirt.webp', backImage: 'images/blackshirt-back.webp', swatch: '#111111', dark: true },
         { name: 'gray', image: 'images/grayshirt.webp', backImage: 'images/grayback.webp', swatch: '#888888', dark: false },
+        { name: 'blue', image: 'images/blueshirt.png', backImage: 'images/blueshirt-back.png', swatch: '#2F5FA8', dark: true },
+        { name: 'pink', image: 'images/pinkshirt.png', backImage: 'images/pinkshirt-back.png', swatch: '#F2A5BD', dark: false },
+        { name: 'red', image: 'images/redshirt.png', backImage: 'images/redshirt-back.png', swatch: '#C62828', dark: true },
       ],
     },
     {
@@ -179,6 +183,36 @@
     return JSON.stringify(items);
   }
 
+  function clearZoneElements() {
+    _deselect(true);
+    Array.from(printZone.querySelectorAll('.dr-text-el, .dr-img-el')).forEach(e => e.remove());
+  }
+
+  function zoneKey(productId, view) {
+    return `${productId}:${view}`;
+  }
+
+  function saveCurrentZoneSnapshot() {
+    zoneSnapshots[zoneKey(activeProductId, currentView)] = serializeZone();
+  }
+
+  function loadZoneSnapshot(productId, view) {
+    const snapshot = zoneSnapshots[zoneKey(productId, view)] || '[]';
+    restoreZone(snapshot);
+  }
+
+  function resetProductSnapshots(productId) {
+    zoneSnapshots[zoneKey(productId, 'front')] = '[]';
+    zoneSnapshots[zoneKey(productId, 'back')] = '[]';
+  }
+
+  function resetHistoryFromCurrentZone() {
+    undoStack.length = 0;
+    undoStack.push(serializeZone());
+    undoPtr = 0;
+    updateUndoBtns();
+  }
+
   function pushHistory() {
     clearTimeout(historyDebounce);
     // Drop any redo future
@@ -196,11 +230,13 @@
   function updateUndoBtns() {
     if (btnUndo) btnUndo.disabled = undoPtr <= 0;
     if (btnRedo) btnRedo.disabled = undoPtr >= undoStack.length - 1;
+    if (mobBtnUndo) mobBtnUndo.disabled = undoPtr <= 0;
+    if (mobBtnRedo) mobBtnRedo.disabled = undoPtr >= undoStack.length - 1;
   }
 
   function restoreZone(snapshot) {
     _deselect(true);
-    Array.from(printZone.querySelectorAll('.dr-text-el, .dr-img-el')).forEach(e => e.remove());
+    clearZoneElements();
     const items = JSON.parse(snapshot);
     items.forEach(item => {
       if (item._type === 'image') {
@@ -247,6 +283,8 @@
   const activeColorName = document.getElementById('active-color-name');
   const btnUndo         = document.getElementById('btn-undo');
   const btnRedo         = document.getElementById('btn-redo');
+  const mobBtnUndo      = document.getElementById('mob-btn-undo');
+  const mobBtnRedo      = document.getElementById('mob-btn-redo');
 
   const inputContent  = document.getElementById('text-content');
   const inputColor    = document.getElementById('text-color');
@@ -420,7 +458,6 @@
       option.addEventListener('click', e => {
         e.stopPropagation();
         applyProduct(product.id);
-        hideProductPicker();
       });
 
       productPicker.appendChild(option);
@@ -516,7 +553,20 @@
 
   function applyProduct(productId) {
     if (!productById[productId]) return;
+    const previousProductId = activeProductId;
+
+    // Persist current side before moving away.
+    saveCurrentZoneSnapshot();
+
+    // User-requested behavior: when product changes, start with a clean design.
+    if (productId !== previousProductId) {
+      resetProductSnapshots(productId);
+      currentView = 'front';
+    }
+
     activeProductId = productId;
+    const cw = document.getElementById('canvas-wrap');
+    if (cw) cw.setAttribute('data-product', activeProductId);
 
     const product = getActiveProduct();
     if (activeProductTitle) activeProductTitle.textContent = product.title;
@@ -525,10 +575,13 @@
     setViewButtonsForProduct();
     applyPrintZoneByProduct();
     setActiveVariant(selectedVariantByProduct[product.id] || 0, { silent: true });
+    loadZoneSnapshot(product.id, currentView);
 
     printZone.querySelectorAll('.dr-text-el, .dr-img-el').forEach(el => {
       constrainToZone(el);
     });
+
+    resetHistoryFromCurrentZone();
 
     renderDesktopProductPicker();
     renderMobileProductCards();
@@ -628,6 +681,18 @@
     if (content) content.innerHTML = buildSVG(d);
   }
 
+  function renderImageContent(el) {
+    const d = elData.get(el);
+    if (!d || d._type !== 'image') return;
+    const img = el.querySelector('img');
+    if (!img) return;
+
+    const fitMode = d.fitMode || 'contain';
+    img.style.objectFit = fitMode;
+    img.style.opacity = String(d.opacity === undefined ? 1 : d.opacity);
+    img.style.filter = d.grayscale ? 'grayscale(1)' : 'none';
+  }
+
   /* ─────────────────────────────────────────────────
      CLAMP FONT SIZE  so element never overflows zone
   ───────────────────────────────────────────────── */
@@ -671,6 +736,13 @@
     el.style.top  = t + 'px';
   }
 
+  function applyElementTransform(el) {
+    const d = elData.get(el);
+    if (!d) return;
+    const rotation = Number.isFinite(d.rotation) ? d.rotation : 0;
+    el.style.transform = `rotate(${rotation}deg)`;
+  }
+
   /* ─────────────────────────────────────────────────
      SHARED ELEMENT HANDLES & BAR BUILDER
   ───────────────────────────────────────────────── */
@@ -679,6 +751,13 @@
     const bar = document.createElement('div');
     bar.className = 'dr-el-bar';
     bar.innerHTML = `
+      <button class="dr-el-btn dr-btn-edit" title="Edit settings">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v4"/><path d="M12 17v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/>
+          <path d="M3 12h4"/><path d="M17 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/>
+        </svg>
+        <span class="dr-btn-edit-label">Edit</span>
+      </button>
       <button class="dr-el-btn dr-btn-dup" title="Duplicate">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="9" y="9" width="13" height="13" rx="1"/>
@@ -719,6 +798,7 @@
       textAlign:  'center',
       left:       16,
       top:        Math.max(16, Math.round(printZone.clientHeight * 0.3)),
+      rotation:   0,
     }, overrides || {});
 
     const el = document.createElement('div');
@@ -746,6 +826,7 @@
     el.appendChild(rotWrap);
 
     elData.set(el, d);
+    applyElementTransform(el);
     bindTextEl(el);
     return el;
   }
@@ -762,21 +843,27 @@
       top:    8,
       width:  120,
       height: 120,
+      fitMode: 'contain',
+      grayscale: false,
+      opacity: 1,
+      rotation: 0,
     }, overrides || {});
 
     const el = document.createElement('div');
     el.className  = 'dr-img-el';
     el.dataset.id = 'img-' + imgCounter;
     el.style.cssText = `position:absolute;left:${d.left}px;top:${d.top}px;width:${d.width}px;height:${d.height}px;
-      cursor:grab;user-select:none;border:2px solid transparent;border-radius:2px;line-height:0;`;
+      cursor:grab;user-select:none;line-height:0;`;
 
     const img = document.createElement('img');
     img.src   = d.src;
     img.style.cssText = 'width:100%;height:100%;object-fit:contain;pointer-events:none;display:block;';
     el.appendChild(img);
+    renderImageContent(el);
 
     addHandlesAndBar(el);
     elData.set(el, d);
+    applyElementTransform(el);
     bindImgEl(el);
     return el;
   }
@@ -820,6 +907,12 @@
       if (inputContent) { inputContent.focus(); inputContent.select(); }
     });
 
+    el.querySelector('.dr-btn-edit').addEventListener('click', e => {
+      e.stopPropagation();
+      selectEl(el);
+      if (isMobile()) mobShowEditSheet(el);
+    });
+
     el.querySelector('.dr-btn-dup').addEventListener('click', e => {
       e.stopPropagation(); duplicateEl(el);
     });
@@ -837,6 +930,12 @@
         startResize(e, el, h.dataset.corner);
       }, { passive: false });
     });
+
+    const rotateBtn = el.querySelector('.dr-rotate-btn');
+    if (rotateBtn) {
+      rotateBtn.addEventListener('mousedown', e => startRotate(e, el));
+      rotateBtn.addEventListener('touchstart', e => startRotate(e, el), { passive: false });
+    }
   }
 
   /* ─────────────────────────────────────────────────
@@ -854,6 +953,12 @@
     }
     el.addEventListener('mousedown',  handleDragStart);
     el.addEventListener('touchstart', handleDragStart, { passive: false });
+
+    el.querySelector('.dr-btn-edit').addEventListener('click', e => {
+      e.stopPropagation();
+      selectEl(el, 'image');
+      if (isMobile()) mobShowEditSheet(el);
+    });
 
     el.querySelector('.dr-btn-dup').addEventListener('click', e => {
       e.stopPropagation(); duplicateEl(el);
@@ -882,7 +987,6 @@
     if (selectedEl) _deselect(false);
     selectedEl = el;
     el.classList.add('selected');
-    el.style.borderColor = '#3b82f6';
     el.style.zIndex      = '40';
 
     const d = elData.get(el);
@@ -892,18 +996,17 @@
       showTextPanel();
       populatePanel(el);
     }
-    // Mobile: show edit sheet + zoom canvas
-    if (isMobile()) mobShowEditSheet(el);
+    // Mobile: edit sheet opens only from explicit Edit action.
   }
 
   function _deselect(hidePanel) {
     if (!selectedEl) return;
     selectedEl.classList.remove('selected');
-    selectedEl.style.borderColor = '';
     selectedEl.style.zIndex      = '';
     selectedEl = null;
     if (hidePanel !== false) hideTextPanel();
     // Mobile: hide edit sheet + unzoom
+    if (isMobile()) mobEndTransform();
     if (isMobile()) mobHideEditSheet();
   }
 
@@ -936,6 +1039,7 @@
     if (!isTouch && e.button !== 0) return;
     el.classList.add('is-dragging');
     el.style.cursor = 'grabbing';
+    if (isMobile()) mobBeginTransform();
 
     const pt     = ptOf(e);
     const zRect  = printZone.getBoundingClientRect();
@@ -960,6 +1064,7 @@
     function onUp() {
       el.classList.remove('is-dragging');
       el.style.cursor = '';
+      if (isMobile()) mobEndTransform();
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup',   onUp);
       document.removeEventListener('touchmove', onMove);
@@ -989,6 +1094,7 @@
     const signY   = corner.includes('b') ?  1 : -1;
 
     document.body.style.cursor = `${corner}-resize`;
+    if (isMobile()) mobBeginTransform();
 
     function onMove(mv) {
       if (mv.cancelable) mv.preventDefault();
@@ -1004,6 +1110,7 @@
 
     function onUp() {
       document.body.style.cursor = '';
+      if (isMobile()) mobEndTransform();
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup',   onUp);
       document.removeEventListener('touchmove', onMove);
@@ -1037,6 +1144,7 @@
     const maxH = printZone.clientHeight - 4;
 
     document.body.style.cursor = `${corner}-resize`;
+    if (isMobile()) mobBeginTransform();
 
     function onMove(mv) {
       if (mv.cancelable) mv.preventDefault();
@@ -1053,6 +1161,7 @@
 
     function onUp() {
       document.body.style.cursor = '';
+      if (isMobile()) mobEndTransform();
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup',   onUp);
       document.removeEventListener('touchmove', onMove);
@@ -1064,6 +1173,47 @@
     document.addEventListener('mouseup',   onUp);
     document.addEventListener('touchmove', onMove, { passive: false });
     document.addEventListener('touchend',  onUp);
+  }
+
+  function startRotate(e, el) {
+    if (!el) return;
+    if (e.cancelable) e.preventDefault();
+    e.stopPropagation();
+    selectEl(el);
+
+    const d = elData.get(el);
+    if (!d) return;
+
+    if (isMobile()) mobBeginTransform();
+
+    const p0 = ptOf(e);
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const startPointerAngle = Math.atan2(p0.clientY - cy, p0.clientX - cx) * 180 / Math.PI;
+    const startRotation = Number.isFinite(d.rotation) ? d.rotation : 0;
+
+    function onMove(mv) {
+      if (mv.cancelable) mv.preventDefault();
+      const p = ptOf(mv);
+      const currentAngle = Math.atan2(p.clientY - cy, p.clientX - cx) * 180 / Math.PI;
+      d.rotation = startRotation + (currentAngle - startPointerAngle);
+      applyElementTransform(el);
+    }
+
+    function onUp() {
+      if (isMobile()) mobEndTransform();
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onUp);
+      pushHistory();
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onUp);
   }
 
   /* ─────────────────────────────────────────────────
@@ -1328,6 +1478,8 @@
   ───────────────────────────────────────────────── */
   if (btnUndo) btnUndo.addEventListener('click', doUndo);
   if (btnRedo) btnRedo.addEventListener('click', doRedo);
+  if (mobBtnUndo) mobBtnUndo.addEventListener('click', doUndo);
+  if (mobBtnRedo) mobBtnRedo.addEventListener('click', doRedo);
 
   /* ─────────────────────────────────────────────────
      SIDEBAR TABS
@@ -1345,6 +1497,15 @@
       if (tab.dataset.tab === 'upload') triggerUpload();
     });
   });
+
+  const sidebarAddTextBtn = document.getElementById('dr-sidebar-add-text');
+  const sidebarUploadBtn = document.getElementById('dr-sidebar-upload');
+  if (sidebarAddTextBtn) {
+    sidebarAddTextBtn.addEventListener('click', () => addText());
+  }
+  if (sidebarUploadBtn) {
+    sidebarUploadBtn.addEventListener('click', () => triggerUpload());
+  }
 
   /* ─────────────────────────────────────────────────
      UPLOAD IMAGE
@@ -1396,16 +1557,20 @@
       const product = getActiveProduct();
       if (btn.dataset.view === 'back' && !product.views.includes('back')) return;
 
+      saveCurrentZoneSnapshot();
+
       document.querySelectorAll('.dr-view-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentView = btn.dataset.view;
       setViewButtonsForProduct();
       updateImageAndThumbs();
       applyPrintZoneByProduct();
+      loadZoneSnapshot(activeProductId, currentView);
       // After reposition, re-clamp all elements in case new zone is smaller
       printZone.querySelectorAll('.dr-text-el, .dr-img-el').forEach(el => {
         constrainToZone(el);
       });
+      resetHistoryFromCurrentZone();
     });
   });
 
@@ -1495,13 +1660,20 @@
     renderMobileProductCards();
     applyProduct('shirt');
 
-    // Seed initial history so undo can't go before initial state
+    if (isMobile()) {
+      // Mobile starts with product selection first, without auto-opening text edit.
+      syncMobileSwatches();
+      setViewButtonsForProduct();
+      mobOpenSheet('mob-product-sheet');
+      resetHistoryFromCurrentZone();
+      return;
+    }
+
+    // Desktop keeps the seeded starter text for quick editing.
     addText({ text: 'Your text here' });
-    // addText calls pushHistory → undoPtr = 1 (empty state at 0, one element at 1)
-    // Seed an empty state at index 0 so undo goes to blank canvas
-    undoStack.unshift('[]');
-    undoPtr = 1;
-    updateUndoBtns();
+    saveCurrentZoneSnapshot();
+    zoneSnapshots[zoneKey('shirt', 'back')] = '[]';
+    resetHistoryFromCurrentZone();
   });
 
   /* ═══════════════════════════════════════════════════════════
@@ -1509,19 +1681,38 @@
      ═══════════════════════════════════════════════════════════ */
 
   function isMobile() { return window.innerWidth <= 768; }
+  let mobIsTransforming = false;
+
+  function mobBeginTransform() {
+    if (!isMobile()) return;
+    mobIsTransforming = true;
+    document.body.classList.add('mob-transforming');
+    mobCloseSheet('mob-edit-sheet');
+  }
+
+  function mobEndTransform() {
+    if (!isMobile()) return;
+    mobIsTransforming = false;
+    document.body.classList.remove('mob-transforming');
+  }
 
   /* ── Sheet management ── */
   const mobBackdrop = document.getElementById('mob-backdrop');
 
+  function mobCloseAllSheets(exceptId) {
+    document.querySelectorAll('.mob-sheet').forEach(s => {
+      if (exceptId && s.id === exceptId) return;
+      s.classList.remove('mob-sheet-open');
+      s.setAttribute('aria-hidden', 'true');
+    });
+  }
+
   function mobOpenSheet(id) {
     const el = document.getElementById(id);
     if (!el) return;
+    mobCloseAllSheets(id);
     el.classList.add('mob-sheet-open');
     el.setAttribute('aria-hidden', 'false');
-    if (mobBackdrop) {
-      mobBackdrop.classList.add('mob-backdrop-on');
-      mobBackdrop.setAttribute('aria-hidden', 'false');
-    }
   }
 
   function mobCloseSheet(id) {
@@ -1529,23 +1720,6 @@
     if (!el) return;
     el.classList.remove('mob-sheet-open');
     el.setAttribute('aria-hidden', 'true');
-    // Hide backdrop only if no other sheets are open
-    const anyOpen = document.querySelector('.mob-sheet.mob-sheet-open');
-    if (!anyOpen && mobBackdrop) {
-      mobBackdrop.classList.remove('mob-backdrop-on');
-      mobBackdrop.setAttribute('aria-hidden', 'true');
-    }
-  }
-
-  function mobCloseAllSheets() {
-    document.querySelectorAll('.mob-sheet').forEach(s => {
-      s.classList.remove('mob-sheet-open');
-      s.setAttribute('aria-hidden', 'true');
-    });
-    if (mobBackdrop) {
-      mobBackdrop.classList.remove('mob-backdrop-on');
-      mobBackdrop.setAttribute('aria-hidden', 'true');
-    }
   }
 
   /* Backdrop tap closes all sheets */
@@ -1563,8 +1737,38 @@
 
   /* ── Edit sheet show/hide ── */
   function mobShowEditSheet(el) {
+    if (mobIsTransforming || !el) return;
     mobZoomIn();
     mobOpenSheet('mob-edit-sheet');
+
+    const editTitle = document.getElementById('mob-edit-title');
+    const settingsRow = document.querySelector('#mob-edit-sheet .mob-settings-row');
+    const textInputRow = document.getElementById('mob-text-input-row');
+    const textInput = document.getElementById('mob-text-content');
+    const fontList = document.getElementById('mob-font-list-wrap');
+    const bendRow = document.getElementById('mob-bend-row');
+    const imgControls = document.getElementById('mob-img-controls');
+    const selectedData = elData.get(el);
+    const isTextSelection = !!selectedData && selectedData._type === 'text';
+    const isImageSelection = !!selectedData && selectedData._type === 'image';
+
+    if (editTitle) editTitle.textContent = isImageSelection ? 'Image settings' : 'Text settings';
+    if (settingsRow) settingsRow.classList.toggle('mob-hidden', !isTextSelection);
+    if (imgControls) imgControls.classList.toggle('mob-hidden', !isImageSelection);
+
+    if (fontList) fontList.classList.add('mob-hidden');
+    if (bendRow) bendRow.classList.add('mob-hidden');
+    if (textInputRow) textInputRow.classList.toggle('mob-hidden', !isTextSelection);
+
+    if (textInput && isTextSelection) {
+      textInput.value = selectedData.text || '';
+      setTimeout(() => {
+        textInput.focus();
+        textInput.select();
+      }, 20);
+    }
+
+    mobPopulateSheet(el);
   }
   function mobHideEditSheet() {
     mobZoomOut();
@@ -1572,6 +1776,7 @@
     // Reset pill sub-rows
     document.getElementById('mob-text-input-row')  && document.getElementById('mob-text-input-row').classList.add('mob-hidden');
     document.getElementById('mob-font-list-wrap')  && document.getElementById('mob-font-list-wrap').classList.add('mob-hidden');
+    document.getElementById('mob-bend-row')        && document.getElementById('mob-bend-row').classList.add('mob-hidden');
   }
 
   /* ── Populate mobile edit sheet from element data ── */
@@ -1579,6 +1784,29 @@
     if (!el) return;
     const d = elData.get(el);
     if (!d) return;
+
+    if (d._type === 'image') {
+      const opacitySlider = document.getElementById('mob-img-opacity');
+      const opacityVal = document.getElementById('mob-img-opacity-val');
+      const opacityPct = Math.round((d.opacity === undefined ? 1 : d.opacity) * 100);
+      if (opacitySlider) opacitySlider.value = String(opacityPct);
+      if (opacityVal) opacityVal.textContent = `${opacityPct}%`;
+
+      const filterRow = document.getElementById('mob-filter-row');
+      const fitRow = document.getElementById('mob-fit-row');
+      if (filterRow) {
+        filterRow.querySelectorAll('.mob-chip').forEach(btn => {
+          const want = btn.dataset.filter === 'bw';
+          btn.classList.toggle('active', !!d.grayscale === want);
+        });
+      }
+      if (fitRow) {
+        fitRow.querySelectorAll('.mob-chip').forEach(btn => {
+          btn.classList.toggle('active', (d.fitMode || 'contain') === btn.dataset.fit);
+        });
+      }
+      return;
+    }
 
     const dotEl   = document.getElementById('mob-color-dot');
     const colInpt = document.getElementById('mob-color-input');
@@ -1621,6 +1849,7 @@
   // Add — toggle sub-tray
   if (mobBtnAdd && mobSubTray) {
     mobBtnAdd.addEventListener('click', () => {
+      mobCloseSheet('mob-product-sheet');
       const open = !mobSubTray.classList.contains('mob-hidden');
       mobSubTray.classList.toggle('mob-hidden', open);
     });
@@ -1630,7 +1859,7 @@
   if (mobSubText) {
     mobSubText.addEventListener('click', () => {
       mobSubTray && mobSubTray.classList.add('mob-hidden');
-      addText({ text: 'Your text here' });
+      addText({ text: 'TEXT' });
     });
   }
 
@@ -1716,6 +1945,50 @@
     });
   }
 
+  const mobFilterRow = document.getElementById('mob-filter-row');
+  const mobFitRow = document.getElementById('mob-fit-row');
+  const mobImgOpacity = document.getElementById('mob-img-opacity');
+  const mobImgOpacityVal = document.getElementById('mob-img-opacity-val');
+
+  if (mobFilterRow) {
+    mobFilterRow.addEventListener('click', e => {
+      const btn = e.target.closest('.mob-chip[data-filter]');
+      if (!btn || !selectedEl) return;
+      const d = elData.get(selectedEl);
+      if (!d || d._type !== 'image') return;
+      d.grayscale = btn.dataset.filter === 'bw';
+      renderImageContent(selectedEl);
+      mobPopulateSheet(selectedEl);
+      pushHistoryDebounced(250);
+    });
+  }
+
+  if (mobFitRow) {
+    mobFitRow.addEventListener('click', e => {
+      const btn = e.target.closest('.mob-chip[data-fit]');
+      if (!btn || !selectedEl) return;
+      const d = elData.get(selectedEl);
+      if (!d || d._type !== 'image') return;
+      d.fitMode = btn.dataset.fit || 'contain';
+      renderImageContent(selectedEl);
+      mobPopulateSheet(selectedEl);
+      pushHistoryDebounced(250);
+    });
+  }
+
+  if (mobImgOpacity) {
+    mobImgOpacity.addEventListener('input', () => {
+      if (!selectedEl) return;
+      const d = elData.get(selectedEl);
+      if (!d || d._type !== 'image') return;
+      const pct = Math.max(20, Math.min(100, parseInt(mobImgOpacity.value, 10) || 100));
+      d.opacity = pct / 100;
+      if (mobImgOpacityVal) mobImgOpacityVal.textContent = `${pct}%`;
+      renderImageContent(selectedEl);
+      pushHistoryDebounced(250);
+    });
+  }
+
   /* ── Size pill ── */
   const mobSzMinus = document.getElementById('mob-sz-minus');
   const mobSzPlus  = document.getElementById('mob-sz-plus');
@@ -1739,19 +2012,36 @@
 
   /* ── Text pill — reveals input row ── */
   const mobTextPill      = document.getElementById('mob-text-pill');
+  const mobColorPill     = document.getElementById('mob-color-pill');
+  const mobSizePill      = document.getElementById('mob-size-pill');
   const mobTextInputRow  = document.getElementById('mob-text-input-row');
   const mobTextContent   = document.getElementById('mob-text-content');
   const mobTextClose     = document.getElementById('mob-text-close');
 
+  function mobCloseTextSubPanels() {
+    mobTextInputRow && mobTextInputRow.classList.add('mob-hidden');
+    mobFontListWrap && mobFontListWrap.classList.add('mob-hidden');
+    mobBendRow && mobBendRow.classList.add('mob-hidden');
+  }
+
   if (mobTextPill && mobTextInputRow) {
     mobTextPill.addEventListener('click', () => {
-      mobTextInputRow.classList.toggle('mob-hidden');
-      document.getElementById('mob-font-list-wrap') && document.getElementById('mob-font-list-wrap').classList.add('mob-hidden');
-      if (!mobTextInputRow.classList.contains('mob-hidden') && mobTextContent) {
+      const willOpen = mobTextInputRow.classList.contains('mob-hidden');
+      mobCloseTextSubPanels();
+      if (willOpen) {
+        mobTextInputRow.classList.remove('mob-hidden');
+      }
+      if (willOpen && mobTextContent) {
         mobTextContent.focus();
         mobTextContent.select();
       }
     });
+  }
+  if (mobColorPill) {
+    mobColorPill.addEventListener('click', () => mobCloseTextSubPanels());
+  }
+  if (mobSizePill) {
+    mobSizePill.addEventListener('click', () => mobCloseTextSubPanels());
   }
   if (mobTextClose && mobTextInputRow) {
     mobTextClose.addEventListener('click', () => mobTextInputRow.classList.add('mob-hidden'));
@@ -1769,6 +2059,7 @@
   /* ── Font pill — reveals font list ── */
   const mobFontPill     = document.getElementById('mob-font-pill');
   const mobFontListWrap = document.getElementById('mob-font-list-wrap');
+  const mobFontClose    = document.getElementById('mob-font-close');
   const mobFontUl       = document.getElementById('mob-font-ul');
 
   // Build mobile font list once
@@ -1802,8 +2093,19 @@
 
   if (mobFontPill && mobFontListWrap) {
     mobFontPill.addEventListener('click', () => {
-      mobFontListWrap.classList.toggle('mob-hidden');
-      mobTextInputRow && mobTextInputRow.classList.add('mob-hidden');
+      const willOpen = mobFontListWrap.classList.contains('mob-hidden');
+      mobCloseTextSubPanels();
+      if (willOpen) mobFontListWrap.classList.remove('mob-hidden');
+    });
+  }
+  if (mobFontClose && mobFontListWrap) {
+    mobFontClose.addEventListener('click', () => mobFontListWrap.classList.add('mob-hidden'));
+  }
+  if (mobFontListWrap) {
+    mobFontListWrap.addEventListener('click', e => {
+      if (e.target === mobFontListWrap) {
+        mobFontListWrap.classList.add('mob-hidden');
+      }
     });
   }
 
@@ -1816,9 +2118,9 @@
 
   if (mobBendPill && mobBendRow) {
     mobBendPill.addEventListener('click', () => {
-      mobBendRow.classList.toggle('mob-hidden');
-      document.getElementById('mob-font-list-wrap') && document.getElementById('mob-font-list-wrap').classList.add('mob-hidden');
-      document.getElementById('mob-text-input-row') && document.getElementById('mob-text-input-row').classList.add('mob-hidden');
+      const willOpen = mobBendRow.classList.contains('mob-hidden');
+      mobCloseTextSubPanels();
+      if (willOpen) mobBendRow.classList.remove('mob-hidden');
     });
   }
   if (mobBendClose && mobBendRow) {
