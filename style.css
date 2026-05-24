@@ -132,7 +132,7 @@ button {
     justify-content: center;
     z-index: 9999;
     pointer-events: none;
-    animation: fade-out-up 0.8s ease-in-out 2.5s forwards;
+    animation: fade-out-up 0.36s ease-in-out 1.14s forwards;
 }
 
 .loading-screen.hidden {
@@ -159,7 +159,7 @@ button {
     width: 80px;
     height: 80px;
     object-fit: contain;
-    animation: fade-in-scale 0.6s ease-out forwards;
+    animation: fade-in-scale 0.27s ease-out forwards;
     z-index: 1;
 }
 
@@ -170,36 +170,36 @@ button {
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-top: 2px solid var(--black);
     border-radius: 50%;
-    animation: spin-slow 2s linear infinite;
+    animation: spin-slow 0.91s linear infinite;
 }
 
 /* Hero animations */
 .hero-content {
-    animation: slide-left-fade 0.8s ease-out 2.5s both;
+    animation: slide-left-fade 0.36s ease-out 1.14s both;
 }
 
 .hero-headline {
-    animation: slide-up-fade 0.8s ease-out 2.8s both;
+    animation: slide-up-fade 0.36s ease-out 1.27s both;
 }
 
 .hero-subheadline {
-    animation: slide-up-fade 0.8s ease-out 3.1s both;
+    animation: slide-up-fade 0.36s ease-out 1.41s both;
 }
 
 .hero-ctas {
-    animation: slide-up-fade 0.8s ease-out 3.4s both;
+    animation: slide-up-fade 0.36s ease-out 1.55s both;
 }
 
 .google-reviews {
-    animation: slide-up-fade 0.8s ease-out 3.7s both;
+    animation: slide-up-fade 0.36s ease-out 1.68s both;
 }
 
 .hero-visual {
-    animation: slide-left-fade 0.8s ease-out 2.5s both;
+    animation: slide-left-fade 0.36s ease-out 1.14s both;
 }
 
 .hero-image {
-    animation: fade-in-scale 0.8s ease-out 2.5s both;
+    animation: fade-in-scale 0.36s ease-out 1.14s both;
 }
 
 /* Mobile optimizations */
@@ -220,11 +220,11 @@ button {
     }
 
     .hero-content {
-        animation: slide-up-fade 0.8s ease-out 2.5s both;
+        animation: slide-up-fade 0.36s ease-out 1.14s both;
     }
 
     .hero-visual {
-        animation: slide-up-fade 0.8s ease-out 2.5s both;
+        animation: slide-up-fade 0.36s ease-out 1.14s both;
         margin-top: 1.5rem;
     }
 }
@@ -1548,6 +1548,12 @@ button {
 .carousel-track::-webkit-scrollbar { display: none; }
 
 /* Each card is 1/3.25 of the visible container */
+a.carousel-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
 .carousel-card {
     flex: 0 0 calc((100vw - 4rem) / 3.25);
     scroll-snap-align: start;

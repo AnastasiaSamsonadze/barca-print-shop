@@ -155,7 +155,79 @@
         front: { top: 22, left: 21, width: 51, height: 62 },
       },
       variants: [
-        { name: 'white', image: 'images/white cup.png', swatch: '#FFFFFF', dark: false },
+        { name: 'hola', image: 'images/catalog-create-yourdesignimage.jpeg', swatch: '#FFD700', dark: false },
+      ],
+    },
+    {
+      id: 'georgian-white',
+      title: 'White Georgian Tee',
+      variantLabel: 'Style',
+      views: ['front'],
+      zones: {
+        front: { top: 12, left: 28, width: 45, height: 84 },
+      },
+      variants: [
+        { name: 'studio', image: 'images/catalog-whitegeorgian-shirt-bluebackground.jpeg', swatch: '#FFFFFF', dark: false },
+      ],
+    },
+    {
+      id: 'georgian-black',
+      title: 'Black Georgian Tee',
+      variantLabel: 'Style',
+      views: ['front'],
+      zones: {
+        front: { top: 12, left: 28, width: 45, height: 84 },
+      },
+      variants: [
+        { name: 'studio', image: 'images/catalog-black-georgian-shirt-bluebackground.jpeg', swatch: '#111111', dark: true },
+      ],
+    },
+    {
+      id: 'georgian-red',
+      title: 'Red Georgian Tee',
+      variantLabel: 'Style',
+      views: ['front'],
+      zones: {
+        front: { top: 12, left: 28, width: 45, height: 84 },
+      },
+      variants: [
+        { name: 'studio', image: 'images/catalog-redgeorgian-shirt-bluebackground.jpeg', swatch: '#C62828', dark: true },
+      ],
+    },
+    {
+      id: 'editorial-heart',
+      title: 'Editorial Heart Tee',
+      variantLabel: 'Style',
+      views: ['front'],
+      zones: {
+        front: { top: 12, left: 28, width: 45, height: 84 },
+      },
+      variants: [
+        { name: 'default', image: 'images/instapost1.PNG', swatch: '#FFFFFF', dark: false },
+      ],
+    },
+    {
+      id: 'palm-paradise',
+      title: 'Palm Paradise Tee',
+      variantLabel: 'Style',
+      views: ['front'],
+      zones: {
+        front: { top: 12, left: 28, width: 45, height: 84 },
+      },
+      variants: [
+        { name: 'black', image: 'images/instapost2.PNG', swatch: '#111111', dark: true },
+      ],
+    },
+    {
+      id: 'pirosmani-jacket',
+      title: 'Pirosmani Denim Jacket',
+      variantLabel: 'Style',
+      views: ['front'],
+      zones: {
+        front: { top: 8, left: 18, width: 64, height: 80 },
+      },
+      variants: [
+        { name: 'denim', image: 'images/instapost5.PNG', swatch: '#5C7C99', dark: false },
       ],
     },
   ];

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Barcaprintshop — Product detail">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#000000">
+    <title>Product | Barcaprintshop</title>
+    <link rel="icon" type="image/png" href="images/barclalogo.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="product.css">
+</head>
+<body class="product-page">
+
+    <!-- ===== ANNOUNCEMENT BAR ===== -->
+    <div class="announce-bar" role="banner" aria-label="Announcements">
+        <div class="announce-msg" id="announce-msg">
+            <span data-en="Tienda Abierta 24-7 — Pide cuando quieras, enviamos a todo el mundo" data-ge="მაღაზია ღია — შეუკვეთეთ ნებისმიერ დროს, ვაგზავნით მთელ მსოფლიოში">
+                Tienda Abierta 24-7 — Pide cuando quieras, enviamos a todo el mundo
+            </span>
+        </div>
+    </div>
+
+    <!-- ===== NAVBAR ===== -->
+    <header class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="index.html#home" class="navbar-logo">
+                <div class="brand-wrapper">
+                    <img src="images/barclalogo.png" alt="Barcaprintshop Logo" class="logo-img">
+                    <span class="brand-name">Barcaprintshop</span>
+                </div>
+            </a>
+
+            <nav class="nav-menu" aria-label="Main navigation">
+                <a href="catalog.html" class="nav-link" data-en="Tienda" data-ge="მაღაზია">Tienda</a>
+                <a href="about.html" class="nav-link" data-en="Historia" data-ge="ჩვენს შესახებ">Historia</a>
+                <a href="catalog.html" class="nav-link" data-en="Catalog" data-ge="კატალოგი">Catalog</a>
+                <a href="index.html#contact" class="nav-link" data-en="Contacto" data-ge="კონტაქტი">Contacto</a>
+            </nav>
+
+            <div class="navbar-actions">
+                <div class="lang-switcher" role="group" aria-label="Language">
+                    <button class="lang-btn active" data-lang="en">ES</button>
+                    <span class="lang-sep">/</span>
+                    <button class="lang-btn" data-lang="ge">GE</button>
+                </div>
+
+                <button class="cart-btn" aria-label="Shopping cart">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </button>
+
+                <button class="hamburger" aria-label="Open menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" aria-hidden="true">
+        <nav class="mobile-nav">
+            <a href="catalog.html" class="mobile-nav-link" data-en="Tienda" data-ge="მაღაზია">Tienda</a>
+            <a href="about.html" class="mobile-nav-link" data-en="Historia" data-ge="ჩვენს შესახებ">Historia</a>
+            <a href="catalog.html" class="mobile-nav-link" data-en="Catalog" data-ge="კატალოგი">Catalog</a>
+            <a href="index.html#contact" class="mobile-nav-link" data-en="Contacto" data-ge="კონტაქტი">Contacto</a>
+        </nav>
+    </div>
+
+    <!-- ===== PRODUCT NOT FOUND ===== -->
+    <section class="product-not-found" id="product-not-found" hidden>
+        <h1 data-en="Producto no encontrado" data-ge="პროდუქტი ვერ მოიძებნა">Producto no encontrado</h1>
+        <p data-en="Este producto no existe o el enlace es incorrecto." data-ge="ეს პროდუქტი არ არსებობს ან ბმული არასწორია.">Este producto no existe o el enlace es incorrecto.</p>
+        <a href="catalog.html" class="btn btn-primary" data-en="Volver a la tienda" data-ge="მაღაზიაში დაბრუნება">Volver a la tienda</a>
+    </section>
+
+    <!-- ===== PRODUCT LAYOUT ===== -->
+    <main class="product-layout" id="product-layout">
+        <div class="product-media-col">
+            <div class="product-media-frame">
+                <img id="dynamic-product-image" src="" alt="">
+            </div>
+        </div>
+
+        <div class="product-details-col">
+            <nav class="product-breadcrumbs" aria-label="Breadcrumb">
+                <a href="catalog.html" data-en="Tienda" data-ge="მაღაზია">Tienda</a>
+                <span aria-hidden="true"> / </span>
+                <span id="breadcrumb-category">Category</span>
+                <span aria-hidden="true"> / </span>
+                <span id="breadcrumb-name">Product</span>
+            </nav>
+
+            <h1 id="dynamic-product-title"></h1>
+            <div id="dynamic-product-price"></div>
+            <p id="dynamic-product-description"></p>
+
+            <div class="product-size-block" id="product-size-block">
+                <span class="product-size-label" data-en="Talla" data-ge="ზომა">Talla</span>
+                <div class="product-size-row" id="product-size-row"></div>
+            </div>
+
+            <button type="button" class="product-add-btn" data-en="Añadir al carrito" data-ge="კალათაში დამატება">Añadir al carrito</button>
+
+            <p id="product-designer-wrap" hidden>
+                <a href="designer.html" class="product-designer-link" data-en="Personaliza en el diseñador ›" data-ge="დიზაინერში მორგება ›">Personaliza en el diseñador ›</a>
+            </p>
+
+            <div class="product-accordion">
+                <div class="product-accordion-item">
+                    <button type="button" class="product-accordion-trigger" aria-expanded="false">
+                        <span class="product-accordion-title" data-en="Material &amp; Specs" data-ge="მასალა და სპეციფიკაცია">Material &amp; Specs</span>
+                        <span class="product-accordion-icon" aria-hidden="true">
+                            <span class="product-accordion-icon-h"></span>
+                            <span class="product-accordion-icon-v"></span>
+                        </span>
+                    </button>
+                    <div class="product-accordion-panel">
+                        <div class="product-accordion-body">
+                            <p id="dynamic-spec-material"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-accordion-item">
+                    <button type="button" class="product-accordion-trigger" aria-expanded="false">
+                        <span class="product-accordion-title" data-en="Shipping &amp; Returns" data-ge="მიწოდება და დაბრუნება">Shipping &amp; Returns</span>
+                        <span class="product-accordion-icon" aria-hidden="true">
+                            <span class="product-accordion-icon-h"></span>
+                            <span class="product-accordion-icon-v"></span>
+                        </span>
+                    </button>
+                    <div class="product-accordion-panel">
+                        <div class="product-accordion-body">
+                            <p id="dynamic-spec-shipping"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="images/barclalogo.png" alt="Barcaprintshop" class="footer-logo">
+                    <p data-en="Impresión personalizada premium con sede en Barcelona. Creado para ideas creativas."
+                       data-ge="პრემიუმ კასტომ პრინტინგი ბარსელონაში. Creado para ideas creativas.">
+                        Impresión personalizada premium con sede en Barcelona. Creado para ideas creativas.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-en="Enlaces Rápidos" data-ge="სწრაფი ბმულები">Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="catalog.html" data-en="Tienda" data-ge="მაღაზია">Tienda</a></li>
+                        <li><a href="about.html" data-en="Historia" data-ge="ჩვენს შესახებ">Historia</a></li>
+                        <li><a href="index.html#faq" data-en="FAQ" data-ge="კითხვები">FAQ</a></li>
+                        <li><a href="#contact" data-en="Contact" data-ge="კონტაქტი">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-en="Síguenos" data-ge="გამოგვყევით">Síguenos</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com/marcaprintshop" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/></svg>
+                        </a>
+                        <a href="https://facebook.com/barcaprintshop" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-en="Contact" data-ge="კონტაქტი">Contacto</h4>
+                    <p><a href="mailto:maxprint2019maxprint@gmail.com">maxprint2019maxprint@gmail.com</a></p>
+                    <p><a href="tel:+34603619061">+34 603 619 061</a></p>
+                    <p data-en="📍 Barcelona, Spain" data-ge="📍 ბარსელონა, ესპანეთი">📍 Barcelona, Spain</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p data-en="© 2026 Barcaprintshop. Todos los derechos reservados."
+                   data-ge="© 2026 Barcaprintshop. ყველა უფლება დაცულია.">
+                    © 2026 Barcaprintshop. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="products-data.js"></script>
+    <script src="product.js"></script>
+</body>
+</html>
