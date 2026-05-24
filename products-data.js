@@ -272,7 +272,7 @@ window.BPS_PRODUCTS = {
     'editorial-heart-tee': {
         id: 'editorial-heart-tee',
         section: 'catalog',
-        name: 'Editorial Heart Tee — Passeig de Gràcia',
+        name: 'Palm Paradise White Tee',
         type: { en: 'Camiseta', ge: 'მაისური' },
         category: { en: 'Camisetas', ge: 'მაისურები' },
         price: 20,
@@ -338,7 +338,7 @@ window.BPS_PRODUCTS = {
     'passeg-white-tee': {
         id: 'passeg-white-tee',
         section: 'catalog',
-        name: 'Passeig Display White Tee',
+        name: 'Display White Tee',
         type: { en: 'Camiseta', ge: 'მაისური' },
         category: { en: 'Camisetas', ge: 'მაისურები' },
         price: 20,

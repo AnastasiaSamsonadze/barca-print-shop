@@ -114,17 +114,17 @@
 
                 <p class="hero-subheadline"
                    data-en="Impresión personalizada premium para camisetas, sudaderas, bolsas &amp; accesorios. Con sede en Barcelona. Creado para mentes creativas."
-                   data-ge="პრემიუმ კასტომ პრინტინგი მაისურებისთვის, ფენელებისთვის, ჩანთებისთვის და აქსესუარებისთვის. ბარსელონაში. შექმნილი კრეატიული გონებებისთვის.">
+                   data-ge="პრემიუმ პრინტინგი მაისურებისთვის, ჩანთებისთვის და აქსესუარებისთვის. ბარსელონაში. შექმნილი კრეატიული გონებებისთვის.">
                     Impresión personalizada premium para camisetas, sudaderas, bolsas &amp; accesorios. Con sede en Barcelona. Creado para mentes creativas.
                 </p>
 
                 <div class="hero-ctas">
                     <a href="designer.html" class="btn btn-primary"
-                       data-en="Empieza a Crear" data-ge="შექმნის დაწყება">
+                       data-en="Empieza a Crear" data-ge="შექმენი შენი">
                         Empieza a Crear
                     </a>
                     <a href="catalog.html" class="btn btn-secondary"
-                       data-en="Compra para ti" data-ge="თქვენთვის შეიძინეთ">
+                       data-en="Compra para ti" data-ge="დაათვალიერე">
                         Compra para ti
                     </a>
                 </div>
@@ -271,6 +271,7 @@
 
     <!-- ===== EDITORIAL BANNER ===== -->
     <section class="editorial-banner">
+        <div class="editorial-banner-media" aria-hidden="true"></div>
         <div class="editorial-inner">
             <div class="editorial-copy">
                 <h2 class="editorial-headline"
@@ -656,6 +657,8 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="index-animations.js"></script>
 
     <script>
         // ── Loading Screen & Hero Animations ────────────────────────
@@ -785,7 +788,7 @@
                 gsap.set(vertical, { scaleY: 1, transformOrigin: '50% 50%' });
 
                 gsap.set(question, { color: '#111111' });
-                gsap.to(icon, { rotation: 180, color: '#FFD700', duration: 0.4, ease: 'back.out(1.7)' });
+                gsap.to(icon, { rotation: 180, color: '#FFD700', duration: 0.4, ease: 'power2.out' });
                 gsap.to(vertical, { scaleY: 0, opacity: 0, duration: 0.25, ease: 'power2.out' });
                 gsap.to(answer, {
                     height: 'auto',
@@ -936,115 +939,6 @@
             });
         });
 
-        // ── Scroll-Triggered Animations using Intersection Observer ───
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('in-view');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        // Add animations to specific sections
-        document.querySelectorAll('.carousel-section').forEach(section => {
-            const header = section.querySelector('.carousel-header');
-            if (header) observer.observe(header);
-            section.querySelectorAll('.carousel-card').forEach(card => {
-                observer.observe(card);
-            });
-        });
-
-        // Animate trust items
-        document.querySelectorAll('.trust-item').forEach(item => {
-            observer.observe(item);
-        });
-
-        // Animate reviews
-        document.querySelectorAll('.grev-card').forEach(card => {
-            observer.observe(card);
-        });
-
-        // Animate about section
-        const aboutSection = document.querySelector('.about-section');
-        if (aboutSection) {
-            const aboutLeft = aboutSection.querySelector('.about-left');
-            const aboutRight = aboutSection.querySelector('.about-right');
-            const aboutHeading = aboutSection.querySelector('.about-heading');
-            if (aboutHeading) observer.observe(aboutHeading);
-            aboutSection.querySelectorAll('.about-feature').forEach(feature => {
-                observer.observe(feature);
-            });
-            if (aboutLeft) aboutLeft.classList.add('scroll-animate-left');
-            if (aboutRight) aboutRight.classList.add('scroll-animate-scale');
-            if (aboutLeft) observer.observe(aboutLeft);
-            if (aboutRight) observer.observe(aboutRight);
-        }
-
-        // Animate FAQ section
-        const faqSection = document.querySelector('.faq-section');
-        if (faqSection) {
-            const faqAside = faqSection.querySelector('.faq-aside');
-            if (faqAside) observer.observe(faqAside);
-            faqSection.querySelectorAll('.faq-item').forEach(item => {
-                observer.observe(item);
-            });
-        }
-
-        // Animate editorial banner
-        const editorialBanner = document.querySelector('.editorial-banner');
-        if (editorialBanner) {
-            const headline = editorialBanner.querySelector('.editorial-headline');
-            if (headline) {
-                headline.classList.add('scroll-animate');
-                observer.observe(headline);
-            }
-        }
-
-        // Animate CTA section
-        const ctaSection = document.querySelector('.cta-section');
-        if (ctaSection) {
-            const heading = ctaSection.querySelector('h2');
-            const desc = ctaSection.querySelector('p');
-            const btn = ctaSection.querySelector('.btn');
-            if (heading) {
-                heading.classList.add('scroll-animate');
-                observer.observe(heading);
-            }
-            if (desc) {
-                desc.classList.add('scroll-animate');
-                observer.observe(desc);
-            }
-            if (btn) {
-                btn.classList.add('scroll-animate');
-                observer.observe(btn);
-            }
-        }
-
-        // Animate footer
-        const footer = document.querySelector('.footer');
-        if (footer) {
-            footer.querySelectorAll('.footer-section').forEach((section, idx) => {
-                section.classList.add('scroll-animate');
-                section.style.animationDelay = (idx * 0.1) + 's';
-                observer.observe(section);
-            });
-        }
-
-        // Animate video teaser
-        const videoTeaser = document.querySelector('.homepage-2nd-teaser');
-        if (videoTeaser) {
-            const textWrapper = videoTeaser.querySelector('.homepage-2nd-teaser__text-wrapper');
-            if (textWrapper) {
-                textWrapper.classList.add('scroll-animate');
-                observer.observe(textWrapper);
-            }
-        }
     </script>
 </body>
 </html>
